@@ -22,6 +22,10 @@ __pycache__/
 *.dylib
 *.dll
 
+# -------------------------------------------------------------------
+# the archived algorithms are blocked to protect the intellectual property
+c_src/archives/hu_kaiqi.c
+
 # Alternatively, ignore the entire shared_libs/ directory (since it contains auto-generated .so files)
 shared_libs/
 
