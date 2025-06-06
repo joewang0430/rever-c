@@ -30,6 +30,6 @@ async def test_c_endpoint():
         # if the shared library is not found, raise a 404 error
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"C 函数运行出错：{e}")
+        raise HTTPException(status_code=500, detail=f"C function illegal {e}")
 
     return {"testLayer1_return": result}
