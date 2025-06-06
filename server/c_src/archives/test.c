@@ -2,7 +2,7 @@ int testLayer1(void);
 void testLayer2(void);
 
 int testLayer1(void) {
-    int test = 3;
+    int test = 7;
     return test;
 }
 
