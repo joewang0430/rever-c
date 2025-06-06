@@ -1,0 +1,56 @@
+
+# -------------------------------------------------------------------
+# === Python Virtual Environment ===
+# Ignore the entire .venv folder to avoid committing third-party packages to the repository
+.venv/
+
+# -------------------------------------------------------------------
+# === Python Cache Files / Bytecode ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# -------------------------------------------------------------------
+# === Environment Variable Config Files ===
+# If you use .env to store sensitive configurations (e.g., database passwords), ignore it
+.env
+
+# -------------------------------------------------------------------
+# === Shared Libraries / Build Artifacts ===
+# Ignore all compiled binary files like .so, .dylib, .dll, etc.
+*.so
+*.dylib
+*.dll
+
+# Alternatively, ignore the entire shared_libs/ directory (since it contains auto-generated .so files)
+shared_libs/
+
+# If switching to CMake or other build systems later, add their output directories here
+# Examples: build/, cmake-build-debug/, etc.
+# build/
+# cmake-build-*/
+
+# -------------------------------------------------------------------
+# === FastAPI / Uvicorn Logs & Temporary Files ===
+# Adjust as needed—ignore if you use log files or temp cache directories
+*.log
+*.tmp
+
+# -------------------------------------------------------------------
+# === IDE / Editor-Related Files ===
+# Common config files for VSCode, PyCharm, etc.
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -------------------------------------------------------------------
+# === System-Level Ignores (Optional) ===
+# macOS .DS_Store
+.DS_Store
+
+# Windows thumbnail files
+Thumbs.db
+
+# Other system cache files
+desktop.ini
