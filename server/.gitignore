@@ -24,7 +24,11 @@ __pycache__/
 
 # -------------------------------------------------------------------
 # the archived algorithms are blocked to protect the intellectual property
-c_src/archives/**/*
+c_src/archives/*
+!c_src/archives/.gitkeep
+
+c_src/candidates/*
+!c_src/candidates/.gitkeep
 
 # Alternatively, ignore the entire shared_libs/ directory (since it contains auto-generated .so files)
 shared_libs/
