@@ -9,6 +9,7 @@ RUN apt-get update \
        gcc \
        libc6-dev \
        make \
+       findutils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

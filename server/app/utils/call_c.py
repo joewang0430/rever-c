@@ -4,8 +4,15 @@ import ctypes
 # location of the shared library
 HERE = os.path.dirname(os.path.abspath(__file__))  # .../backend/app/utils
 BASE = os.path.abspath(os.path.join(HERE, "..", ".."))  # .../backend
-SO_PATH = os.path.join(BASE, "shared_libs", "libtest.so")
 
+#SO_PATH = os.path.join(BASE, "shared_libs", "libtest.so")
+SO_PATH = os.path.join(
+    BASE,
+    "shared_libs",
+    "archives",
+    "2025",       # here fills the year
+    "test.so"     # here fills the source file name without prefix
+)
 
 def call_test_layer1() -> int:
     """
