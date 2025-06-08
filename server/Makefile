@@ -2,14 +2,14 @@
 
 # --- Directory variables ---
 # Archives: has year subfolders
-SRC_ARCHIVES   := c_src/archives
-LIB_ARCHIVES   := shared_libs/archives
+SRC_ARCHIVES   := data/c_src/archives
+LIB_ARCHIVES   := data/shared_libs/archives
 
-SRC_CANDIDATES := c_src/candidates
-LIB_CANDIDATES := shared_libs/candidates
+SRC_CANDIDATES := data/c_src/candidates
+LIB_CANDIDATES := data/shared_libs/candidates
 
-SRC_CACHES     := c_src/caches
-LIB_CACHES     := shared_libs/caches
+SRC_CACHES     := data/c_src/caches
+LIB_CACHES     := data/shared_libs/caches
 
 # --- Source file lists ---
 # Find all .c under corresponding hierarchy

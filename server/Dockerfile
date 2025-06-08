@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 3. Copy backend source code, C source code and Makefile
 COPY app/        ./app
-COPY c_src/      ./c_src
+COPY data/c_src/    ./data/c_src
 COPY Makefile    ./
 
 # 4. Run make to compile all .c → .so
@@ -42,7 +42,7 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # 3. Copy compiled shared libraries and backend source code
-COPY --from=builder /app/shared_libs ./shared_libs
+COPY --from=builder /app/data/shared_libs ./data/shared_libs
 COPY --from=builder /app/app         ./app
 COPY --from=builder /app/requirements.txt ./
 

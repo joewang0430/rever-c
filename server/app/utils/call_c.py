@@ -2,12 +2,13 @@ import os
 import ctypes
 
 # location of the shared library
-HERE = os.path.dirname(os.path.abspath(__file__))  # .../backend/app/utils
-BASE = os.path.abspath(os.path.join(HERE, "..", ".."))  # .../backend
+HERE = os.path.dirname(os.path.abspath(__file__))      # .../app/utils
+BASE = os.path.abspath(os.path.join(HERE, "..", ".."))  # .../server
 
 #SO_PATH = os.path.join(BASE, "shared_libs", "libtest.so")
 SO_PATH = os.path.join(
     BASE,
+    "data",       # here fills the data folder
     "shared_libs",
     "archives",
     "2025",       # here fills the year
