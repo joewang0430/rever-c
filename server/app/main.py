@@ -1,13 +1,35 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import os
-
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from datetime import datetime, timedelta
-from .cleanup import cleanup_candidates
 from app.utils.call_c import call_test_layer1
 
-app = FastAPI(title="Reverc backend")
+import os
+from datetime import datetime, timedelta
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from app.utils.cleanup import cleanup_ttl
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ——— Startup phase ———
+    # TODO: add dump_archives_to_fs() here later
+    # — Start TTL cleanup scheduler —
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(
+        cleanup_ttl,
+        trigger="interval",
+        minutes=30,
+        id="cleanup_ttl_job",
+        replace_existing=True
+    )
+    scheduler.start()
+
+    yield  # Application is now running
+
+    # ——— Shutdown phase ———
+    scheduler.shutdown()
+
+app = FastAPI(lifespan=lifespan)
 
 # ---- Cross-domain configuration, convenient for local development ----
 app.add_middleware(
