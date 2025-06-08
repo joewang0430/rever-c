@@ -26,12 +26,13 @@ __pycache__/
 # the archived algorithms are blocked to protect the intellectual property
 c_src/archives/*
 !c_src/archives/.gitkeep
-
 c_src/candidates/*
 !c_src/candidates/.gitkeep
 
-# Alternatively, ignore the entire shared_libs/ directory (since it contains auto-generated .so files)
-shared_libs/
+shared_libs/archives/*
+!shared_libs/archives/.gitkeep
+shared_libs/candidates/*
+!shared_libs/candidates/.gitkeep
 
 # If switching to CMake or other build systems later, add their output directories here
 # Examples: build/, cmake-build-debug/, etc.
