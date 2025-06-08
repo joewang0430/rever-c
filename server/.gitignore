@@ -28,11 +28,15 @@ c_src/archives/*
 !c_src/archives/.gitkeep
 c_src/candidates/*
 !c_src/candidates/.gitkeep
+c_src/caches/*
+!c_src/caches/.gitkeep
 
 shared_libs/archives/*
 !shared_libs/archives/.gitkeep
 shared_libs/candidates/*
 !shared_libs/candidates/.gitkeep
+shared_libs/caches/*
+!shared_libs/caches/.gitkeep
 
 # If switching to CMake or other build systems later, add their output directories here
 # Examples: build/, cmake-build-debug/, etc.

@@ -1,9 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.utils.call_c import call_test_layer1
 import os
 
-app = FastAPI(title="Reversi testing backend")
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from datetime import datetime, timedelta
+from .cleanup import cleanup_candidates
+from app.utils.call_c import call_test_layer1
+
+app = FastAPI(title="Reverc backend")
 
 # ---- Cross-domain configuration, convenient for local development ----
 app.add_middleware(
