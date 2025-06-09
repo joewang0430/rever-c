@@ -2,6 +2,7 @@ import os
 import time
 
 def cleanup_ttl():
+    print(">>> running cleanup_ttl at", time.ctime())
     """
     Delete files older than their TTL in:
       - data/c_src/caches           → 36 hours
