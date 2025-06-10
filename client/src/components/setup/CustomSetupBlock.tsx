@@ -1,12 +1,16 @@
 import CacheUpload from "./ui/CacheUpload";
 import CandidateUpload from "./ui/CandidateUpload";
 
-const CustomSetupBlock = () => {
+interface CustomSetupBlockProps {
+    matchId: string;
+};
+
+const CustomSetupBlock = ({matchId} : CustomSetupBlockProps) => {
   return (
     <div className="text-blue-400">
       <h2>Cache / Candidate</h2>
-      <CacheUpload />
-      <CandidateUpload />
+      <CacheUpload matchId={matchId}/>
+      <CandidateUpload matchId={matchId}/>
     </div>
   );
 };

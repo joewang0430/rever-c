@@ -1,7 +1,7 @@
 // src/app/setup/[matchId]/page.tsx
 import CustomSetupBlock from "@/components/setup/CustomSetupBlock";
 import ArchiveSetupBlock from "@/components/setup/ArchiveSetupBlock";
-import PlayerSetupBlock from "@/components/setup/PlayerSetupBlock";
+import HumanSetupBlock from "@/components/setup/HumanSetupBlock";
 
 
 interface PageProps {
@@ -16,8 +16,8 @@ export default async function SetupPage({ params }: PageProps) {
         <main className="flex flex-col p-4">
             <h1>Setup Page</h1>
             <p>Match ID: {matchId}</p>
-            <CustomSetupBlock />
-            <PlayerSetupBlock />
+            <CustomSetupBlock matchId={matchId} />
+            <HumanSetupBlock />
             <ArchiveSetupBlock />
         </main>
     )
