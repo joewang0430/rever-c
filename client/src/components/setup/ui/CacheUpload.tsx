@@ -1,6 +1,6 @@
 const CacheUpload = () => {
   return (
-    <>cache component tbd</>
+    <div className="text-green-400">CacheUpload</div>
   );
 }
 
