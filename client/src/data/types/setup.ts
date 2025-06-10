@@ -1,3 +1,5 @@
+// data types required for setup a game
+
 export interface SetupData {
   matchId: string;
   boardSize: 8 | 12 | 26;
@@ -11,13 +13,16 @@ export interface PlayerConfig {
     // Custom Mode
     customType?: "candidate" | "cache"; 
     customCodeId?: string;
+    customName?: string;
     // Archive Mode  
     archiveYear?: string; 
     archiveId?: string;
+    archiveName?: string
     // Human Mode
     humanName?: string;
     // AI Mode (if applicable)
-    aiModel?: string;
+    aiId?: string;
+    aiName?: string;
   };
 }
 

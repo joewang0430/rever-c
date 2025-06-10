@@ -1,4 +1,4 @@
-/* Custom hook to manage setup data for a match */
+// Custom hook to manage setup data for a match
 
 "use client";
 
@@ -62,16 +62,16 @@ export const useSetupData = (matchId: string) => {
         }
         
         // check if custom players have necessary configurations
-        if (black.type === "custom" && (!black.config?.customCodeId)) return false;
-        if (white.type === "custom" && (!white.config?.customCodeId)) return false;
+        if (black.type === "custom" && (!black.config?.customCodeId || !black.config?.customName)) return false;
+        if (white.type === "custom" && (!white.config?.customCodeId || !white.config?.customName)) return false;
         
         // check if archived players (community) have necessary configurations
-        if (black.type === "archive" && (!black.config?.archiveId || !black.config?.archiveYear)) return false;
-        if (white.type === "archive" && (!white.config?.archiveId || !white.config?.archiveYear)) return false;
+        if (black.type === "archive" && (!black.config?.archiveId || !black.config?.archiveYear || !black.config?.archiveName)) return false;
+        if (white.type === "archive" && (!white.config?.archiveId || !white.config?.archiveYear || !white.config?.archiveName)) return false;
         
         // check if AIs have necessary configurations
-        if (black.type === "ai" && (!black.config?.aiModel)) return false;
-        if (white.type === "ai" && (!white.config?.aiModel)) return false;
+        if (black.type === "ai" && (!black.config?.aiId || !black.config?.aiName)) return false;
+        if (white.type === "ai" && (!white.config?.aiId || !white.config?.aiName)) return false;
         
         return true;
 
