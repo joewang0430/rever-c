@@ -1,14 +1,15 @@
-// src/app/page.tsx
-"use client"
-import { useRouter } from "next/navigation"
-import { v4 as uuid } from "uuid"
+// Home Page
+
+import StartButton from "@/components/home/StartButton";
+import CasheBlockHome from '@/components/home/CacheBlockHome';
 
 export default function HomePage() {
-  const router = useRouter()
-  const start = () => {
-    const matchId = uuid()           // generate uni matchId for each game
-    router.push(`/setup/${matchId}`) // navigate to the setup page with the matchId
-    console.log("Navigating to setup page with matchId:", matchId) // TODO: remove this in production
-  }
-  return <button onClick={start}>Start a Game</button>
+  return(
+    <main>
+      <h1>Welcome to the Game!</h1>
+      <p>Click the button below to start a new game.</p>
+      <StartButton />
+      <CasheBlockHome />
+    </main>
+  );
 }
