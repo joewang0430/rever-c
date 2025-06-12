@@ -1,16 +1,17 @@
+import { PlayerConfig } from "@/data/types/setup";
 import CacheUpload from "./CacheUpload";
 import CandidateUpload from "./CandidateUpload";
 
 interface CustomSetupBlockProps {
-    matchId: string;
-};
+    playerConfig: PlayerConfig;
+    onConfigChange: (config: PlayerConfig) => void;
+    side: 'black' | 'white';
+}
 
-const CustomSetupBlock = ({matchId} : CustomSetupBlockProps) => {
+const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlockProps) => {
   return (
     <div className="text-blue-400">
-      <h2>Cache / Candidate</h2>
-      <CacheUpload matchId={matchId}/>
-      <CandidateUpload matchId={matchId}/>
+      <h2>CustomSetupBlock</h2>
     </div>
   );
 };

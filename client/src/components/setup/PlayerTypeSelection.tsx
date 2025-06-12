@@ -113,7 +113,7 @@ const PlayerTypeSelection = ({
                                 {label}
                             </div>
                             {type === "ai" && !isAIAvailable && (
-                                <div className="text-xs text-red-500">8×8 only</div>
+                                <div className="text-xs text-red-500">Not available</div>
                             )}
                         </div>
                         

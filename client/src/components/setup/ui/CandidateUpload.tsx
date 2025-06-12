@@ -4,7 +4,7 @@ interface CustomSetupBlockProps {
 
 const CandidateUpload = ({matchId} : CustomSetupBlockProps) => {
     return (
-        <div className="text-green-400">CandidateUpload: {matchId} </div>
+        <div className="text-green-400">CandidateUpload:</div>
     );
 }
 

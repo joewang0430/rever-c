@@ -30,7 +30,7 @@ export const useSetupData = (matchId: string, initialConfig?: Partial<SetupData>
             const newData = { ...prev, boardSize: size };
         
             // if the board size is not 8, reset AI players
-            if (size !== 8) {
+            if (size === 12) {
                 if (newData.black.type === "ai") {
                     newData.black = { type: null };
                 }
@@ -55,7 +55,7 @@ export const useSetupData = (matchId: string, initialConfig?: Partial<SetupData>
 
     // check if AI is available based on board size
     const isAIAvailable = useCallback((): boolean => {
-        return setupData.boardSize === 8;
+        return setupData.boardSize === 8 || setupData.boardSize === 6;
     }, [setupData.boardSize]);
 
     // validate the setup data
@@ -68,7 +68,7 @@ export const useSetupData = (matchId: string, initialConfig?: Partial<SetupData>
         }
         
         // check if player types are valid
-        if ((black.type === "ai" || white.type === "ai") && boardSize !== 8) {
+        if ((black.type === "ai" || white.type === "ai") && boardSize === 12) {
             return false;
         }
         

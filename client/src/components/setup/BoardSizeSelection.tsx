@@ -9,7 +9,7 @@ interface BoardSizeSelectionProps {
 };
 
 const BoardSizeSelection = ({ boardSize, onBoardSizeChange, isAIAvailable }: BoardSizeSelectionProps) => {
-    const boardSizes: BoardSize[] = [8, 12, 26];
+    const boardSizes: BoardSize[] = [6, 8, 12];
     const handleSizeChange = (size: BoardSize) => {
         onBoardSizeChange(size);
     };

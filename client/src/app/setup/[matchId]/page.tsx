@@ -104,20 +104,11 @@ export default function SetupPage({ params }: PageProps) {
                     
                     {/* Left - Black (first hand) Settings */}
                     <div className="flex flex-col">
-                        <div className="mb-4 text-center">
-                            <h2 className="text-xl font-semibold text-gray-800">
-                                Black Player (First)
-                            </h2>
-                            {setupData.black.type === null && (
-                                <p className="text-red-500 text-sm mt-1">Please select a player type</p>
-                            )}
-                        </div>
                         
                         <PlayerSetupBlock 
                             playerConfig={setupData.black}
                             onConfigChange={updateBlackPlayer}
                             side="black"
-                            matchId={matchId}
                             isAIAvailable={isAIAvailable()}
                         />
                     </div>
@@ -136,20 +127,11 @@ export default function SetupPage({ params }: PageProps) {
                     
                     {/* Right - White (back hand) Settings */}
                     <div className="flex flex-col">
-                        <div className="mb-4 text-center">
-                            <h2 className="text-xl font-semibold text-gray-800">
-                                White Player (Second)
-                            </h2>
-                            {setupData.white.type === null && (
-                                <p className="text-red-500 text-sm mt-1">Please select a player type</p>
-                            )}
-                        </div>
                         
                         <PlayerSetupBlock 
                             playerConfig={setupData.white}
                             onConfigChange={updateWhitePlayer}
                             side="white"
-                            matchId={matchId}
                             isAIAvailable={isAIAvailable()}
                         />
                     </div>

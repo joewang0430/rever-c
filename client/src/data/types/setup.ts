@@ -2,7 +2,7 @@
 
 export interface SetupData {
     matchId: string;
-    boardSize: 8 | 12 | 26;
+    boardSize: 6 | 8 | 12;
     black: PlayerConfig;
     white: PlayerConfig;
 }
@@ -28,4 +28,4 @@ export interface PlayerConfig {
 
 export type PlayerType = "custom" | "archive" | "human" | "ai" | null; 
 export type CustomType = "candidate" | "cache";
-export type BoardSize = 8 | 12 | 26;
+export type BoardSize = 6 | 8 | 12;
