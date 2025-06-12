@@ -1,5 +1,5 @@
-import CacheUpload from "./ui/CacheUpload";
-import CandidateUpload from "./ui/CandidateUpload";
+import CacheUpload from "./CacheUpload";
+import CandidateUpload from "./CandidateUpload";
 
 interface CustomSetupBlockProps {
     matchId: string;
