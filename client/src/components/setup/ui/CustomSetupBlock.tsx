@@ -1,5 +1,6 @@
-import { useState, useEffect} from "react";
+import { useState } from "react";
 import { PlayerConfig } from "@/data/types/setup";
+import { cleanupCandidate } from "@/api/upload";
 import CacheUpload from "./CacheUpload";
 import CandidateUpload from "./CandidateUpload";
 
@@ -12,23 +13,40 @@ interface CustomSetupBlockProps {
 const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlockProps) => {
     const [selectedType, setSelectedType] = useState<'cache' | 'candidate'>('cache');
 
-    // keep the selected type
-    // useEffect(() => {
-    //     if (playerConfig.config?.customType) {
-    //         setSelectedType(playerConfig.config.customType);
-    //     }
-    // }, [playerConfig.config?.customType]);
+    const handleTypeChange = async (type: 'cache' | 'candidate') => {
+        // If switching from candidate to cache and has uploaded temporary file,
+        // confirm with user and clean up the temporary file from backend
+        if (selectedType === 'candidate' && 
+            type === 'cache' &&
+            playerConfig.config?.customType === 'candidate' &&
+            playerConfig.config?.customName) {
+            
+            const confirmed = window.confirm(
+                "You have uploaded a temporary file. Switching to stored code will delete it from the server. Continue?"
+            );
+            
+            if (!confirmed) return;
+            
+            // Clean up backend file
+            try {
+                if (playerConfig.config?.customCodeId) {
+                    await cleanupCandidate(playerConfig.config.customCodeId);
+                }
+            } catch (error) {
+                console.error('Cleanup failed:', error);
+                // Continue with type switch even if cleanup fails
+            }
+        }
 
-    const handleTypeChange = (type: 'cache' | 'candidate') => {
         setSelectedType(type);
         
-        // update customType in playerConfig
+        // Update customType in playerConfig
         const updatedConfig: PlayerConfig = {
             ...playerConfig,
             config: {
                 ...playerConfig.config,
                 customType: type,
-                // reset related fields, as the type changed
+                // Reset related fields, as the type changed
                 customCodeId: undefined,
                 customName: undefined
             }
