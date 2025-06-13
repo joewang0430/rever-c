@@ -1,4 +1,6 @@
-// Custom hook to manage setup data for a match
+//
+// Hook to manage setup data for a match.
+// 
 
 "use client";
 

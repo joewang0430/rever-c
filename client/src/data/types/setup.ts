@@ -1,4 +1,6 @@
-// data types required to setup a game
+//
+// Data types required to setup a game
+//  
 
 export interface SetupData {
     matchId: string;

@@ -2,7 +2,6 @@
 // Selection component for player types in the setup stage
 //
 
-
 import { PlayerConfig, PlayerType } from '../../data/types/setup';
 
 interface PlayerTypeSelectionProps {
@@ -31,17 +30,24 @@ const PlayerTypeSelection = ({
 
     const handleTypeSelect = (type: PlayerType, side: 'black' | 'white') => {
         if (type === "ai" && !isAIAvailable) return;
+
+        const currentPlayerType = side === 'black' ? blackPlayerType : whitePlayerType;
         const updateFunction = side === 'black' ? onBlackPlayerChange : onWhitePlayerChange;
 
-        // provide basic config based on type
+        // if the selected type is already set, do nothing
+        if (currentPlayerType === type) {
+            return;
+        }
+
+        // Provide basic config based on type
         switch (type) {
             case "custom":
                 updateFunction({
                     type: "custom",
                     config: {
-                        customType: "candidate",
-                        customCodeId: `${side}_${Date.now()}`,
-                        customName: `${side} Custom Player`
+                        customType: "cache",
+                        customCodeId: undefined, 
+                        customName: undefined
                     }
                 });
                 break;
@@ -50,9 +56,9 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "archive",
                     config: {
-                        archiveId: "",
+                        archiveId: undefined,
                         archiveGroup: "",
-                        archiveName: `${side} Archive Player`
+                        archiveName: undefined
                     }
                 });
                 break;
@@ -61,7 +67,7 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "human",
                     config: {
-                        humanName: `${side === 'black' ? 'Black' : 'White'} Player`
+                        humanName: ` Player ${side === 'black' ? 'B' : 'W'} `
                     }
                 });
                 break;
@@ -70,14 +76,14 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "ai",
                     config: {
-                        aiId: "default",
-                        aiName: "AI Player"
+                        aiId: undefined,
+                        aiName: undefined
                     }
                 });
                 break;
         }
-
     };
+
     return (
         <div className="bg-white p-4 rounded border">
             <h3 className="text-lg font-medium mb-4 text-center">
@@ -87,12 +93,12 @@ const PlayerTypeSelection = ({
                 {playerTypes.map(({ type, label, icon }) => (
                     <div key={type} className="flex items-center justify-between gap-4">
                         
-                        {/* 左侧：黑棋选择框 */}
+                        {/* Left side: Black player selection */}
                         <button
                             onClick={() => handleTypeSelect(type, 'black')}
                             disabled={type === "ai" && !isAIAvailable}
                             className={`
-                                w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold
+                                w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold transition-colors
                                 ${blackPlayerType === type
                                     ? 'bg-black border-black text-white' 
                                     : 'border-gray-300 hover:border-gray-400'
@@ -103,7 +109,7 @@ const PlayerTypeSelection = ({
                             {blackPlayerType === type && '✓'}
                         </button>
                         
-                        {/* 中间：类型标签 */}
+                        {/* Center: Type label */}
                         <div className="flex-1 text-center">
                             <div className="text-xl mb-1">{icon}</div>
                             <div className={`
@@ -117,12 +123,12 @@ const PlayerTypeSelection = ({
                             )}
                         </div>
                         
-                        {/* 右侧：白棋选择框 */}
+                        {/* Right side: White player selection */}
                         <button
                             onClick={() => handleTypeSelect(type, 'white')}
                             disabled={type === "ai" && !isAIAvailable}
                             className={`
-                                w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold
+                                w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold transition-colors
                                 ${whitePlayerType === type
                                     ? 'bg-gray-700 border-gray-700 text-white' 
                                     : 'border-gray-300 hover:border-gray-400'
