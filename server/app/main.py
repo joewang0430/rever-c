@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
     scheduler.add_job(
         cleanup.cleanup_ttl,
         trigger="interval",
-        seconds=10,#minutes=30,
+        minutes=30,
         id="cleanup_ttl_job",
         replace_existing=True
     )
@@ -38,6 +38,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ---- Include routers ----
+app.include_router(upload.upload_router)
+
+# ---- API Endpoints ----
 @app.get("/ping")
 async def ping():
     """ simple testing endpoint """

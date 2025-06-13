@@ -17,8 +17,8 @@ def cleanup_ttl():
 
     # define TTLs in seconds
     ttls = {
-        "caches":     60, #36 * 3600,    # `caches` are kept for 36 hours
-        "candidates":  30, #1 * 3600,    # `candidates` are kept for 1 hour
+        "caches":       36 * 3600,    # `caches` are kept for 36 hours
+        "candidates":   1 * 3600,    # `candidates` are kept for 1 hour
     }
 
     for category, ttl in ttls.items():

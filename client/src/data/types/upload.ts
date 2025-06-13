@@ -15,8 +15,6 @@ export interface UploadStatus {
 
 export interface ProcessResponse {
     code_id: string;
-    status: string;
-    message: string;
 }
 
 export interface StatusResponse {
