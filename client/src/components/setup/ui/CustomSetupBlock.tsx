@@ -13,11 +13,11 @@ const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlo
     const [selectedType, setSelectedType] = useState<'cache' | 'candidate'>('cache');
 
     // keep the selected type
-    useEffect(() => {
-        if (playerConfig.config?.customType) {
-            setSelectedType(playerConfig.config.customType);
-        }
-    }, [playerConfig.config?.customType]);
+    // useEffect(() => {
+    //     if (playerConfig.config?.customType) {
+    //         setSelectedType(playerConfig.config.customType);
+    //     }
+    // }, [playerConfig.config?.customType]);
 
     const handleTypeChange = (type: 'cache' | 'candidate') => {
         setSelectedType(type);

@@ -3,10 +3,11 @@
 //
 
 import { PlayerConfig, PlayerType } from '../../data/types/setup';
+import { cleanupCandidate } from '../../api/upload';
 
 interface PlayerTypeSelectionProps {
-    blackPlayerType: PlayerType;
-    whitePlayerType: PlayerType;
+    blackPlayerConfig: PlayerConfig;
+    whitePlayerConfig: PlayerConfig;
     onBlackPlayerChange: (config: PlayerConfig) => void;
     onWhitePlayerChange: (config: PlayerConfig) => void;
     isAIAvailable: boolean;
@@ -14,8 +15,8 @@ interface PlayerTypeSelectionProps {
 }
 
 const PlayerTypeSelection = ({ 
-    blackPlayerType, 
-    whitePlayerType, 
+    blackPlayerConfig, 
+    whitePlayerConfig, 
     onBlackPlayerChange, 
     onWhitePlayerChange,
     isAIAvailable 
@@ -28,25 +29,49 @@ const PlayerTypeSelection = ({
         { type: "ai" as PlayerType, label: "AI", icon: "🤖" }
     ];
 
-    const handleTypeSelect = (type: PlayerType, side: 'black' | 'white') => {
+    const handleTypeSelect = async (type: PlayerType, side: 'black' | 'white') => {
         if (type === "ai" && !isAIAvailable) return;
 
-        const currentPlayerType = side === 'black' ? blackPlayerType : whitePlayerType;
+        const currentConfig = side === 'black' ? blackPlayerConfig : whitePlayerConfig;
         const updateFunction = side === 'black' ? onBlackPlayerChange : onWhitePlayerChange;
 
-        // if the selected type is already set, do nothing
-        if (currentPlayerType === type) {
+        // If the selected type is already set, do nothing to preserve existing config
+        if (currentConfig.type === type) {
             return;
         }
 
-        // Provide basic config based on type
+        // If current player is custom candidate with uploaded file and switching to another type,
+        // confirm with user and clean up the temporary file from backend
+        if (currentConfig.type === 'custom' && 
+            currentConfig.config?.customType === 'candidate' &&
+            currentConfig.config?.customName &&
+            type !== 'custom') {
+            
+            const confirmed = window.confirm(
+                "You have uploaded a temporary file. Switching player type will delete it from the server. Continue?"
+            );
+            
+            if (!confirmed) return;
+            
+            // Clean up backend file
+            try {
+                if (currentConfig.config?.customCodeId) {
+                    await cleanupCandidate(currentConfig.config.customCodeId);
+                }
+            } catch (error) {
+                console.error('Cleanup failed:', error);
+                // In this case, continue with type switch even if cleanup fails
+            }
+        }
+
+        // Initialize config based on the new type
         switch (type) {
             case "custom":
                 updateFunction({
                     type: "custom",
                     config: {
                         customType: "cache",
-                        customCodeId: undefined, 
+                        customCodeId: undefined,
                         customName: undefined
                     }
                 });
@@ -56,7 +81,7 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "archive",
                     config: {
-                        archiveId: undefined,
+                        archiveId: "",
                         archiveGroup: "",
                         archiveName: undefined
                     }
@@ -67,7 +92,7 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "human",
                     config: {
-                        humanName: ` Player ${side === 'black' ? 'B' : 'W'} `
+                        humanName: undefined
                     }
                 });
                 break;
@@ -76,7 +101,7 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "ai",
                     config: {
-                        aiId: undefined,
+                        aiId: "default",
                         aiName: undefined
                     }
                 });
@@ -99,14 +124,14 @@ const PlayerTypeSelection = ({
                             disabled={type === "ai" && !isAIAvailable}
                             className={`
                                 w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold transition-colors
-                                ${blackPlayerType === type
+                                ${blackPlayerConfig.type === type
                                     ? 'bg-black border-black text-white' 
                                     : 'border-gray-300 hover:border-gray-400'
                                 }
                                 ${type === "ai" && !isAIAvailable ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                             `}
                         >
-                            {blackPlayerType === type && '✓'}
+                            {blackPlayerConfig.type === type && '✓'}
                         </button>
                         
                         {/* Center: Type label */}
@@ -129,14 +154,14 @@ const PlayerTypeSelection = ({
                             disabled={type === "ai" && !isAIAvailable}
                             className={`
                                 w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold transition-colors
-                                ${whitePlayerType === type
+                                ${whitePlayerConfig.type === type
                                     ? 'bg-gray-700 border-gray-700 text-white' 
                                     : 'border-gray-300 hover:border-gray-400'
                                 }
                                 ${type === "ai" && !isAIAvailable ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                             `}
                         >
-                            {whitePlayerType === type && '✓'}
+                            {whitePlayerConfig.type === type && '✓'}
                         </button>
                     </div>
                 ))}

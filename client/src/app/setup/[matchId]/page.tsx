@@ -116,8 +116,8 @@ export default function SetupPage({ params }: PageProps) {
                     {/* Middle - Player Type Selection */}
                     <div className="flex flex-col items-center">
                         <PlayerTypeSelection 
-                            blackPlayerType={setupData.black.type}
-                            whitePlayerType={setupData.white.type}
+                            blackPlayerConfig={setupData.black}
+                            whitePlayerConfig={setupData.white}
                             onBlackPlayerChange={updateBlackPlayer}
                             onWhitePlayerChange={updateWhitePlayer}
                             isAIAvailable={isAIAvailable()}

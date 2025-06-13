@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PlayerConfig } from '@/data/types/setup';
 import { useFileUpload } from '@/hooks/useFileUpload';
 
@@ -13,7 +13,24 @@ interface CandidateUploadProps {
 const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUploadProps) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [hasProcessedFile, setHasProcessedFile] = useState(false);
+    const [isButtonCooldown, setIsButtonCooldown] = useState(false);
     const { uploadStatus, processFile, pollStatus, cleanup } = useFileUpload('candidate');
+
+    // if polling indicates failure, reset config
+    useEffect(() => {
+        if (uploadStatus.currentStep === 'failed' && (playerConfig.config?.customCodeId || playerConfig.config?.customName)) {
+            const resetConfig: PlayerConfig = {
+                ...playerConfig,
+                config: {
+                    ...playerConfig.config,
+                    customName: undefined,
+                    customCodeId: undefined
+                }
+            };
+            onConfigChange(resetConfig);
+            setHasProcessedFile(false);
+        }
+    }, [uploadStatus.currentStep, playerConfig, onConfigChange]);
 
     // Handle file selection
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +49,13 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
 
     // Handle main button click
     const handleButtonClick = async () => {
-        if (!selectedFile) return;
+        if (!selectedFile || isButtonCooldown) return; 
+
+        // cool down to prevent multiple clicks
+        setIsButtonCooldown(true);
+        setTimeout(() => {
+            setIsButtonCooldown(false);
+        }, 1000);
 
         // If user selected a new file after processing, this becomes "Reload"
         if (hasProcessedFile && uploadStatus.currentStep !== 'idle') {
@@ -78,6 +101,11 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
 
     // Determine button state
     const getButtonState = () => {
+
+        if (isButtonCooldown) {
+            return { text: 'Please wait...', disabled: true, className: 'bg-gray-400 text-gray-600' };
+        }   // Always a cooldown after clicking the button
+
         if (!selectedFile) {
             return { text: 'Upload', disabled: true, className: 'bg-gray-300 text-gray-500' };
         }
