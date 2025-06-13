@@ -24,4 +24,5 @@ export interface StatusResponse {
     status: 'uploading' | 'compiling' | 'testing' | 'success' | 'failed';
     error_message?: string;
     test_return_value?: number;
+    failed_stage?: 'uploading' | 'compiling' | 'testing';
 }

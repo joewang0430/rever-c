@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import { PlayerConfig } from "@/data/types/setup";
 import { cleanupCandidate } from "@/api/upload";
 import CacheUpload from "./CacheUpload";
@@ -11,7 +13,17 @@ interface CustomSetupBlockProps {
 }
 
 const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlockProps) => {
-    const [selectedType, setSelectedType] = useState<'cache' | 'candidate'>('cache');
+    // Determine initial type based on playerConfig
+    const [selectedType, setSelectedType] = useState<'cache' | 'candidate'>(
+        playerConfig.config?.customType || 'cache'
+    );
+
+    // Update selectedType if playerConfig changes, seems impossible, but to be safe
+    useEffect(() => {
+        if (playerConfig.config?.customType && playerConfig.config.customType !== selectedType) {
+            setSelectedType(playerConfig.config.customType);
+        }
+    }, [playerConfig.config?.customType, selectedType]);
 
     const handleTypeChange = async (type: 'cache' | 'candidate') => {
         // If switching from candidate to cache and has uploaded temporary file,

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PlayerConfig } from '@/data/types/setup';
 import { useFileUpload } from '@/hooks/useFileUpload';
+import { cleanupCandidate } from '@/api/upload';
 
 interface CandidateUploadProps {
     playerConfig: PlayerConfig;
@@ -47,6 +48,51 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
         }
     };
 
+    // Handle clear button click
+    const handleClear = async () => {
+        // Show confirmation dialog before clearing
+        const confirmed = window.confirm(
+            "Are you sure you want to clear the current file? This action cannot be undone."
+        );
+        
+        if (!confirmed) return;
+
+        // Clear uploaded file from backend if exists
+        try {
+            if (playerConfig.config?.customCodeId) {
+                await cleanupCandidate(playerConfig.config.customCodeId);
+            }
+        } catch (error) {
+            console.error('Clear cleanup failed:', error);
+            // Continue with clearing even if backend cleanup fails
+        }
+
+        // Reset upload status
+        await cleanup();
+
+        // Clear local state
+        setSelectedFile(null);
+        setHasProcessedFile(false);
+        
+        // Reset file input
+        const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.value = '';
+        }
+
+        // Reset PlayerConfig to clean state
+        const clearedConfig: PlayerConfig = {
+            ...playerConfig,
+            config: {
+                ...playerConfig.config,
+                customCodeId: undefined,
+                customName: undefined
+            }
+        };
+        
+        onConfigChange(clearedConfig);
+    };
+
     // Handle main button click
     const handleButtonClick = async () => {
         if (!selectedFile || isButtonCooldown) return; 
@@ -72,6 +118,16 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
             };
             onConfigChange(resetConfig);
             return;
+        }
+
+        // Clear the old file if exists, before the new upload
+        if (playerConfig.config?.customCodeId) {
+            try {
+                await cleanupCandidate(playerConfig.config.customCodeId);
+            } catch (error) {
+                console.error('Failed to cleanup old file:', error);
+                // Continue with upload even if cleanup fails
+            }
         }
 
         // Otherwise, start upload process
@@ -111,13 +167,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
         }
         
         if (hasProcessedFile && uploadStatus.currentStep !== 'idle') {
-            // Check if user selected a new file
-            const currentFileName = playerConfig.config?.customName;
-            const selectedFileName = selectedFile.name.replace('.c', '');
-            
-            if (currentFileName !== selectedFileName) {
-                return { text: 'Reload', disabled: false, className: 'bg-blue-500 text-white hover:bg-blue-600' };
-            }
+            return { text: 'Reload', disabled: false, className: 'bg-blue-500 text-white hover:bg-blue-600' };
         }
 
         switch (uploadStatus.currentStep) {
@@ -136,7 +186,28 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
         }
     };
 
+    // Determine clear button state
+    const getClearButtonState = () => {
+        const hasSelectedFile = selectedFile !== null;
+        const hasUploadedFile = playerConfig.config?.customName !== undefined;
+        
+        // If no file selected and no uploaded file, don't show clear button
+        if (!hasSelectedFile && !hasUploadedFile) {
+            return { show: false, disabled: true };
+        }
+        
+        // If uploading/processing, disable clear button
+        if (uploadStatus.currentStep === 'uploading' || 
+            uploadStatus.currentStep === 'compiling' || 
+            uploadStatus.currentStep === 'testing') {
+            return { show: true, disabled: true };
+        }
+        
+        return { show: true, disabled: false };
+    };
+
     const buttonState = getButtonState();
+    const clearButtonState = getClearButtonState();
 
     return (
         <div className="space-y-4 p-4 border rounded">
@@ -160,16 +231,33 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                     </div>
                 )}
 
-                {/* Main action button */}
-                <button
-                    onClick={handleButtonClick}
-                    disabled={buttonState.disabled}
-                    className={`px-6 py-2 rounded font-medium transition-colors ${buttonState.className} ${
-                        buttonState.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-                    }`}
-                >
-                    {buttonState.text}
-                </button>
+                {/* Action buttons */}
+                <div className="flex space-x-2">
+                    <button
+                        onClick={handleButtonClick}
+                        disabled={buttonState.disabled}
+                        className={`px-6 py-2 rounded font-medium transition-colors ${buttonState.className} ${
+                            buttonState.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+                        }`}
+                    >
+                        {buttonState.text}
+                    </button>
+                    
+                    {/* Clear button */}
+                    {clearButtonState.show && (
+                        <button
+                            onClick={handleClear}
+                            disabled={clearButtonState.disabled}
+                            className={`px-4 py-2 rounded font-medium transition-colors ${
+                                clearButtonState.disabled
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer'
+                            }`}
+                        >
+                            Clear
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Processing status */}

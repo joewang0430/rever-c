@@ -7,7 +7,7 @@
 
 import { useState, useCallback } from 'react';
 import { UploadStatus, ProcessResponse, StatusResponse } from '@/data/types/upload';
-import { processCandidate, processCache, getProcessStatus, cleanupCandidate, cleanupCache } from '@/api/upload';
+import { processCandidate, processCache, getProcessStatus, cleanupCandidate, cleanupCache, cleanupCandidateCode, cleanupCacheCode } from '@/api/upload';
 
 export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') => {
     const [uploadStatus, setUploadStatus] = useState<UploadStatus>({
@@ -110,6 +110,23 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                         return;
                         
                     case 'failed':
+                        // Handle failure in case of compilation or testing:
+                        // if compilation or testing failed, there will be garbage files.
+                        try {
+                            const cleanupFn = uploadType === 'candidate' ? cleanupCandidate : cleanupCache;
+                            const cleanupCodeFn = uploadType === 'candidate' ? cleanupCandidateCode : cleanupCacheCode;
+
+                            if (status.failed_stage === 'compiling') {
+                                console.log('Compiling failed, cleaning up source file...');
+                                await cleanupCodeFn(codeId); 
+                            } else if (status.failed_stage === 'testing') {
+                                console.log('Testing failed, cleaning up all files...');
+                                await cleanupFn(codeId); 
+                            }
+                        } catch (cleanupError) {
+                            console.error('Auto cleanup failed:', cleanupError);
+                        }
+
                         setUploadStatus(prev => ({
                             ...prev,
                             error: status.error_message || 'Process failed',
@@ -117,7 +134,7 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                         }));
                         setIsProcessing(false);
                         return;
-                }
+                    }
                 
                 // Continue polling every second
                 setTimeout(poll, 1000);
@@ -133,7 +150,7 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
         
         // Start polling
         poll();
-    }, []);
+    }, [uploadType]);
 
     // Clean up backend files and reset state
     const cleanup = useCallback(async () => {
