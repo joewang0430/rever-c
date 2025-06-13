@@ -1,13 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.utils.call_c import call_test_layer1
-
+from contextlib import asynccontextmanager
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import os
 from datetime import datetime, timedelta
-
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from app.utils.cleanup import cleanup_ttl
-from contextlib import asynccontextmanager
+from app.utils import call_c, cleanup
+from app.routers import upload
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,9 +14,9 @@ async def lifespan(app: FastAPI):
     # — Start TTL cleanup scheduler —
     scheduler = AsyncIOScheduler()
     scheduler.add_job(
-        cleanup_ttl,
+        cleanup.cleanup_ttl,
         trigger="interval",
-        minutes=30,
+        seconds=10,#minutes=30,
         id="cleanup_ttl_job",
         replace_existing=True
     )
@@ -51,7 +49,7 @@ async def test_c_endpoint():
     This endpoint calls a C function from a shared library and returns the result.
     """
     try:
-        result = call_test_layer1()
+        result = call_c.call_test_layer1()
     except FileNotFoundError as e:
         # if the shared library is not found, raise a 404 error
         raise HTTPException(status_code=404, detail=str(e))

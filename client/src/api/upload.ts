@@ -1,5 +1,10 @@
+//
+// This file contains api functions to handle file uploads, connecting to backend.
+// 
+
 import { ProcessResponse, StatusResponse } from '@/data/types/upload';
 
+// TODO: consider delete localhost
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 // Helper function to handle API responses
@@ -37,12 +42,19 @@ export async function processCache(file: File): Promise<ProcessResponse> {
     return handleResponse<ProcessResponse>(response);
 }
 
-// Get processing status for a code ID
-export async function getProcessStatus(codeId: string): Promise<StatusResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/status/${codeId}`, {
+// Get processing status for a candidate (temporary) code ID
+export async function getCandidateStatus(codeId: string): Promise<StatusResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/status/candidate/${codeId}`, {
         method: 'GET',
     });
+    return handleResponse<StatusResponse>(response);
+}
 
+// Get processing status for a cache (stored) code ID
+export async function getCacheStatus(codeId: string): Promise<StatusResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/status/cache/${codeId}`, {
+        method: 'GET',
+    });
     return handleResponse<StatusResponse>(response);
 }
 

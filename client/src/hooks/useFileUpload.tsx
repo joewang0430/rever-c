@@ -7,7 +7,7 @@
 
 import { useState, useCallback } from 'react';
 import { UploadStatus, ProcessResponse, StatusResponse } from '@/data/types/upload';
-import { processCandidate, processCache, getProcessStatus, cleanupCandidate, cleanupCache, cleanupCandidateCode, cleanupCacheCode } from '@/api/upload';
+import { processCandidate, processCache, getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, cleanupCandidateCode, cleanupCacheCode } from '@/api/upload';
 
 export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') => {
     const [uploadStatus, setUploadStatus] = useState<UploadStatus>({
@@ -67,7 +67,9 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
 
         const poll = async () => {
             try {
-                const status: StatusResponse = await getProcessStatus(codeId);
+                const status: StatusResponse = uploadType === 'candidate' 
+                ? await getCandidateStatus(codeId)
+                : await getCacheStatus(codeId);
                 
                 switch (status.status) {
                     case 'uploading':
