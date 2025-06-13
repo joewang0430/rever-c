@@ -2,69 +2,94 @@ import { ProcessResponse, StatusResponse } from '@/data/types/upload';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-export const processCandidate = async (file: File): Promise<ProcessResponse> => {
+// Helper function to handle API responses
+async function handleResponse<T>(response: Response): Promise<T> {
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+    return response.json();
+}
+
+// Upload and process candidate file (temporary code)
+export async function processCandidate(file: File): Promise<ProcessResponse> {
     const formData = new FormData();
     formData.append('file', file);
-    
-    const response = await fetch(`${API_BASE_URL}/api/upload/candidates`, {
+
+    const response = await fetch(`${API_BASE_URL}/api/upload/candidate`, {
         method: 'POST',
         body: formData,
     });
-    
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Upload failed');
-    }
-    
-    return response.json();
-};
 
-export const processCache = async (file: File): Promise<ProcessResponse> => {
+    return handleResponse<ProcessResponse>(response);
+}
+
+// Upload and process cache file (stored code)
+export async function processCache(file: File): Promise<ProcessResponse> {
     const formData = new FormData();
     formData.append('file', file);
-    
-    const response = await fetch(`${API_BASE_URL}/api/upload/caches`, {
+
+    const response = await fetch(`${API_BASE_URL}/api/upload/cache`, {
         method: 'POST',
         body: formData,
     });
-    
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Upload failed');
-    }
-    
-    return response.json();
-};
 
-export const getProcessStatus = async (codeId: string): Promise<StatusResponse> => {
-    const response = await fetch(`${API_BASE_URL}/api/upload/status/${codeId}`);
-    
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to get status');
-    }
-    
-    return response.json();
-};
+    return handleResponse<ProcessResponse>(response);
+}
 
-export const cleanupCandidate = async (codeId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/api/upload/cleanup/${codeId}`, {
+// Get processing status for a code ID
+export async function getProcessStatus(codeId: string): Promise<StatusResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/status/${codeId}`, {
+        method: 'GET',
+    });
+
+    return handleResponse<StatusResponse>(response);
+}
+
+// Clean up candidate files (both .c and .so files)
+export async function cleanupCandidate(codeId: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/cleanup/candidate/${codeId}`, {
         method: 'DELETE',
     });
-    
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Cleanup failed');
-    }
-};
 
-export const cleanupCache = async (codeId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/api/upload/cleanup/${codeId}`, {
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Cleanup failed: ${errorText}`);
+    }
+}
+
+// Clean up cache files (both .c and .so files)
+export async function cleanupCache(codeId: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/cleanup/cache/${codeId}`, {
         method: 'DELETE',
     });
-    
+
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Cleanup failed');
+        const errorText = await response.text();
+        throw new Error(`Cleanup failed: ${errorText}`);
     }
-};
+}
+
+// Clean up candidate source code only (.c file)
+export async function cleanupCandidateCode(codeId: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/cleanup/candidate/${codeId}/code`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Code cleanup failed: ${errorText}`);
+    }
+}
+
+// Clean up cache source code only (.c file)
+export async function cleanupCacheCode(codeId: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/cleanup/cache/${codeId}/code`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Code cleanup failed: ${errorText}`);
+    }
+}
