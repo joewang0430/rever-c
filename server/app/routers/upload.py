@@ -21,12 +21,12 @@ async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
     Upload and process candidate file (temporary code)
     """
     try:
-        if not file.filename.endswith('.c'):
+        if not file.filename or not file.filename.endswith('.c'):
             raise HTTPException(status_code=400, detail="Only .c files are allowed")
         
         # Generate a unique ID, new name, and store path for the code
         code_id = str(uuid.uuid4())
-        new_filename = f"candidate_{code_id}"
+        new_filename = f"candidate_{code_id}.c"
         file_path = f"data/c_src/candidates/{new_filename}"
 
         # Save file, with renaming, write in binary to prevent encoding issues
