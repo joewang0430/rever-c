@@ -9,11 +9,14 @@ import os
 import aiofiles
 from datetime import datetime
 
+
 upload_router = APIRouter()
+
 
 # Response model, corresponds to the "ProcessResponse" at front-end
 class ProcessResponse(BaseModel):
     code_id: str
+
 
 @upload_router.post("/api/upload/candidate")
 async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
@@ -41,3 +44,42 @@ async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+    
+
+@upload_router.delete("/api/cleanup/candidate/{code_id}")
+async def cleanup_candidate(code_id: str):
+    """
+    Clean up all candidate files (both .c source and .so compiled files)
+    """
+    try:
+        # Delete source file (.c)
+        source_file = f"data/c_src/candidates/candidate_{code_id}.c"
+        if os.path.exists(source_file):
+            os.remove(source_file)
+        
+        # Delete shared library file after compiled (.so)
+        compiled_file = f"data/shared_libs/candidates/candidate_{code_id}.so"
+        if os.path.exists(compiled_file):
+            os.remove(compiled_file)
+        
+        return
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cleanup failed: {str(e)}")
+    
+
+@upload_router.delete("/api/cleanup/candidate/{code_id}/code")
+async def cleanup_candidate_code(code_id: str):
+    """
+    Clean up only candidate source code (.c file), keep compiled file (.so)
+    """
+    try:
+        # only delete the source file (.c)
+        source_file = f"data/c_src/candidates/candidate_{code_id}.c"
+        if os.path.exists(source_file):
+            os.remove(source_file)
+        
+        return 
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Code cleanup failed: {str(e)}")
