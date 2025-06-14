@@ -62,97 +62,107 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
     }, [uploadType]);
 
     // Function to poll the processing status
-    const pollStatus = useCallback(async (codeId: string) => {
+    const pollStatus = useCallback(async (codeId: string): Promise<boolean> => {
         setIsProcessing(true);
 
-        const poll = async () => {
-            try {
-                const status: StatusResponse = uploadType === 'candidate' 
-                ? await getCandidateStatus(codeId)
-                : await getCacheStatus(codeId);
-                
-                switch (status.status) {
-                    case 'uploading':
-                        setUploadStatus(prev => ({
-                            ...prev,
-                            currentStep: 'uploading'
-                        }));
-                        break;
-                        
-                    case 'compiling':
-                        setUploadStatus(prev => ({
-                            ...prev,
-                            uploading: true,
-                            compiling: false,
-                            currentStep: 'compiling'
-                        }));
-                        break;
-                        
-                    case 'testing':
-                        setUploadStatus(prev => ({
-                            ...prev,
-                            uploading: true,
-                            compiling: true,
-                            testing: false,
-                            currentStep: 'testing'
-                        }));
-                        break;
-                        
-                    case 'success':
-                        setUploadStatus(prev => ({
-                            ...prev,
-                            uploading: true,
-                            compiling: true,
-                            testing: true,
-                            success: true,
-                            currentStep: 'success',
-                            testReturnValue: status.test_return_value 
-                        }));
-                        setIsProcessing(false);
-                        return;
-                        
-                    case 'failed':
-                        // Handle failure in case of compilation or testing:
-                        // if compilation or testing failed, there will be garbage files.
-                        try {
-                            const cleanupFn = uploadType === 'candidate' ? cleanupCandidate : cleanupCache;
-                            const cleanupCodeFn = uploadType === 'candidate' ? cleanupCandidateCode : cleanupCacheCode;
+        return new Promise((resolve) => {
+            const poll = async () => {
+                try {
+                    const status: StatusResponse = uploadType === 'candidate' 
+                        ? await getCandidateStatus(codeId)
+                        : await getCacheStatus(codeId);
+                    
+                    switch (status.status) {
+                        case 'uploading':
+                            setUploadStatus(prev => ({
+                                ...prev,
+                                currentStep: 'uploading'
+                            }));
+                            break;
+                            
+                        case 'compiling':
+                            setUploadStatus(prev => ({
+                                ...prev,
+                                uploading: true,
+                                compiling: false,
+                                currentStep: 'compiling'
+                            }));
+                            break;
+                            
+                        case 'testing':
+                            setUploadStatus(prev => ({
+                                ...prev,
+                                uploading: true,
+                                compiling: true,
+                                testing: false,
+                                currentStep: 'testing'
+                            }));
+                            break;
+                            
+                        case 'success':
+                            setUploadStatus(prev => ({
+                                ...prev,
+                                uploading: true,
+                                compiling: true,
+                                testing: true,
+                                success: true,
+                                currentStep: 'success',
+                                testReturnValue: status.test_return_value 
+                            }));
+                            setIsProcessing(false);
+                            resolve(true);  // return success
+                            return;
+                            
+                        case 'failed':
+                            // Handle failure in case of compilation or testing:
+                            // if compilation or testing failed, there will be garbage files.
+                            try {
+                                const cleanupFn = uploadType === 'candidate' ? cleanupCandidate : cleanupCache;
+                                const cleanupCodeFn = uploadType === 'candidate' ? cleanupCandidateCode : cleanupCacheCode;
 
-                            if (status.failed_stage === 'compiling') {
-                                console.log('Compiling failed, cleaning up source file...');
-                                await cleanupCodeFn(codeId); 
-                            } else if (status.failed_stage === 'testing') {
-                                console.log('Testing failed, cleaning up all files...');
-                                await cleanupFn(codeId); 
+                                if (status.failed_stage === 'compiling') {
+                                    console.log('Compiling failed, cleaning up source file...');
+                                    await cleanupCodeFn(codeId); 
+                                } else if (status.failed_stage === 'testing') {
+                                    console.log('Testing failed, cleaning up all files...');
+                                    await cleanupFn(codeId); 
+                                }
+                            } catch (cleanupError) {
+                                console.error('Auto cleanup failed:', cleanupError);
                             }
-                        } catch (cleanupError) {
-                            console.error('Auto cleanup failed:', cleanupError);
-                        }
 
-                        setUploadStatus(prev => ({
-                            ...prev,
-                            error: status.error_message || 'Process failed',
-                            currentStep: 'failed'
-                        }));
-                        setIsProcessing(false);
-                        return;
+                            setUploadStatus(prev => ({
+                                ...prev,
+                                error: status.error_message || 'Process failed',
+                                currentStep: 'failed'
+                            }));
+                            setIsProcessing(false);
+                            resolve(false);  
+                            return;
+                            
+                        default:
+                            // unkonwn status, continue polling
+                            break;
                     }
-                
-                // Continue polling every second
-                setTimeout(poll, 1000);
-            } catch (error) {
-                setUploadStatus(prev => ({
-                    ...prev,
-                    error: error instanceof Error ? error.message : 'Status check failed',
-                    currentStep: 'failed'
-                }));
-                setIsProcessing(false);
-            }
-        };
-        
-        // Start polling
-        poll();
+                    
+                    // Continue polling every second
+                    setTimeout(poll, 1000);
+                } catch (error) {
+                    setUploadStatus(prev => ({
+                        ...prev,
+                        error: error instanceof Error ? error.message : 'Status check failed',
+                        currentStep: 'failed'
+                    }));
+                    setIsProcessing(false);
+                    resolve(false);  // return failure as well if network error
+                }
+            };
+            
+            // Start polling
+            poll();
+        });
     }, [uploadType]);
+        
 
     // Clean up backend files and reset state
     const cleanup = useCallback(async () => {

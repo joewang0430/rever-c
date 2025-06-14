@@ -18,20 +18,21 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const { uploadStatus, processFile, pollStatus, cleanup } = useFileUpload('candidate');
 
     // if polling indicates failure, reset config
-    useEffect(() => {
-        if (uploadStatus.currentStep === 'failed' && (playerConfig.config?.customCodeId || playerConfig.config?.customName)) {
-            const resetConfig: PlayerConfig = {
-                ...playerConfig,
-                config: {
-                    ...playerConfig.config,
-                    customName: undefined,
-                    customCodeId: undefined
-                }
-            };
-            onConfigChange(resetConfig);
-            setHasProcessedFile(false);
-        }
-    }, [uploadStatus.currentStep, playerConfig, onConfigChange]);
+    // TODO: not needed for now, consider deleted it
+    // useEffect(() => {
+    //     if (uploadStatus.currentStep === 'failed' && (playerConfig.config?.customCodeId || playerConfig.config?.customName)) {
+    //         const resetConfig: PlayerConfig = {
+    //             ...playerConfig,
+    //             config: {
+    //                 ...playerConfig.config,
+    //                 customName: undefined,
+    //                 customCodeId: undefined
+    //             }
+    //         };
+    //         onConfigChange(resetConfig);
+    //         setHasProcessedFile(false);
+    //     }
+    // }, [uploadStatus.currentStep, playerConfig, onConfigChange]);
 
     // Handle file selection
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,21 +135,34 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
         try {
             setHasProcessedFile(true);
             const uploadedCodeId = await processFile(selectedFile);
-            
-            // Update PlayerConfig
-            const updatedConfig: PlayerConfig = {
-                ...playerConfig,
-                config: {
-                    ...playerConfig.config,
-                    customName: selectedFile.name.replace('.c', ''),
-                    customCodeId: uploadedCodeId
-                }
-            };
-            onConfigChange(updatedConfig);
+
+            // TODO: test config update, delete this later
+            // const updatedConfigTest: PlayerConfig = {
+            //     ...playerConfig,
+            //     config: {
+            //         ...playerConfig.config,
+            //         customName: selectedFile.name.replace('.c', ''),
+            //         customCodeId: uploadedCodeId
+            //     }
+            // };
+            // onConfigChange(updatedConfigTest);
 
             // Start polling
-            await pollStatus(uploadedCodeId);
-            
+            const isSuccess = await pollStatus(uploadedCodeId);
+
+            // Update PlayerConfig if overall process was successful
+            if (isSuccess) {
+                const updatedConfig: PlayerConfig = {
+                    ...playerConfig,
+                    config: {
+                        ...playerConfig.config,
+                        customName: selectedFile.name.replace('.c', ''),
+                        customCodeId: uploadedCodeId
+                    }
+                };
+                onConfigChange(updatedConfig);
+            }
+
         } catch (error) {
             console.error('Upload failed:', error);
             setHasProcessedFile(false);
