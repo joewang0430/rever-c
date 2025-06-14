@@ -68,18 +68,18 @@ async def cleanup_candidate(code_id: str):
         raise HTTPException(status_code=500, detail=f"Cleanup failed: {str(e)}")
     
 
-@upload_router.delete("/api/cleanup/candidate/{code_id}/code")
-async def cleanup_candidate_code(code_id: str):
-    """
-    Clean up only candidate source code (.c file), keep compiled file (.so)
-    """
-    try:
-        # only delete the source file (.c)
-        source_file = f"data/c_src/candidates/candidate_{code_id}.c"
-        if os.path.exists(source_file):
-            os.remove(source_file)
+# @upload_router.delete("/api/cleanup/candidate/{code_id}/code")
+# async def cleanup_candidate_code(code_id: str):
+#     """
+#     Clean up only candidate source code (.c file), keep compiled file (.so)
+#     """
+#     try:
+#         # only delete the source file (.c)
+#         source_file = f"data/c_src/candidates/candidate_{code_id}.c"
+#         if os.path.exists(source_file):
+#             os.remove(source_file)
         
-        return 
+#         return 
     
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Code cleanup failed: {str(e)}")
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Code cleanup failed: {str(e)}")

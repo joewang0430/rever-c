@@ -82,26 +82,27 @@ export async function cleanupCache(codeId: string): Promise<void> {
     }
 }
 
-// Clean up candidate source code only (.c file)
-export async function cleanupCandidateCode(codeId: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/cleanup/candidate/${codeId}/code`, {
-        method: 'DELETE',
-    });
+// TODO: I was stupid to write these routers, but in case they are needed...
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Code cleanup failed: ${errorText}`);
-    }
-}
+// export async function cleanupCandidateCode(codeId: string): Promise<void> {
+//     const response = await fetch(`${API_BASE_URL}/api/cleanup/candidate/${codeId}/code`, {
+//         method: 'DELETE',
+//     });
 
-// Clean up cache source code only (.c file)
-export async function cleanupCacheCode(codeId: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/cleanup/cache/${codeId}/code`, {
-        method: 'DELETE',
-    });
+//     if (!response.ok) {
+//         const errorText = await response.text();
+//         throw new Error(`Code cleanup failed: ${errorText}`);
+//     }
+// }
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Code cleanup failed: ${errorText}`);
-    }
-}
+
+// export async function cleanupCacheCode(codeId: string): Promise<void> {
+//     const response = await fetch(`${API_BASE_URL}/api/cleanup/cache/${codeId}/code`, {
+//         method: 'DELETE',
+//     });
+
+//     if (!response.ok) {
+//         const errorText = await response.text();
+//         throw new Error(`Code cleanup failed: ${errorText}`);
+//     }
+// }

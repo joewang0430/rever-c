@@ -7,7 +7,7 @@
 
 import { useState, useCallback } from 'react';
 import { UploadStatus, ProcessResponse, StatusResponse } from '@/data/types/upload';
-import { processCandidate, processCache, getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, cleanupCandidateCode, cleanupCacheCode } from '@/api/upload';
+import { processCandidate, processCache, getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache} from '@/api/upload';
 
 export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') => {
     const [uploadStatus, setUploadStatus] = useState<UploadStatus>({
@@ -114,19 +114,10 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                             return;
                             
                         case 'failed':
-                            // Handle failure in case of compilation or testing:
-                            // if compilation or testing failed, there will be garbage files.
                             try {
                                 const cleanupFn = uploadType === 'candidate' ? cleanupCandidate : cleanupCache;
-                                const cleanupCodeFn = uploadType === 'candidate' ? cleanupCandidateCode : cleanupCacheCode;
-
-                                if (status.failed_stage === 'compiling') {
-                                    console.log('Compiling failed, cleaning up source file...');
-                                    await cleanupCodeFn(codeId); 
-                                } else if (status.failed_stage === 'testing') {
-                                    console.log('Testing failed, cleaning up all files...');
-                                    await cleanupFn(codeId); 
-                                }
+                                console.log('Process failed, cleaning up all files...');
+                                await cleanupFn(codeId); 
                             } catch (cleanupError) {
                                 console.error('Auto cleanup failed:', cleanupError);
                             }
@@ -137,7 +128,7 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                                 currentStep: 'failed'
                             }));
                             setIsProcessing(false);
-                            resolve(false);  
+                            resolve(false);
                             return;
                             
                         default:
