@@ -104,10 +104,22 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
             setIsButtonCooldown(false);
         }, 1000);
 
-        // If user selected a new file after processing, this becomes "Reload"
-        if (hasProcessedFile && uploadStatus.currentStep !== 'idle') {
+        // If we are in a failed state, implement Reload logic
+        if (uploadStatus.currentStep === 'failed') {
+
+            // TODO: delted it later, not needed for now, as clean conflicts
+            // if (playerConfig.config?.customCodeId) {
+            //     try {
+            //         await cleanupCandidate(playerConfig.config.customCodeId);
+            //     } catch (error) {
+            //         console.error('Failed to cleanup old file:', error);
+            //     }
+            // }
+            
+            // Reset UploadStatus
             await cleanup();
             setHasProcessedFile(false);
+            
             // Reset PlayerConfig
             const resetConfig: PlayerConfig = {
                 ...playerConfig,
@@ -118,11 +130,11 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                 }
             };
             onConfigChange(resetConfig);
-            return;
+            
+            // Then begin the upload process by continuing logics below
         }
-
-        // Clear the old file if exists, before the new upload
-        if (playerConfig.config?.customCodeId) {
+        // If not failed, still need to clean up the old file
+        else if (playerConfig.config?.customCodeId) {
             try {
                 await cleanupCandidate(playerConfig.config.customCodeId);
             } catch (error) {
@@ -131,26 +143,15 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
             }
         }
 
-        // Otherwise, start upload process
+        // Begin file upload and processing
         try {
             setHasProcessedFile(true);
             const uploadedCodeId = await processFile(selectedFile);
 
-            // TODO: test config update, delete this later
-            // const updatedConfigTest: PlayerConfig = {
-            //     ...playerConfig,
-            //     config: {
-            //         ...playerConfig.config,
-            //         customName: selectedFile.name.replace('.c', ''),
-            //         customCodeId: uploadedCodeId
-            //     }
-            // };
-            // onConfigChange(updatedConfigTest);
-
-            // Start polling
+            // Polling for status updates
             const isSuccess = await pollStatus(uploadedCodeId);
 
-            // Update PlayerConfig if overall process was successful
+            // Reset PlayerConfig ONLY IF the upload was successful
             if (isSuccess) {
                 const updatedConfig: PlayerConfig = {
                     ...playerConfig,
@@ -173,30 +174,65 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const getButtonState = () => {
 
         if (isButtonCooldown) {
-            return { text: 'Please wait...', disabled: true, className: 'bg-gray-400 text-gray-600' };
-        }   // Always a cooldown after clicking the button
+        return { 
+            show: true,  
+            text: 'Please wait...', 
+            disabled: true, 
+            className: 'bg-gray-400 text-gray-600' 
+        };
+    }
 
-        if (!selectedFile) {
-            return { text: 'Upload', disabled: true, className: 'bg-gray-300 text-gray-500' };
-        }
-        
-        if (hasProcessedFile && uploadStatus.currentStep !== 'idle') {
-            return { text: 'Reload', disabled: false, className: 'bg-blue-500 text-white hover:bg-blue-600' };
-        }
+    if (!selectedFile) {
+        return { 
+            show: true,  
+            text: 'Upload', 
+            disabled: true, 
+            className: 'bg-gray-300 text-gray-500' 
+        };
+    }
 
         switch (uploadStatus.currentStep) {
             case 'idle':
-                return { text: 'Upload', disabled: false, className: 'bg-green-500 text-white hover:bg-green-600' };
+                return { 
+                    show: true, 
+                    text: 'Upload', 
+                    disabled: false, 
+                    className: 'bg-green-500 text-white hover:bg-green-600' 
+                };
+                
             case 'uploading':
             case 'compiling':
             case 'testing':
-                return { text: 'Processing...', disabled: true, className: 'bg-yellow-500 text-white' };
+                return { 
+                    show: true, 
+                    text: 'Submitting...', 
+                    disabled: true, 
+                    className: 'bg-blue-400 text-white' 
+                };
+                
             case 'success':
-                return { text: 'Submitted', disabled: true, className: 'bg-gray-400 text-gray-600' };
+                return { 
+                    show: true, 
+                    text: 'Submitted', 
+                    disabled: true, 
+                    className: 'bg-gray-500 text-white' 
+                };
+            
             case 'failed':
-                return { text: 'Upload', disabled: false, className: 'bg-red-500 text-white hover:bg-red-600' };
+                return { 
+                    show: true,
+                    text: 'Reload', 
+                    disabled: false, 
+                    className: 'bg-red-500 text-white hover:bg-red-600' 
+                };
+                
             default:
-                return { text: 'Upload', disabled: true, className: 'bg-gray-300 text-gray-500' };
+                return { 
+                    show: true, 
+                    text: 'Upload', 
+                    disabled: true, 
+                    className: 'bg-gray-300 text-gray-500' 
+                };
         }
     };
 
@@ -247,17 +283,19 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
 
                 {/* Action buttons */}
                 <div className="flex space-x-2">
-                    <button
-                        onClick={handleButtonClick}
-                        disabled={buttonState.disabled}
-                        className={`px-6 py-2 rounded font-medium transition-colors ${buttonState.className} ${
-                            buttonState.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-                        }`}
-                    >
-                        {buttonState.text}
-                    </button>
+                    {buttonState.show && (
+                        <button
+                            onClick={handleButtonClick}
+                            disabled={buttonState.disabled}
+                            className={`px-6 py-2 rounded font-medium transition-colors ${buttonState.className} ${
+                                buttonState.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+                            }`}
+                        >
+                            {buttonState.text}
+                        </button>
+                    )}
                     
-                    {/* Clear button */}
+                    {/* Clear button 保持不变 */}
                     {clearButtonState.show && (
                         <button
                             onClick={handleClear}
