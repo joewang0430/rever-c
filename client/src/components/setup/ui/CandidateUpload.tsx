@@ -420,6 +420,68 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                     )}
                 </div>
             )}
+
+            {/* TODO: Test Info - Used in Development */}
+            {process.env.NODE_ENV === 'development' && (
+                <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                    <details>
+                        <summary className="cursor-pointer text-sm font-medium text-gray-600">
+                            Debug: Upload Status & State
+                        </summary>
+                        <div className="mt-2 space-y-3">
+                            {/* Upload Status */}
+                            <div>
+                                <h5 className="text-xs font-semibold text-gray-700 mb-1">Upload Status:</h5>
+                                <pre className="text-xs text-gray-800 overflow-x-auto bg-white p-2 rounded border">
+                                    {JSON.stringify(uploadStatus, null, 2)}
+                                </pre>
+                            </div>
+                            
+                            {/* Local State */}
+                            <div>
+                                <h5 className="text-xs font-semibold text-gray-700 mb-1">Local State:</h5>
+                                <pre className="text-xs text-gray-800 overflow-x-auto bg-white p-2 rounded border">
+                                    {JSON.stringify({
+                                        selectedFile: selectedFile ? {
+                                            name: selectedFile.name,
+                                            size: selectedFile.size,
+                                            type: selectedFile.type,
+                                            lastModified: new Date(selectedFile.lastModified).toISOString()
+                                        } : null,
+                                        hasProcessedFile,
+                                        isButtonCooldown,
+                                        buttonState: buttonState,
+                                        clearButtonState: clearButtonState
+                                    }, null, 2)}
+                                </pre>
+                            </div>
+                            
+                            {/* Player Config */}
+                            <div>
+                                <h5 className="text-xs font-semibold text-gray-700 mb-1">Player Config:</h5>
+                                <pre className="text-xs text-gray-800 overflow-x-auto bg-white p-2 rounded border">
+                                    {JSON.stringify({
+                                        customName: playerConfig.config?.customName,
+                                        customCodeId: playerConfig.config?.customCodeId,
+                                        side: side,
+                                        playerType: playerConfig.type
+                                    }, null, 2)}
+                                </pre>
+                            </div>
+                            
+                            {/* Timestamps */}
+                            <div>
+                                <h5 className="text-xs font-semibold text-gray-700 mb-1">Timestamps:</h5>
+                                <div className="text-xs text-gray-800 bg-white p-2 rounded border">
+                                    <p>Current Time: {new Date().toISOString()}</p>
+                                    <p>Selected File Time: {selectedFile ? new Date(selectedFile.lastModified).toISOString() : 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            )}
+
         </div>
     );
 };

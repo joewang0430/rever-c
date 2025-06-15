@@ -81,28 +81,3 @@ export async function cleanupCache(codeId: string): Promise<void> {
         throw new Error(`Cleanup failed: ${errorText}`);
     }
 }
-
-// TODO: I was stupid to write these routers, but in case they are needed...
-
-// export async function cleanupCandidateCode(codeId: string): Promise<void> {
-//     const response = await fetch(`${API_BASE_URL}/api/cleanup/candidate/${codeId}/code`, {
-//         method: 'DELETE',
-//     });
-
-//     if (!response.ok) {
-//         const errorText = await response.text();
-//         throw new Error(`Code cleanup failed: ${errorText}`);
-//     }
-// }
-
-
-// export async function cleanupCacheCode(codeId: string): Promise<void> {
-//     const response = await fetch(`${API_BASE_URL}/api/cleanup/cache/${codeId}/code`, {
-//         method: 'DELETE',
-//     });
-
-//     if (!response.ok) {
-//         const errorText = await response.text();
-//         throw new Error(`Code cleanup failed: ${errorText}`);
-//     }
-// }
