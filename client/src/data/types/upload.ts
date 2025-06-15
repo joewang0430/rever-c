@@ -18,9 +18,9 @@ export interface ProcessResponse {
 }
 
 export interface StatusResponse {
-    code_id: string;
+    // code_id: string;
     status: 'uploading' | 'compiling' | 'testing' | 'success' | 'failed';
     error_message?: string;
     test_return_value?: number;
-    failed_stage?: 'uploading' | 'compiling' | 'testing';
+    failed_stage?: 'compiling' | 'testing';
 }
