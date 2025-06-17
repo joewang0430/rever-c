@@ -1,4 +1,6 @@
+// 
 // Setup page
+// 
 
 "use client";
 
@@ -82,7 +84,7 @@ export default function SetupPage({ params }: PageProps) {
                     />
                 </div>
                 
-                {/* Player Name Display - 左上和右上分开显示 */}
+                {/* Player Name Display */}
                 <div className="flex justify-between items-start mb-4 px-4">
                     <div className="flex-1 flex justify-start">
                         <SetupNameDisplay 

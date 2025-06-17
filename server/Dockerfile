@@ -34,6 +34,8 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        libc6 \
+       gcc \
+       libc6-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

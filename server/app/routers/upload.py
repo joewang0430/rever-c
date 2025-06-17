@@ -9,15 +9,17 @@ import os
 import aiofiles
 from datetime import datetime
 from typing import Optional, Literal
-# from concurrent.futures import ThreadPoolExecutor
-# import subprocess
 import json
+import subprocess
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+import resource
 
 
 upload_router = APIRouter()
 
 # Thread pool executor for running tasks in parallel
-# executor = ThreadPoolExecutor(max_workers=4)
+executor = ThreadPoolExecutor(max_workers=4)
 
 
 # Response model, corresponds to the interface at front-end
@@ -70,11 +72,132 @@ def cleanup_status(code_id: str, file_type: str = 'candidate'):
     if os.path.exists(status_file):
         os.remove(status_file)
 
-# def compile_candidate(code_id: str) -> dict:
+def set_memory_limits():
+    """ Set memory limits for the process to prevent excessive memory usage """
+    resource.setrlimit(resource.RLIMIT_AS, (100*1024*1024, 100*1024*1024))
+
+def validate_c_code(file_path: str) -> bool:
+    """
+    Validate the C code by checking malicious code and line number restrictions
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            code = f.read()
+    except Exception:
+        return False
+    
+    # Check for forbidden keywords
+    forbidden_keywords = [
+        '#include <unistd.h>',    # system calls
+        '#include <sys/',         # system headers
+        'system(',                # execute system commands
+        'exec(',                  # execute external programs
+        'fork(',                  # process operations
+        'while(1)',               # infinite loop
+        'for(;;)',                # infinite loop as well
+        '__asm__',                # no way to do ece243 here
+        'asm(',                   # same
+        '#include <signal.h>',    # signal handling
+        'kill(',                  # kill processes
+        'exit(',                  # exit the program
+    ]
+
+    # Check if any forbidden keyword is in the code
+    for keyword in forbidden_keywords:
+        if keyword in code:
+            return False
+
+    # NO MORE THAN 5000 lines of code
+    if len(code.splitlines()) > 5000:
+        return False
+    
+    # Check if the function 'make_move' is defined
+    if 'makeMove' not in code:
+        return False
+    
+    return True
+
+def compile_code(code_id: str, file_type: str) -> dict:
+    """
+    Compile the .c file into .so shared library
+    """
+    try:
+        source_file = f"data/c_src/{file_type}s/{file_type}_{code_id}.c"
+        output_file = f"data/shared_libs/{file_type}s/{file_type}_{code_id}.so"
+
+        # Validate the C code before compilation
+        if not validate_c_code(source_file):
+            return {
+                "success": False, 
+                "error": "Code validation failed: contains forbidden operations, exceeds line limit, or missing make_move function"
+            }
+        
+        # Run the gcc command to compile
+        compile_command = [
+            "gcc", 
+            "-shared",           # generate a shared library
+            "-fPIC",            # position-independent code
+            "-o", output_file,   # output file
+            source_file,         # src file
+            "-Wall",            # show all warnings
+            "-Wextra",          # additional warnings
+            "-std=c99"          # use C99 standard
+        ]
+
+        result = subprocess.run(
+            compile_command,
+            capture_output=True, 
+            text=True, 
+            timeout=30,
+            preexec_fn=set_memory_limits  # ✅ 使用外部定义的函数
+        )
+
+        # check compilation result
+        if result.returncode == 0:
+            return {"success": True}
+        else:
+            error_message = result.stderr if result.stderr else "Compilation failed with no error message"
+            return {"success": False, "error": error_message}
+        
+    except subprocess.TimeoutExpired:
+        return {"success": False, "error": "Compilation timeout (exceeded 30 seconds)"}
+    except Exception as e:
+        return {"success": False, "error": f"Compilation error: {str(e)}"}
+
+
+# def test_code(code_id: str) -> dict:
 #     pass #TODO:
 
-# def test_candidate(code_id: str) -> dict:
-#     pass #TODO:
+async def process_candidate_async(code_id: str):
+    """
+    Asynchronous processing of candidate files: 
+    compilation & testing.
+    """
+    try:
+        # Update status to "compiling"
+        save_status(code_id, "compiling", "candidate")
+        
+        # Run the compile_code function in a thread pool
+        loop = asyncio.get_event_loop()
+        compile_result = await loop.run_in_executor(
+            executor, 
+            compile_code, 
+            code_id, 
+            "candidate"
+        )
+        
+        if compile_result["success"]:
+            # TODO: 编译成功，暂时标记为成功（测试功能待实现）
+            save_status(code_id, "success", "candidate")
+        else:
+            # compile failed, save the error message
+            save_status(code_id, "failed", "candidate", 
+                       compile_result["error"], "compiling")
+            
+    except Exception as e:
+        # Error during processing
+        save_status(code_id, "failed", "candidate", 
+                   f"Processing error: {str(e)}")
 
 
 # Routers
@@ -100,8 +223,8 @@ async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
             content = await file.read()
             await f.write(content)
 
-        # TODO: set success status for test
-        save_status(code_id, "success", "candidate", test_return_value=42)
+        # Start background compilation process
+        asyncio.create_task(process_candidate_async(code_id))
 
         # Return the response in the expected format: ProcessResponse
         return ProcessResponse(code_id=code_id)
