@@ -14,6 +14,7 @@ import subprocess
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import resource
+from app.services import call_c
 
 
 upload_router = APIRouter()
