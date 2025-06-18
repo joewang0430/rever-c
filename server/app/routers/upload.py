@@ -150,7 +150,7 @@ def compile_code(code_id: str, file_type: str) -> dict:
             capture_output=True, 
             text=True, 
             timeout=30,
-            preexec_fn=set_memory_limits  # ✅ 使用外部定义的函数
+            preexec_fn=set_memory_limits
         )
 
         # check compilation result
@@ -167,7 +167,7 @@ def compile_code(code_id: str, file_type: str) -> dict:
 
 
 # def test_code(code_id: str) -> dict:
-#     pass #TODO:
+#     pass
 
 async def process_candidate_async(code_id: str):
     """
@@ -188,12 +188,42 @@ async def process_candidate_async(code_id: str):
         )
         
         if compile_result["success"]:
-            # TODO: 编译成功，暂时标记为成功（测试功能待实现）
-            save_status(code_id, "success", "candidate")
+            save_status(code_id, "testing", "candidate")
+
+            # Compile succeeded, now run the test_code function in the thread pool
+            test_result = await loop.run_in_executor(
+                executor,
+                call_c.test_code,
+                code_id,
+                "candidate"
+            )
+
+            if test_result["success"]:
+                # if test passed, save the success result
+                save_status(
+                    code_id, 
+                    "success", 
+                    "candidate", 
+                    test_return_value=test_result["return_value"]
+                )
+            else:
+                # if failed, save the error
+                save_status(
+                    code_id, 
+                    "failed", 
+                    "candidate", 
+                    test_result["error"], 
+                    "testing"
+                )
         else:
-            # compile failed, save the error message
-            save_status(code_id, "failed", "candidate", 
-                       compile_result["error"], "compiling")
+            # Compilation failed, save the error
+            save_status(
+                code_id, 
+                "failed", 
+                "candidate", 
+                compile_result["error"], 
+                "compiling"
+            )
             
     except Exception as e:
         # Error during processing

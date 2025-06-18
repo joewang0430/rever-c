@@ -407,7 +407,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                                 <div>
                                     <p className="font-medium text-green-800">Success!</p>
                                     <p className="text-green-700 text-sm mt-1">
-                                        Your code has been uploaded, compiled, and tested successfully.
+                                        Your code has been uploaded, compiled, and passed the basic test.
                                     </p>
                                     {uploadStatus.testReturnValue !== undefined && (
                                         <p className="text-green-700 text-sm mt-1">
