@@ -2,7 +2,6 @@
 // Data types for the upload process.
 //
 
-
 export interface UploadStatus {
     uploading: boolean;
     compiling: boolean;  
@@ -24,3 +23,25 @@ export interface StatusResponse {
     test_return_value?: number;
     failed_stage?: 'compiling' | 'testing';
 }
+
+export interface CacheData {
+  code_id: string;
+  upload_time: string;      // ISO 8601 format
+  filename: string;
+  status: StatusResponse['status'];
+  return_value?: number;    // returned value of makeMove in the initial test;
+                            // Note: this is different from the return value during the game
+}
+
+// Cache manager interface for handling cache data.
+export interface CacheManager {
+  getCacheData(): CacheData | null;
+  setCacheData(data: CacheData): void;
+  clearCacheData(): void;
+  isCacheExpired(uploadTime: string): boolean;
+  checkCacheOnLoad(): CacheData | null;
+}
+
+// Constants for cache management.
+export const CACHE_EXPIRY_HOURS = 36;
+export const CACHE_STORAGE_KEY = 'reverc_cache';
