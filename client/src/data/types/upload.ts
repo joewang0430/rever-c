@@ -33,15 +33,6 @@ export interface CacheData {
                             // Note: this is different from the return value during the game
 }
 
-// Cache manager interface for handling cache data.
-export interface CacheManager {
-  getCacheData(): CacheData | null;
-  setCacheData(data: CacheData): void;
-  clearCacheData(): void;
-  isCacheExpired(uploadTime: string): boolean;
-  checkCacheOnLoad(): CacheData | null;
-}
-
 // Constants for cache management.
 export const CACHE_EXPIRY_HOURS = 36;
 export const CACHE_STORAGE_KEY = 'reverc_cache';
