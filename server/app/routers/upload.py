@@ -2,7 +2,7 @@
 Router for handling file uploads before the game starts.
 '''
 
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 from pydantic import BaseModel
 import uuid
 import os
@@ -166,8 +166,7 @@ def compile_code(code_id: str, file_type: str) -> dict:
         return {"success": False, "error": f"Compilation error: {str(e)}"}
 
 
-# def test_code(code_id: str) -> dict:
-#     pass
+# ==================== CANDIDATE ROUTES ====================
 
 async def process_candidate_async(code_id: str):
     """
@@ -319,3 +318,159 @@ async def get_candidate_status(code_id: str) -> StatusResponse:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get status: {str(e)}")
+    
+
+# ==================== CACHE ROUTES ====================
+
+async def process_cache_async(code_id: str):
+    """
+    Asyncly process cache files: compilation and testing
+    """
+    try: 
+        # Update status: begin compiling
+        save_status(code_id, "compiling", "cache")
+
+        # Compile the code in a thread pool
+        loop = asyncio.get_event_loop()
+        compile_result = await loop.run_in_executor(
+            executor, 
+            compile_code, 
+            code_id, 
+            "cache"
+        )
+
+        if compile_result["success"]:
+            # Compilation succeeded, begin testing
+            save_status(code_id, "testing", "cache")
+            
+            # Run the test_code function in the thread pool
+            test_result = await loop.run_in_executor(
+                executor,
+                call_c.test_code,
+                code_id,
+                "cache"
+            )
+            
+            if test_result["success"]:
+                # Test passed, save the success result
+                save_status(
+                    code_id, 
+                    "success", 
+                    "cache", 
+                    test_return_value=test_result["return_value"]
+                )
+            else:
+                # Test failed, save the error
+                save_status(
+                    code_id, 
+                    "failed", 
+                    "cache", 
+                    test_result["error"], 
+                    "testing"
+                )
+        else:
+            # Compilation failed, save the error
+            save_status(
+                code_id, 
+                "failed", 
+                "cache", 
+                compile_result["error"], 
+                "compiling"
+            )
+
+    except Exception as e:
+        # Error during processing
+        save_status(
+            code_id, 
+            "failed", 
+            "cache", 
+            f"Processing error: {str(e)}"
+        )
+    
+
+@upload_router.post("/api/upload/cache")
+async def process_cache(file: UploadFile = File(...)) -> ProcessResponse:
+    """
+    upload and process cache file (reuse within 36 hs)
+    """
+    try:
+        if not file.filename or not file.filename.endswith('.c'):
+            raise HTTPException(status_code=400, detail="Only .c files are allowed")
+        
+        # Generate a unique ID, new name, and store path for the code
+        code_id = str(uuid.uuid4())
+        new_filename = f"cache_{code_id}.c"
+        file_path = f"data/c_src/caches/{new_filename}"
+
+        # Set the initial status to "uploading"
+        save_status(code_id, "uploading", "cache")
+
+        # Save file, with renaming, write in binary to prevent encoding issues
+        async with aiofiles.open(file_path, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
+
+        # Start background processing task
+        asyncio.create_task(process_cache_async(code_id))
+
+        # Return the response in ProcessResponse
+        return ProcessResponse(code_id=code_id)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        if 'code_id' in locals():
+            cleanup_status(code_id, "cache")
+        raise HTTPException(status_code=500, detail=f"Cache upload failed: {str(e)}")
+    
+
+@upload_router.get("/api/status/cache/{code_id}")
+async def get_cache_status(code_id: str) -> StatusResponse:
+    """
+    Get the processing status of the cache file
+    """
+    try:
+        # Load the status data
+        status_data = load_status(code_id, 'cache')
+        if status_data["status"] == "not_found":
+            raise HTTPException(status_code=404, detail="Cache ID not found")
+        if status_data["status"] == "error":
+            raise HTTPException(status_code=500, detail="Status file corrupted")
+        
+        # Return the status in StatusResponse
+        return StatusResponse(
+            status=status_data["status"],
+            error_message=status_data.get("error_message"),
+            failed_stage=status_data.get("failed_stage"),
+            test_return_value=status_data.get("test_return_value")
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get cache status: {str(e)}")
+    
+
+@upload_router.delete("/api/cleanup/cache/{code_id}")
+async def cleanup_cache(code_id: str):
+    """
+    Clean up all cache files (both .c source and .so compiled files) in this id
+    """
+    try:
+        # delete .c
+        source_file = f"data/c_src/caches/cache_{code_id}.c"
+        if os.path.exists(source_file):
+            os.remove(source_file)
+
+        # delete .so
+        compiled_file = f"data/shared_libs/caches/cache_{code_id}.so"
+        if os.path.exists(compiled_file):
+            os.remove(compiled_file)
+
+        # delete status file
+        cleanup_status(code_id, "cache")
+
+        return {"message": "Cache files cleaned up successfully"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cache cleanup failed: {str(e)}")
