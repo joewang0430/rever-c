@@ -1,10 +1,6 @@
-//
-// Section for Code Storage (cache) upload in the setup stage.
-//
-
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCacheManager } from '@/hooks/useCacheManager';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { PlayerConfig } from '@/data/types/setup';
@@ -19,6 +15,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [hasProcessedFile, setHasProcessedFile] = useState(false);
     const [isButtonCooldown, setIsButtonCooldown] = useState(false);
+    
     const { 
         cacheData, 
         isLoading, 
@@ -27,7 +24,10 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         isCacheAvailable,
         updateCacheStatus 
     } = useCacheManager();
+    
     const { uploadStatus, pollStatus, cleanup } = useFileUpload('cache');
+
+    const hasSuccessfulCache = (cacheData && cacheData.status === 'success') || uploadStatus.currentStep === 'success';
 
     // Handle file selection
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,26 +45,25 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
 
     // Handle clear button click
     const handleClear = async () => {
-        const confirmed = window.confirm(
-            "Are you sure you want to clear the stored code? You will need to upload again for future games."
-        );
+        const confirmMessage = hasSuccessfulCache 
+            ? "Are you sure you want to clear the stored code and reload the upload interface?"
+            : "Are you sure you want to clear the stored code? You will need to upload again for future games.";
+            
+        const confirmed = window.confirm(confirmMessage);
         if (!confirmed) return;
 
         try {
             await clearCacheManager();
             await cleanup();
 
-            // Reset local state
             setSelectedFile(null);
             setHasProcessedFile(false);
             
-            // Reset file input
             const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
             if (fileInput) {
                 fileInput.value = '';
             }
 
-            // Reset PlayerConfig
             const clearedConfig: PlayerConfig = {
                 ...playerConfig,
                 config: {
@@ -76,15 +75,14 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
             onConfigChange(clearedConfig);
 
         } catch (error) {
-            console.error('Clear cache failed:', error);
+            console.error('❌ Clear cache failed:', error);
             alert('Failed to clear cache. Please try again.');
         }
     };
 
-    // Handle use cache button (for existing valid cache)
+    // Handle use cache button
     const handleUseCache = () => {
         if (cacheData && isCacheAvailable()) {
-            // Update PlayerConfig
             const updatedConfig: PlayerConfig = {
                 ...playerConfig,
                 config: {
@@ -97,17 +95,15 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         }
     };
 
-    // Handle main button click (upload/reload)
+    // Handle main button click (upload)
     const handleButtonClick = async () => {
         if (!selectedFile || isButtonCooldown) return; 
 
-        // Cool down to prevent multiple clicks
         setIsButtonCooldown(true);
         setTimeout(() => {
             setIsButtonCooldown(false);
         }, 1000);
 
-        // If we are in a failed state, implement Reload logic
         if (uploadStatus.currentStep === 'failed') {
             await cleanup();
             setHasProcessedFile(false);
@@ -116,20 +112,18 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         try {
             setHasProcessedFile(true);
 
-            // Upload using cache manager (handles old cache cleanup automatically)
             const uploadedCodeId = await uploadCache(selectedFile);
 
-            // Use useFileUpload for polling (for consistent UI)
             const isSuccess = await pollStatus(uploadedCodeId);
 
-            // Update cache status when polling completes
+
             if (isSuccess && uploadStatus.testReturnValue !== undefined) {
+
                 updateCacheStatus({
                     status: 'success',
                     test_return_value: uploadStatus.testReturnValue
                 });
 
-                // Update PlayerConfig with new cache
                 const updatedConfig: PlayerConfig = {
                     ...playerConfig,
                     config: {
@@ -141,120 +135,13 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                 onConfigChange(updatedConfig);
             }
 
-        } catch (error) {   
-            console.error('Cache upload failed:', error);
+        } catch (error) {
+            console.error('❌ Cache upload failed:', error);
             setHasProcessedFile(false);
         }
     };
 
-    // Determine button state
-    const getButtonState = () => {
-        if (isButtonCooldown) {
-            return { 
-                show: true,  
-                text: 'Please wait...', 
-                disabled: true, 
-                className: 'bg-gray-400 text-gray-600' 
-            };
-        }
-
-        if (!selectedFile) {
-            return { 
-                show: true,  
-                text: 'Upload Cache', 
-                disabled: true, 
-                className: 'bg-gray-300 text-gray-500' 
-            };
-        }
-
-        switch (uploadStatus.currentStep) {
-            case 'idle':
-                return { 
-                    show: true, 
-                    text: 'Upload Cache', 
-                    disabled: false, 
-                    className: 'bg-blue-500 text-white hover:bg-blue-600' 
-                };
-                
-            case 'uploading':
-            case 'compiling':
-            case 'testing':
-                return { 
-                    show: true, 
-                    text: 'Processing...', 
-                    disabled: true, 
-                    className: 'bg-blue-400 text-white' 
-                };
-                
-            case 'success':
-                return { 
-                    show: true, 
-                    text: 'Cached Successfully', 
-                    disabled: true, 
-                    className: 'bg-green-500 text-white' 
-                };
-            
-            case 'failed':
-                return { 
-                    show: true,
-                    text: 'Retry Upload', 
-                    disabled: false, 
-                    className: 'bg-red-500 text-white hover:bg-red-600' 
-                };
-                
-            default:
-                return { 
-                    show: true, 
-                    text: 'Upload Cache', 
-                    disabled: true, 
-                    className: 'bg-gray-300 text-gray-500' 
-                };
-        }
-    };
-
-    // Determine clear button state
-    const getClearButtonState = () => {
-        const hasSelectedFile = selectedFile !== null;
-        const hasCachedFile = cacheData !== null;
-        
-        if (!hasSelectedFile && !hasCachedFile) {
-            return { show: false, disabled: true };
-        }
-        
-        if (uploadStatus.currentStep === 'uploading' || 
-            uploadStatus.currentStep === 'compiling' || 
-            uploadStatus.currentStep === 'testing') {
-            return { show: true, disabled: true };
-        }
-        
-        return { show: true, disabled: false };
-    };
-
-    // Determine use cache button state
-    const getUseCacheButtonState = () => {
-        const cacheAvailable = isCacheAvailable();
-        const isProcessing = uploadStatus.currentStep === 'uploading' || 
-                           uploadStatus.currentStep === 'compiling' || 
-                           uploadStatus.currentStep === 'testing';
-        
-        return {
-            show: cacheAvailable && !isProcessing,
-            disabled: false
-        };
-    };
-
-    // Get status color for cache display
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'success': return 'bg-green-100 text-green-800';
-            case 'failed': return 'bg-red-100 text-red-800';
-            case 'uploading': return 'bg-blue-100 text-blue-800';
-            case 'compiling': return 'bg-yellow-100 text-yellow-800';
-            case 'testing': return 'bg-purple-100 text-purple-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
-    };
-
+    // Utility functions
     const getTimeAgo = (uploadTime: string) => {
         const now = new Date();
         const uploaded = new Date(uploadTime);
@@ -271,15 +158,37 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         }
     };
 
-    const buttonState = getButtonState();
-    const clearButtonState = getClearButtonState();
-    const useCacheButtonState = getUseCacheButtonState();
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'success': return 'bg-green-100 text-green-800';
+            case 'failed': return 'bg-red-100 text-red-800';
+            case 'uploading': return 'bg-blue-100 text-blue-800';
+            case 'compiling': return 'bg-yellow-100 text-yellow-800';
+            case 'testing': return 'bg-purple-100 text-purple-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
 
     return (
         <div className="space-y-4">
+            {/* Debug info display in development */}
+            {process.env.NODE_ENV === 'development' && (
+                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
+                    <div className="font-bold text-yellow-800 mb-2">🐛 Debug Info:</div>
+                    <div className="space-y-1 text-yellow-700">
+                        <div>cacheData: {cacheData ? `${cacheData.filename} (${cacheData.status})` : 'null'}</div>
+                        <div>isLoading: {isLoading.toString()}</div>
+                        <div>uploadStatus.currentStep: {uploadStatus.currentStep}</div>
+                        <div>hasSuccessfulCache: {hasSuccessfulCache.toString()}</div>
+                        <div>isCacheAvailable: {isCacheAvailable().toString()}</div>
+                        <div>playerConfig.customCodeId: {playerConfig.config?.customCodeId || 'undefined'}</div>
+                    </div>
+                </div>
+            )}
+
             {/* Header */}
             <div className="flex items-center justify-between border-b pb-2">
-                <h3 className="text-lg font-semibold text-gray-800">Code Cache</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Stored Code</h3>
                 <div className="text-right">
                     <div className="text-xs text-gray-500">Valid for 36 hours</div>
                     <div className="text-xs text-gray-400 capitalize">{side} Player</div>
@@ -320,80 +229,152 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
             )}
 
             {/* File Upload Section */}
-            <div className="space-y-3">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Select C File to Cache:
-                    </label>
-                    <input
-                        type="file"
-                        accept=".c"
-                        onChange={handleFileSelect}
-                        className="block w-full text-sm text-gray-500 
-                                 file:mr-4 file:py-2 file:px-4 
-                                 file:rounded-full file:border-0 
-                                 file:text-sm file:font-semibold 
-                                 file:bg-blue-50 file:text-blue-700 
-                                 hover:file:bg-blue-100
-                                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    />
-                </div>
-                
-                {/* Selected file display */}
-                {selectedFile && (
-                    <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg border">
-                        <span className="text-blue-600">📄</span>
-                        <div className="flex-1">
-                            <div className="text-sm font-medium text-blue-800">{selectedFile.name}</div>
-                            <div className="text-xs text-blue-600">
-                                {(selectedFile.size / 1024).toFixed(1)} KB
+            {!hasSuccessfulCache && (
+                <div className="space-y-3">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Select C File to Store:
+                        </label>
+                        <input
+                            type="file"
+                            accept=".c"
+                            onChange={handleFileSelect}
+                            className="block w-full text-sm text-gray-500 
+                                     file:mr-4 file:py-2 file:px-4 
+                                     file:rounded-full file:border-0 
+                                     file:text-sm file:font-semibold 
+                                     file:bg-blue-50 file:text-blue-700 
+                                     hover:file:bg-blue-100
+                                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        />
+                    </div>
+                    
+                    {selectedFile && (
+                        <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg border">
+                            <span className="text-blue-600">📄</span>
+                            <div className="flex-1">
+                                <div className="text-sm font-medium text-blue-800">{selectedFile.name}</div>
+                                <div className="text-xs text-blue-600">
+                                    {(selectedFile.size / 1024).toFixed(1)} KB
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
-
-                {/* Action buttons */}
-                <div className="flex flex-wrap gap-2">
-                    {/* Upload/Retry button */}
-                    {buttonState.show && (
-                        <button
-                            onClick={handleButtonClick}
-                            disabled={buttonState.disabled}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${buttonState.className} ${
-                                buttonState.disabled ? 'cursor-not-allowed' : 'cursor-pointer shadow-sm hover:shadow-md'
-                            }`}
-                        >
-                            {buttonState.text}
-                        </button>
-                    )}
-                    
-                    {/* Use Cache button */}
-                    {useCacheButtonState.show && (
-                        <button
-                            onClick={handleUseCache}
-                            disabled={useCacheButtonState.disabled}
-                            className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 
-                                     cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
-                        >
-                            Use Cache
-                        </button>
-                    )}
-
-                    {/* Clear button */}
-                    {clearButtonState.show && (
-                        <button
-                            onClick={handleClear}
-                            disabled={clearButtonState.disabled}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                clearButtonState.disabled
-                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer shadow-sm hover:shadow-md'
-                            }`}
-                        >
-                            Clear Cache
-                        </button>
                     )}
                 </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="flex flex-wrap gap-2">
+                {/* Upload button */}
+                {!hasSuccessfulCache && (
+                    <>
+                        {(() => {
+                            if (isButtonCooldown) {
+                                return (
+                                    <button
+                                        disabled
+                                        className="px-4 py-2 rounded-lg font-medium bg-gray-400 text-gray-600 cursor-not-allowed"
+                                    >
+                                        Please wait...
+                                    </button>
+                                );
+                            }
+
+                            if (!selectedFile) {
+                                return (
+                                    <button
+                                        disabled
+                                        className="px-4 py-2 rounded-lg font-medium bg-gray-300 text-gray-500 cursor-not-allowed"
+                                    >
+                                        Upload
+                                    </button>
+                                );
+                            }
+
+                            switch (uploadStatus.currentStep) {
+                                case 'idle':
+                                    return (
+                                        <button
+                                            onClick={handleButtonClick}
+                                            className="px-4 py-2 rounded-lg font-medium bg-blue-500 text-white hover:bg-blue-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
+                                        >
+                                            Upload
+                                        </button>
+                                    );
+                                case 'uploading':
+                                case 'compiling':
+                                case 'testing':
+                                    return (
+                                        <button
+                                            disabled
+                                            className="px-4 py-2 rounded-lg font-medium bg-blue-400 text-white cursor-not-allowed"
+                                        >
+                                            Processing...
+                                        </button>
+                                    );
+                                case 'success':
+                                    return (
+                                        <button
+                                            disabled
+                                            className="px-4 py-2 rounded-lg font-medium bg-green-500 text-white cursor-not-allowed"
+                                        >
+                                            Stored Successfully
+                                        </button>
+                                    );
+                                case 'failed':
+                                    return (
+                                        <button
+                                            onClick={handleButtonClick}
+                                            className="px-4 py-2 rounded-lg font-medium bg-red-500 text-white hover:bg-red-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
+                                        >
+                                            Retry Upload
+                                        </button>
+                                    );
+                                default:
+                                    return (
+                                        <button
+                                            disabled
+                                            className="px-4 py-2 rounded-lg font-medium bg-gray-300 text-gray-500 cursor-not-allowed"
+                                        >
+                                            Upload
+                                        </button>
+                                    );
+                            }
+                        })()}
+                    </>
+                )}
+                
+                {/* Use Cache button */}
+                {isCacheAvailable() && 
+                 uploadStatus.currentStep !== 'uploading' && 
+                 uploadStatus.currentStep !== 'compiling' && 
+                 uploadStatus.currentStep !== 'testing' && (
+                    <button
+                        onClick={handleUseCache}
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                        Use Stored Code
+                    </button>
+                )}
+
+                {/* Clear button */}
+                {(selectedFile || cacheData) && (
+                    <button
+                        onClick={handleClear}
+                        disabled={uploadStatus.currentStep === 'uploading' || 
+                                 uploadStatus.currentStep === 'compiling' || 
+                                 uploadStatus.currentStep === 'testing'}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                            uploadStatus.currentStep === 'uploading' || 
+                            uploadStatus.currentStep === 'compiling' || 
+                            uploadStatus.currentStep === 'testing'
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer shadow-sm hover:shadow-md'
+                        }`}
+                    >
+                        {hasSuccessfulCache ? 'Clear and Reload' : 'Clear'}
+                    </button>
+                )}
             </div>
 
             {/* Processing Status Display */}
@@ -501,9 +482,9 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                             <div className="flex items-start space-x-3">
                                 <span className="text-green-500 text-xl">🎉</span>
                                 <div className="flex-1">
-                                    <h5 className="font-medium text-green-800 mb-1">Cache Created Successfully!</h5>
+                                    <h5 className="font-medium text-green-800 mb-1">Code Stored Successfully!</h5>
                                     <p className="text-green-700 text-sm mb-2">
-                                        Your code has been cached and is ready for use in games for the next 36 hours.
+                                        Your code has been stored and is ready for use in games for the next 36 hours.
                                     </p>
                                     {uploadStatus.testReturnValue !== undefined && (
                                         <div className="flex items-center space-x-2">
