@@ -10,9 +10,8 @@ import {
     CacheData, 
     CACHE_EXPIRY_HOURS, 
     CACHE_STORAGE_KEY,
-    ProcessResponse
 } from '../data/types/upload';
-import { processCache, getCacheStatus, cleanupCache } from '../api/upload';
+import { processCache, cleanupCache } from '../api/upload';
 
 /* Helper Functions */
 
@@ -87,7 +86,6 @@ export const checkCacheOnLoad = (): CacheData | null => {
 
 export const useCacheManager = () => {
     const [cacheState, setCacheState] = useState<CacheData | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // Initialize and check the cache
     useEffect(() => {
@@ -98,8 +96,6 @@ export const useCacheManager = () => {
     // Upload cache file, including cleanup of old cache if exists
     const uploadCache = useCallback(async (file: File): Promise<string> => {
         try {
-            setIsLoading(true);
-
             // Check & cleanup old cache if exists
             const oldCache = getCacheData();
             if (oldCache && !isCacheExpired(oldCache.upload_time)) {
@@ -129,8 +125,6 @@ export const useCacheManager = () => {
         } catch (error) {
             console.error('Cache upload failed:', error);
             throw error;
-        } finally {
-            setIsLoading(false);
         }
     },[]);
 
@@ -174,7 +168,6 @@ export const useCacheManager = () => {
     return {
         // States
         cacheState,
-        isLoading,
         
         // Methods
         uploadCache,
