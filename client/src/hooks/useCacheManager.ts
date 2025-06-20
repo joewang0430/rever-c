@@ -10,7 +10,6 @@ import {
     CacheData, 
     CACHE_EXPIRY_HOURS, 
     CACHE_STORAGE_KEY,
-    StatusResponse,
     ProcessResponse
 } from '../data/types/upload';
 import { processCache, getCacheStatus, cleanupCache } from '../api/upload';
@@ -159,19 +158,18 @@ export const useCacheManager = () => {
     },[cacheState]);
 
     // Update cache status (for external usage, ex. after polling)
-    const updateCacheStatus = useCallback((statusResponse: StatusResponse) => {
+    const updateCacheStatus = useCallback((statusUpdate: { status: 'uploading' | 'compiling' | 'testing' | 'success' | 'failed'; testReturnValue?: number }) => {
         const currentCache = getCacheData();
         if (currentCache) {
             const updatedCache: CacheData = {
                 ...currentCache,
-                status: statusResponse.status,
-                return_value: statusResponse.test_return_value
+                status: statusUpdate.status,
+                return_value: statusUpdate.testReturnValue
             };
-            // Save the updated cache data
             saveCacheData(updatedCache);
             setCacheState(updatedCache);
         }
-    },[]);
+    }, []);
 
     return {
         // States
