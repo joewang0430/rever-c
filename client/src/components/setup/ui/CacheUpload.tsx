@@ -16,7 +16,6 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const [isButtonCooldown, setIsButtonCooldown] = useState<boolean>(false);
     const { 
         cacheState,
-        isLoading,
         uploadCache,
         clearCache,
         isCacheAvailable,
@@ -30,7 +29,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     
     // Automatically load the cache config
     useEffect(() => {
-        if (cacheState && isCacheAvailable() && !playerConfig.config.customCodeId) {
+        if (cacheState && isCacheAvailable() && !playerConfig.config?.customCodeId) {
             const updatedConfig: PlayerConfig = {
                 ...playerConfig,
                 config: {
@@ -429,7 +428,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
             )}
 
             {/* Current Player Config Display */}
-            {playerConfig.config.customCodeId && (
+            {playerConfig.config?.customCodeId && (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-center space-x-2 text-blue-800">
                         <span className="text-sm">🔧</span>
