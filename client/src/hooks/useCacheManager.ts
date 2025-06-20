@@ -17,14 +17,12 @@ import { processCache, getCacheStatus, cleanupCache } from '../api/upload';
 
 /* Helper Functions */
 
-// Get cache data from local storage
 export const getCacheData = (): CacheData | null => {
     try {
         const cached = localStorage.getItem(CACHE_STORAGE_KEY);
         if (!cached) return null;
 
         const data = JSON.parse(cached) as CacheData;
-
         // Verify the data structure
         if (!data.code_id || !data.upload_time || !data.filename) {
             clearCacheData();
@@ -37,19 +35,19 @@ export const getCacheData = (): CacheData | null => {
         clearCacheData();
         return null;
     }
-}
+};
 
 // Load cache data into local storage
-export const setCacheData = (data: CacheData): void => {
+export const saveCacheData = (data: CacheData) => {
     try {
         localStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
         console.error('Failed to set cache data:', error);
     }
-}
+};
 
 // Clear cache data from local storage
-export const clearCacheData = (): void => {
+export const clearCacheData = () => {
     try {
         localStorage.removeItem(CACHE_STORAGE_KEY);
     } catch (error) {
@@ -73,17 +71,15 @@ export const isCacheExpired = (uploadTime: string): boolean => {
 // Check the cache when the page loads
 export const checkCacheOnLoad = (): CacheData | null => {
     const cache = getCacheData();
-    
+
     if (!cache) return null;
-    
+
     // check if the cache is expired
     if (isCacheExpired(cache.upload_time)) {
-        console.log('Your code storage expired, clearing...');
         clearCacheData();
         return null;
     }
-    
-    console.log('Valid code storage found:', cache);
+
     return cache;
 };
 
@@ -91,22 +87,20 @@ export const checkCacheOnLoad = (): CacheData | null => {
 /* Custom Hook */
 
 export const useCacheManager = () => {
-    const [cacheData, setCacheDataState] = useState<CacheData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState<StatusResponse['status'] | null>(null);
+    const [cacheState, setCacheState] = useState<CacheData | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // Initialize and check the cache
     useEffect(() => {
         const cache = checkCacheOnLoad();
-        setCacheDataState(cache);
+        setCacheState(cache);
     }, []);
 
-    // Upload cache file
+    // Upload cache file, including cleanup of old cache if exists
     const uploadCache = useCallback(async (file: File): Promise<string> => {
         try {
             setIsLoading(true);
-            setUploadProgress('uploading');
-            
+
             // Check & cleanup old cache if exists
             const oldCache = getCacheData();
             if (oldCache && !isCacheExpired(oldCache.upload_time)) {
@@ -116,34 +110,33 @@ export const useCacheManager = () => {
                     console.warn('Failed to cleanup old cache:', error);
                 }
             }
-            // Then upload the new cache file
-            const response = await processCache(file); 
+            // Then upload the new cache file, get code id
+            const response = await processCache(file);
 
             // Create new cache data object
             const newCacheData: CacheData = {
                 code_id: response.code_id,
                 upload_time: new Date().toISOString(),
                 filename: file.name,
-                status: 'uploading',
+                status: 'uploading', 
             };
 
             // Then store it in local storage
-            setCacheData(newCacheData);
-            setCacheDataState(newCacheData);
+            saveCacheData(newCacheData);
+            setCacheState(newCacheData);
 
             return response.code_id;
 
         } catch (error) {
             console.error('Cache upload failed:', error);
-            setUploadProgress(null);
             throw error;
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    },[]);
 
     // Cleanup cache data
-    const clearCache = useCallback(async () => {
+    const clearCache = useCallback(async ()=> {
         const cache = getCacheData();
         if (cache) {
             try {
@@ -153,43 +146,42 @@ export const useCacheManager = () => {
             }
         }
         clearCacheData();
-        setCacheDataState(null);
-        setUploadProgress(null);
+        setCacheState(null);
     }, []);
 
     // Check if cache is available
     const isCacheAvailable = useCallback((): boolean => {
-        if (!cacheData) return false;
-        if (isCacheExpired(cacheData.upload_time)) return false;
-        return cacheData.status === 'success';
-    }, [cacheData]);
+        if (!cacheState) {return false;} 
+        else if (!cacheState.code_id || !cacheState.upload_time) {return false;}
+        if (isCacheExpired(cacheState.upload_time)) return false;
+
+        return true;
+    },[cacheState]);
 
     // Update cache status (for external usage, ex. after polling)
-    const updateCacheStatus = useCallback((status: StatusResponse) => {
+    const updateCacheStatus = useCallback((statusResponse: StatusResponse) => {
         const currentCache = getCacheData();
         if (currentCache) {
             const updatedCache: CacheData = {
                 ...currentCache,
-                status: status.status,
-                return_value: status.test_return_value
+                status: statusResponse.status,
+                return_value: statusResponse.test_return_value
             };
-            setCacheData(updatedCache);
-            setCacheDataState(updatedCache);
+            // Save the updated cache data
+            saveCacheData(updatedCache);
+            setCacheState(updatedCache);
         }
-        setUploadProgress(null);
-    }, []);
+    },[]);
 
     return {
         // States
-        cacheData,
+        cacheState,
         isLoading,
-        uploadProgress,
         
         // Methods
         uploadCache,
         clearCache,
         isCacheAvailable,
-        updateCacheStatus,
-        checkExpired: (uploadTime: string) => isCacheExpired(uploadTime),
+        updateCacheStatus
     };
 };
