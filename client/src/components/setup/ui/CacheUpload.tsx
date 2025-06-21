@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useCacheManager } from '@/hooks/useCacheManager';
+// import { useCacheManager } from '@/hooks/useCacheManager';
+import { useCacheContext } from '@/contexts/CacheContext';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { PlayerConfig } from '@/data/types/setup';
 
@@ -15,12 +16,12 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isButtonCooldown, setIsButtonCooldown] = useState<boolean>(false);
     const { 
-        cacheState,
-        uploadCache,
+        cacheState, 
+        uploadCache, 
         clearCache,
         isCacheAvailable,
         updateCacheStatus
-    } = useCacheManager();
+    } = useCacheContext();
     const { uploadStatus, pollStatus, cleanup } = useFileUpload('cache');
 
     // Check if there is an successful cache
