@@ -1,0 +1,40 @@
+{
+    "groups": [
+    {
+        "id": "2024",
+        "name": "2024 APS105 Leaders",
+        "archives": [
+        {
+            "id": "hukaiqi1",
+            "name": "Alex K.Q. Hu",
+            "shortName": "Alex.H",
+            "description": "#8 rank APS105 Leaderboard 2024",
+            "shortDescription": "#8",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "wang4577",
+            "name": "Joe Wang",
+            "shortName": "Joe.W",
+            "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
+            "shortDescription": "#21",
+            "image": "/images/archives/test_archive.jpg"
+        }
+        ]
+    },
+    {
+        "id": "2025",
+        "name": "2025 APS105 Leaders",
+        "archives": [
+        {
+            "id": "test",
+            "name": "test",
+            "shortName": "test",
+            "description": "test",
+            "shortDescription": "test",
+            "image": "/images/archives/test_archive.jpg"
+        }
+        ]
+    }
+  ]
+}
