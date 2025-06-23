@@ -12,15 +12,15 @@ import {
     CACHE_STORAGE_KEY,
 } from '../data/types/upload';
 import { processCache, cleanupCache } from '../api/upload';
+import { storage } from '@/utils/storage';
 
 /* Helper Functions */
 
 export const getCacheData = (): CacheData | null => {
     try {
-        const cached = localStorage.getItem(CACHE_STORAGE_KEY);
-        if (!cached) return null;
+        const data = storage.getJSON(CACHE_STORAGE_KEY) as CacheData;
+        if (!data) return null;
 
-        const data = JSON.parse(cached) as CacheData;
         // Verify the data structure
         if (!data.code_id || !data.upload_time || !data.filename) {
             clearCacheData();
@@ -38,7 +38,7 @@ export const getCacheData = (): CacheData | null => {
 // Load cache data into local storage
 export const saveCacheData = (data: CacheData) => {
     try {
-        localStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify(data));
+        storage.setJSON(CACHE_STORAGE_KEY, data);
     } catch (error) {
         console.error('Failed to set cache data:', error);
     }
@@ -47,7 +47,7 @@ export const saveCacheData = (data: CacheData) => {
 // Clear cache data from local storage
 export const clearCacheData = () => {
     try {
-        localStorage.removeItem(CACHE_STORAGE_KEY);
+        storage.removeItem(CACHE_STORAGE_KEY);
     } catch (error) {
         console.error('Failed to clear cache data:', error);
     }

@@ -7,6 +7,7 @@
 import { useState, useEffect } from 'react';
 import communityData from '@/data/constants/community.json';
 import { PlayerConfig } from '@/data/types/setup';
+import { storage } from '@/utils/storage';
 
 interface ArchiveEntry {
     id: string;
@@ -28,17 +29,15 @@ export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConf
     const [selectedArchive, setSelectedArchive] = useState<ArchiveEntry | null>(null);
     const [openGroups, setOpenGroups] = useState<string[]>(() => {
         try {
-            const saved = localStorage.getItem(`archiveOpenGroups_${side}`);  // 🔥 加上 side
-            return saved ? JSON.parse(saved) : ['2024'];
+            return storage.getJSON(`archiveOpenGroups_${side}`) || ['2024'];
         } catch {
             return ['2024'];
-    }
-});
-
+        }
+    });
     // Reload selection from local storage
     useEffect(() => {
         const storageKey = `selectedArchive_${side}`;
-        const lastSelectedId = localStorage.getItem(storageKey);
+        const lastSelectedId = storage.getItem(storageKey);
         if (lastSelectedId) {
             try {
                 const archive = communityData.groups
@@ -50,7 +49,7 @@ export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConf
                     }
             } catch (error) {
                 console.warn(`Failed to restore archive selection for ${side}:`, error);
-                localStorage.removeItem(storageKey);
+                storage.removeItem(storageKey);
             }
         }
     }, [side]);
@@ -90,7 +89,7 @@ export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConf
 
         try {
             const storageKey = `selectedArchive_${side}`;
-            localStorage.setItem(storageKey, archive.id);
+            storage.setItem(storageKey, archive.id);
         } catch (error) {
             console.warn(`Failed to save archive selection for ${side}:`, error);
         }
@@ -101,7 +100,7 @@ export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConf
         setSelectedArchive(null);
         try {
             const storageKey = `selectedArchive_${side}`;
-            localStorage.removeItem(storageKey);
+            storage.removeItem(storageKey);
         } catch (error) {
             console.warn(`Failed to clear archive selection for ${side}:`, error);
         }
@@ -115,7 +114,7 @@ export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConf
                 : [...prev, groupId];
             
             try {
-                localStorage.setItem(`archiveOpenGroups_${side}`, JSON.stringify(newGroups));  // 🔥 加上 side
+                storage.setJSON(`archiveOpenGroups_${side}`, newGroups);
             } catch (error) {
                 console.warn(`Failed to save open groups for ${side}:`, error);
             }
