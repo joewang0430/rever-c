@@ -6,6 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import communityData from '@/data/constants/community.json';
+import { PlayerConfig } from '@/data/types/setup';
 
 interface ArchiveEntry {
     id: string;
@@ -23,9 +24,16 @@ interface ArchiveGroupEntry {
     archives: ArchiveEntry[];
 };
 
-export const useArchiveData = (side: 'black' | 'white') => {
+export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConfig, onConfigChange: (config: PlayerConfig) => void) => {
     const [selectedArchive, setSelectedArchive] = useState<ArchiveEntry | null>(null);
-    const [openGroups, setOpenGroups] = useState<string[]>(['2024']);
+    const [openGroups, setOpenGroups] = useState<string[]>(() => {
+        try {
+            const saved = localStorage.getItem(`archiveOpenGroups_${side}`);  // 🔥 加上 side
+            return saved ? JSON.parse(saved) : ['2024'];
+        } catch {
+            return ['2024'];
+    }
+});
 
     // Reload selection from local storage
     useEffect(() => {
@@ -46,6 +54,35 @@ export const useArchiveData = (side: 'black' | 'white') => {
             }
         }
     }, [side]);
+
+    // Update player config when selected archive changes
+    useEffect(() => {
+        if (selectedArchive) {
+            // Update player config with selected archive
+            const updatedConfig: PlayerConfig = {
+                ...playerConfig,
+                config: {
+                    ...playerConfig.config || {},
+                    archiveGroup: selectedArchive.groupId,
+                    archiveId: selectedArchive.id,
+                    archiveName: selectedArchive.name
+                }
+            };
+            onConfigChange(updatedConfig);
+        } else {
+            // update as well when cleared
+            const updatedConfig: PlayerConfig = {
+                ...playerConfig,
+                config: {
+                    ...playerConfig.config || {},
+                    archiveGroup: undefined,
+                    archiveId: undefined,
+                    archiveName: undefined
+                }
+            };
+            onConfigChange(updatedConfig);
+        }
+    }, [selectedArchive]); // prevent infinite dep loop
 
     // Select archive
     const selectArchive = (archive: ArchiveEntry) => {
@@ -72,11 +109,19 @@ export const useArchiveData = (side: 'black' | 'white') => {
 
     // Toggle group open state
     const toggleGroup = (groupId: string) => {
-        setOpenGroups(prev => 
-            prev.includes(groupId) 
+        setOpenGroups(prev => {
+            const newGroups = prev.includes(groupId) 
                 ? prev.filter(id => id !== groupId)
-                : [...prev, groupId]
-        );
+                : [...prev, groupId];
+            
+            try {
+                localStorage.setItem(`archiveOpenGroups_${side}`, JSON.stringify(newGroups));  // 🔥 加上 side
+            } catch (error) {
+                console.warn(`Failed to save open groups for ${side}:`, error);
+            }
+            
+            return newGroups;
+        });
     };
 
     // Find archive based on ID
@@ -87,12 +132,6 @@ export const useArchiveData = (side: 'black' | 'white') => {
         return archive ? (archive as ArchiveEntry) : null;
     };
 
-    // Get complete customCodeId (groupId/archiveId)
-    const getCustomCodeId = (): string | null => {
-        if (!selectedArchive) return null;
-        return `${selectedArchive.groupId}/${selectedArchive.id}`;
-    };
-
     return {
         groups: communityData.groups as ArchiveGroupEntry[],
         selectedArchive,
@@ -101,7 +140,6 @@ export const useArchiveData = (side: 'black' | 'white') => {
         selectArchive,
         clearSelection,
         toggleGroup,
-        findArchiveById,
-        getCustomCodeId
+        findArchiveById
     };
 };

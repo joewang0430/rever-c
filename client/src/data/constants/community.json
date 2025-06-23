@@ -7,20 +7,20 @@
         {
             "id": "hukaiqi1",
             "groupId": "2024",
-            "name": "Hukaiqi Advanced Strategy",
-            "shortName": "Hukaiqi #1",
-            "description": "Advanced strategy with aggressive opening moves",
-            "shortDescription": "Aggressive opening",
-            "image": "/images/archives/hukaiqi1.jpg"
+            "name": "Alex K.Q. Hu",
+            "shortName": "H.Alex",
+            "description": "#8 rank APS105 Leaderboard 2024",
+            "shortDescription": "#8",
+            "image": "/images/archives/test_archive.jpg"
         },
         {
             "id": "wang4577",
             "groupId": "2024",
-            "name": "Wang4577 Defensive Algorithm",
-            "shortName": "Wang4577 #2",
-            "description": "Defensive strategy focusing on center control",
-            "shortDescription": "Center control",
-            "image": "/images/archives/wang4577.jpg"
+            "name": "Joe Wang",
+            "shortName": "W.Joe",
+            "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
+            "shortDescription": "#21",
+            "image": "/images/archives/test_archive.jpg"
         }
         ]
     },
@@ -31,10 +31,10 @@
         {
             "id": "test",
             "groupId": "2025",
-            "name": "Test Algorithm for 2025",
-            "shortName": "Test #1",
-            "description": "Experimental algorithm for testing purposes",
-            "shortDescription": "Experimental",
+            "name": "test",
+            "shortName": "test",
+            "description": "test",
+            "shortDescription": "test",
             "image": "/images/archives/test_archive.jpg"
         }
         ]
