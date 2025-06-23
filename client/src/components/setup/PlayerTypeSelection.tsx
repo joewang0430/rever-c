@@ -4,6 +4,8 @@
 
 import { PlayerConfig, PlayerType } from '../../data/types/setup';
 import { cleanupCandidate } from '../../api/upload';
+import { useEffect, useCallback } from 'react';
+import { storage } from '@/utils/storage';
 
 interface PlayerTypeSelectionProps {
     blackPlayerConfig: PlayerConfig;
@@ -29,7 +31,7 @@ const PlayerTypeSelection = ({
         { type: "ai" as PlayerType, label: "AI", icon: "🤖" }
     ];
 
-    const handleTypeSelect = async (type: PlayerType, side: 'black' | 'white') => {
+    const handleTypeSelect = useCallback(async (type: PlayerType, side: 'black' | 'white') => {
         if (type === "ai" && !isAIAvailable) return;
 
         const currentConfig = side === 'black' ? blackPlayerConfig : whitePlayerConfig;
@@ -61,6 +63,15 @@ const PlayerTypeSelection = ({
             } catch (error) {
                 console.error('Cleanup failed:', error);
                 // In this case, continue with type switch even if cleanup fails
+            }
+        }
+
+        // Save the new type to localStorage
+        if (type) {
+            try {
+                storage.setItem(`playerType_${side}`, type);
+            } catch (error) {
+                console.warn(`Failed to save player type for ${side}:`, error);
             }
         }
 
@@ -107,7 +118,25 @@ const PlayerTypeSelection = ({
                 });
                 break;
         }
-    };
+    }, [blackPlayerConfig, whitePlayerConfig, onBlackPlayerChange, onWhitePlayerChange, isAIAvailable]);
+
+    // Restore player types from localStorage on mount
+    useEffect(() => {
+        try {
+            const savedBlackType = storage.getItem('playerType_black');
+            const savedWhiteType = storage.getItem('playerType_white');
+            
+            if (savedBlackType && savedBlackType !== blackPlayerConfig.type) {
+                handleTypeSelect(savedBlackType as PlayerType, 'black');
+            }
+            
+            if (savedWhiteType && savedWhiteType !== whitePlayerConfig.type) {
+                handleTypeSelect(savedWhiteType as PlayerType, 'white');
+            }
+        } catch (error) {
+            console.warn('Failed to restore player types from localStorage:', error);
+        }
+    }, [handleTypeSelect, blackPlayerConfig.type, whitePlayerConfig.type]); 
 
     return (
         <div className="bg-white p-4 rounded border">
