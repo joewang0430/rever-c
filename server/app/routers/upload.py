@@ -14,7 +14,7 @@ import subprocess
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import resource
-from app.services import call_c
+from app.services import test_c
 
 
 upload_router = APIRouter()
@@ -192,7 +192,7 @@ async def process_candidate_async(code_id: str):
             # Compile succeeded, now run the test_code function in the thread pool
             test_result = await loop.run_in_executor(
                 executor,
-                call_c.test_code,
+                test_c.test_code,
                 code_id,
                 "candidate"
             )
@@ -346,7 +346,7 @@ async def process_cache_async(code_id: str):
             # Run the test_code function in the thread pool
             test_result = await loop.run_in_executor(
                 executor,
-                call_c.test_code,
+                test_c.test_code,
                 code_id,
                 "cache"
             )

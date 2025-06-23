@@ -1,10 +1,15 @@
 '''
-Functions to execute C code and shared libraries.
+Functions to test C code and shared libraries, in setup stage.
 '''
 
 import ctypes
 import os
+import threading
 from typing import Dict, Tuple, List
+
+
+class TimeoutException(Exception):
+    pass
 
 
 def test_code(code_id: str, file_type: str) -> dict:
@@ -64,21 +69,59 @@ def test_code(code_id: str, file_type: str) -> dict:
         row = ctypes.c_int()
         col = ctypes.c_int()
 
-        # Call makeMove function
-        try:
-            result = make_move(board, 8, b'B', ctypes.byref(row), ctypes.byref(col))
-        except Exception as e:
+        # Use threading to realize the timeout mechanism
+        result_container = {}
+        exception_container = {}
+        
+        def run_function():
+            try:
+                result = make_move(board, 8, b'B', ctypes.byref(row), ctypes.byref(col))
+                result_container['result'] = result
+                result_container['row'] = row.value
+                result_container['col'] = col.value
+            except Exception as e:
+                exception_container['exception'] = e
+        
+        # Start the thread to run the function
+        thread = threading.Thread(target=run_function)
+        thread.daemon = True
+        thread.start()
+        
+        # Max wait 60s
+        thread.join(timeout=60)
+        
+        if thread.is_alive():
+            # Time out occurred
             return {
                 "success": False,
-                "error": f"Runtime error during makeMove execution: {str(e)}",
+                "error": "Test execution timed out after 1 minute",
                 "return_value": None,
                 "move": None
             }
         
+        # Check if there was an exception during the function execution
+        if 'exception' in exception_container:
+            return {
+                "success": False,
+                "error": f"Runtime error during makeMove execution: {str(exception_container['exception'])}",
+                "return_value": None,
+                "move": None
+            }
+        
+        # Get the result from the result container
+        if 'result' not in result_container:
+            return {
+                "success": False,
+                "error": "Function execution failed without exception",
+                "return_value": None,
+                "move": None
+            }
+        
+        result = result_container['result']
+        move_position = (result_container['row'], result_container['col'])
+        
         # Check if the result is valid
-        move_position = (row.value, col.value)
-
-        if not (0 <= row.value < 8 and 0 <= col.value < 8): # Check if the move is within bounds
+        if not (0 <= move_position[0] < 8 and 0 <= move_position[1] < 8): # Check if the move is within bounds
             return {
                 "success": False,
                 "error": f"Move out of bounds: {move_position}",
@@ -130,7 +173,7 @@ def _prepare_test_data() -> Tuple[ctypes.Array, List[Tuple[int, int]]]:
     
     for i in range(26):
         for j in range(26):
-            board_array[i][j] = board_data[i][j].encode('ascii')
+            board_array[i][j] = board_data[i][j].encode('utf-8')
     
     # Define valid moves for the test
     valid_moves = [(2, 3), (3, 2), (4, 5), (5, 4)]
