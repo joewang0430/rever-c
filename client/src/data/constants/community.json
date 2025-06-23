@@ -1,40 +1,43 @@
 {
-    "groups": [
+  "groups": [
     {
         "id": "2024",
-        "name": "2024 APS105 Leaders",
+        "name": "2024 Championship",
         "archives": [
         {
             "id": "hukaiqi1",
-            "name": "Alex K.Q. Hu",
-            "shortName": "Alex.H",
-            "description": "#8 rank APS105 Leaderboard 2024",
-            "shortDescription": "#8",
-            "image": "/images/archives/test_archive.jpg"
+            "groupId": "2024",
+            "name": "Hukaiqi Advanced Strategy",
+            "shortName": "Hukaiqi #1",
+            "description": "Advanced strategy with aggressive opening moves",
+            "shortDescription": "Aggressive opening",
+            "image": "/images/archives/hukaiqi1.jpg"
         },
         {
             "id": "wang4577",
-            "name": "Joe Wang",
-            "shortName": "Joe.W",
-            "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
-            "shortDescription": "#21",
-            "image": "/images/archives/test_archive.jpg"
+            "groupId": "2024",
+            "name": "Wang4577 Defensive Algorithm",
+            "shortName": "Wang4577 #2",
+            "description": "Defensive strategy focusing on center control",
+            "shortDescription": "Center control",
+            "image": "/images/archives/wang4577.jpg"
         }
         ]
     },
     {
         "id": "2025",
-        "name": "2025 APS105 Leaders",
+        "name": "2025 Championship",
         "archives": [
         {
             "id": "test",
-            "name": "test",
-            "shortName": "test",
-            "description": "test",
-            "shortDescription": "test",
+            "groupId": "2025",
+            "name": "Test Algorithm for 2025",
+            "shortName": "Test #1",
+            "description": "Experimental algorithm for testing purposes",
+            "shortDescription": "Experimental",
             "image": "/images/archives/test_archive.jpg"
         }
         ]
     }
-  ]
+    ]
 }

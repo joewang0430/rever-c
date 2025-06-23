@@ -1,3 +1,9 @@
+//
+// This file provides the context & provider for managing cache.
+// Simply to say, it ensures "Stored Code" for both B & W player 
+// selection columns in setup page can be updated and rendered simultaneously.
+//
+
 "use client";
 
 import { createContext, useContext, ReactNode } from 'react';
