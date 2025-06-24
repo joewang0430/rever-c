@@ -7,8 +7,51 @@ interface HumanSetupBlockProps {
 }
 
 const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlockProps) => {
+    const defaultName = side === 'black' ? 'Player B' : 'Player W';
+    const currentName = playerConfig.config?.humanName || defaultName;
+
+    // Handle name change
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newName = e.target.value;
+        
+        onConfigChange({
+            ...playerConfig,
+            config: {
+                ...playerConfig.config,
+                humanName: newName
+            }
+        });
+    };
+
     return (
-        <div className="text-green-400">HumanSetupBlock</div>
+        <div className="space-y-4">
+            {/* 标题 */}
+            <div className="flex items-center space-x-2">
+                <span className="text-2xl">👤</span>
+                <h3 className="text-lg font-semibold text-gray-800">
+                    Human Player Setup
+                </h3>
+            </div>
+            
+            {/* 名字输入 */}
+            <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                    Player Name
+                </label>
+                <input
+                    type="text"
+                    value={currentName}
+                    onChange={handleNameChange}
+                    placeholder={defaultName}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
+                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                             placeholder-gray-400 text-gray-900"
+                />
+                <p className="text-xs text-gray-500">
+                    This name will be displayed during the game
+                </p>
+            </div>
+        </div>
     );
 }
 

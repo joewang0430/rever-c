@@ -44,8 +44,8 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             {/* 类型标识（小标签） */}
             {playerConfig.type && (
                 <span className={`px-2 py-1 text-xs rounded-full ${
-                    playerConfig.type === 'custom' ? 'bg-blue-100 text-blue-700' :
-                    playerConfig.type === 'archive' ? 'bg-green-100 text-green-700' :
+                    playerConfig.type === 'custom' ? 'bg-green-100 text-green-700' :
+                    playerConfig.type === 'archive' ? 'bg-blue-100 text-blue-700' :
                     playerConfig.type === 'human' ? 'bg-yellow-100 text-yellow-700' :
                     playerConfig.type === 'ai' ? 'bg-purple-100 text-purple-700' :
                     'bg-gray-100 text-gray-500'
