@@ -1,0 +1,24 @@
+version: '3'
+services:
+  server:
+    build: ./server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    # PROD: change it to http://server:8000
+    environment: 
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"

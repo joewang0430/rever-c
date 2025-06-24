@@ -5,7 +5,7 @@
 import { ProcessResponse, StatusResponse } from '@/data/types/upload';
 
 // TODO: consider delete localhost
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 // Helper function to handle API responses
 async function handleResponse<T>(response: Response): Promise<T> {
