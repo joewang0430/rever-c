@@ -61,7 +61,7 @@ export async function getCacheStatus(codeId: string): Promise<StatusResponse> {
 // Clean up candidate files (both .c and .so files)
 export async function cleanupCandidate(codeId: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/cleanup/candidate/${codeId}`, {
-        method: 'DELETE',
+        method: 'POST',
     });
 
     if (!response.ok) {
@@ -73,7 +73,7 @@ export async function cleanupCandidate(codeId: string): Promise<void> {
 // Clean up cache files (both .c and .so files)
 export async function cleanupCache(codeId: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/cleanup/cache/${codeId}`, {
-        method: 'DELETE',
+        method: 'POST',
     });
 
     if (!response.ok) {

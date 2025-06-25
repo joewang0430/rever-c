@@ -267,7 +267,7 @@ async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
     
 
-@upload_router.delete("/api/cleanup/candidate/{code_id}")
+@upload_router.post("/api/cleanup/candidate/{code_id}")
 async def cleanup_candidate(code_id: str):
     """
     Clean up all candidate files (both .c source and .so compiled files)
@@ -451,7 +451,7 @@ async def get_cache_status(code_id: str) -> StatusResponse:
         raise HTTPException(status_code=500, detail=f"Failed to get cache status: {str(e)}")
     
 
-@upload_router.delete("/api/cleanup/cache/{code_id}")
+@upload_router.post("/api/cleanup/cache/{code_id}")
 async def cleanup_cache(code_id: str):
     """
     Clean up all cache files (both .c source and .so compiled files) in this id
