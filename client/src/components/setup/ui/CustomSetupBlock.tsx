@@ -1,3 +1,8 @@
+//
+// This infcludes two modes: "Temporary Code" and "Stored Code".
+// Both modes allow users to upload code, but they differ in how the code is stored and managed.
+//
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -26,6 +31,9 @@ const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlo
     }, [playerConfig.config?.customType, selectedType]);
 
     const handleTypeChange = async (type: 'cache' | 'candidate') => {
+        // If already selected, do nothing
+        if (selectedType === type) return;
+
         // If switching from candidate to cache and has uploaded temporary file,
         // confirm with user and clean up the temporary file from backend
         if (selectedType === 'candidate' && 

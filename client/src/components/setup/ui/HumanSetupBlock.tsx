@@ -1,3 +1,7 @@
+//
+//  Human mode setup block in the setup page
+//
+
 import { PlayerConfig } from '../../../data/types/setup';
 
 interface HumanSetupBlockProps {
@@ -8,7 +12,7 @@ interface HumanSetupBlockProps {
 
 const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlockProps) => {
     const defaultName = side === 'black' ? 'Player B' : 'Player W';
-    const currentName = playerConfig.config?.humanName || defaultName;
+    const currentName = playerConfig.config?.humanName ?? "";
 
     // Handle name change
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +29,7 @@ const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlock
 
     return (
         <div className="space-y-4">
-            {/* 标题 */}
+            {/* Title */}
             <div className="flex items-center space-x-2">
                 <span className="text-2xl">👤</span>
                 <h3 className="text-lg font-semibold text-gray-800">
@@ -33,7 +37,7 @@ const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlock
                 </h3>
             </div>
             
-            {/* 名字输入 */}
+            {/* Name Input */}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                     Player Name
@@ -47,6 +51,11 @@ const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlock
                              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                              placeholder-gray-400 text-gray-900"
                 />
+                {(playerConfig.config?.humanName ?? "").trim() === "" && (
+                    <p className="text-xs text-red-500">
+                        Name cannot be empty
+                    </p>
+                )}
                 <p className="text-xs text-gray-500">
                     This name will be displayed during the game
                 </p>

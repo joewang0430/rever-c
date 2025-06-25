@@ -103,7 +103,7 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "human",
                     config: {
-                        humanName: undefined
+                        humanName: side === "black" ? "Player B" : "Player W"
                     }
                 });
                 break;

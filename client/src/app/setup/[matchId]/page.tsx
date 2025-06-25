@@ -67,7 +67,6 @@ export default function SetupPage({ params }: PageProps) {
         const handleUnload = (event: BeforeUnloadEvent) => {
             try {
                 if (blackCandidateRef.current) {
-                    console.log('Sending cleanup for black candidate:', blackCandidateRef.current);
                     navigator.sendBeacon(
                         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cleanup/candidate/${blackCandidateRef.current}`,
                     );
