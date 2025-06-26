@@ -85,12 +85,12 @@ export default function SetupPage({ params }: PageProps) {
     }, []);
 
     // TODO: consider move into a separate component
-    const handleStartGame = () => {
-        if (isValid) {
-            console.log('Starting game with:', setupData);
-            // TODO: nav to the game page with setupData
-        }
-    };
+    // const handleStartGame = () => {
+    //     if (isValid) {
+    //         console.log('Starting game with:', setupData);
+    //         // TODO: nav to the game page with setupData
+    //     }
+    // };
 
     return (
         <main className="min-h-screen bg-gray-50 p-6">
@@ -176,13 +176,13 @@ export default function SetupPage({ params }: PageProps) {
                     </div>
                     
                     {/* Button to Start the Game */}
-                    <div className="flex justify-center">
+                    {/* <div className="flex justify-center">
                         <GameStartButton 
                             isValid={isValid}
                             onStartGame={handleStartGame}
                             setupData={setupData}
                         />
-                    </div>
+                    </div> */}
                     
                     {/* Test Info - Used in Development */}
                     {process.env.NODE_ENV === 'development' && (
