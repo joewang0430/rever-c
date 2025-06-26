@@ -474,3 +474,17 @@ async def cleanup_cache(code_id: str):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Cache cleanup failed: {str(e)}")
+    
+
+@upload_router.get("/api/status/archive/{archive_group}/{archive_id}")
+async def check_archive_exists(archive_group: str, archive_id: str):
+    """
+    Check if the archive code exists in the specified group and ID.
+    """
+    c_path = f"data/c_src/archives/{archive_group}/{archive_id}.c"
+    so_path = f"data/shared_libs/archives/{archive_group}/{archive_id}.so"
+    
+    if os.path.exists(c_path) and os.path.exists(so_path):
+        return {"status": "exists"}
+    else:
+        raise HTTPException(status_code=404, detail="Archive not found")

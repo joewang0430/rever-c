@@ -81,3 +81,18 @@ export async function cleanupCache(codeId: string): Promise<void> {
         throw new Error(`Cleanup failed: ${errorText}`);
     }
 }
+
+// Check if a archive file exists on the server
+export async function checkArchiveExists(archiveGroup: string, archiveId: string): Promise<boolean> {
+    const response = await fetch(`${API_BASE_URL}/api/status/archive/${archiveGroup}/${archiveId}`, {
+        method: 'GET',
+    });
+    if (response.ok) {
+        return true;
+    }
+    if (response.status === 404) {
+        return false;
+    }
+    const errorText = await response.text();
+    throw new Error(`Archive check failed: ${errorText}`);
+};
