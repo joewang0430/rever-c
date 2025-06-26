@@ -29,6 +29,7 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
             }
             return true;
         } catch (e) {
+            console.warn("Error occurred when custom file cleanning up:", e);
             return false;
         }
     };
@@ -122,9 +123,9 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
         } else if (missingArchive) {
             let message = "";
             if (missingArchiveSide === "black") {
-                message = `The historic code for ${setupData.black.config?.archiveName} player does not exist. Please reconfigure your game. Click confirm to return.`;
+                message = `The historic code for ${setupData.black.config?.archiveName} in ${missingArchiveGroup} does not exist. Please reconfigure your game. Click confirm to return.`;
             } else if (missingArchiveSide === "white") {
-                message = `The historic code for ${setupData.white.config?.archiveName} player does not exist. Please reconfigure your game. Click confirm to return.`;
+                message = `The historic code for ${setupData.white.config?.archiveName} in ${missingArchiveGroup} does not exist. Please reconfigure your game. Click confirm to return.`;
             }
             if (
                 window.confirm(message)

@@ -8,22 +8,8 @@ import { useState, useEffect } from 'react';
 import communityData from '@/data/constants/community.json';
 import { PlayerConfig } from '@/data/types/setup';
 import { storage } from '@/utils/storage';
+import { ArchiveEntry, ArchiveGroupEntry } from '@/data/types/archive';
 
-interface ArchiveEntry {
-    id: string;
-    groupId: string;
-    name: string;
-    shortName: string;
-    description: string;
-    shortDescription: string;
-    image: string;
-};
-
-interface ArchiveGroupEntry {
-    id: string;
-    name: string;
-    archives: ArchiveEntry[];
-};
 
 export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConfig, onConfigChange: (config: PlayerConfig) => void) => {
     const [selectedArchive, setSelectedArchive] = useState<ArchiveEntry | null>(null);

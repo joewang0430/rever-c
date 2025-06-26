@@ -1,0 +1,6 @@
+//
+// Gaming Page
+//
+
+"use client";
+

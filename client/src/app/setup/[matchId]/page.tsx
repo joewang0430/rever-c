@@ -16,11 +16,11 @@ import SetupNameDisplay from "@/components/setup/SetupNameDisplay";
 import SetupTitle from "@/components/setup/SetupTitle";
 import { CacheProvider } from '@/contexts/CacheContext';
 
-interface PageProps {
+interface SetupPageProps {
     params: Promise<{ matchId: string }>
 }
 
-export default function SetupPage({ params }: PageProps) {
+export default function SetupPage({ params }: SetupPageProps) {
     const { matchId } = use(params);
     const searchParams = useSearchParams();
 
@@ -116,7 +116,6 @@ export default function SetupPage({ params }: PageProps) {
                         <BoardSizeSelection 
                             boardSize={setupData.boardSize}
                             onBoardSizeChange={updateBoardSize}
-                            isAIAvailable={isAIAvailable()}
                         />
                     </div>
                     
@@ -176,13 +175,13 @@ export default function SetupPage({ params }: PageProps) {
                     </div>
                     
                     {/* Button to Start the Game */}
-                    {/* <div className="flex justify-center">
+                    <div className="flex justify-center">
                         <GameStartButton 
                             isValid={isValid}
-                            onStartGame={handleStartGame}
                             setupData={setupData}
+                            matchId={matchId}
                         />
-                    </div> */}
+                    </div>
                     
                     {/* Test Info - Used in Development */}
                     {process.env.NODE_ENV === 'development' && (

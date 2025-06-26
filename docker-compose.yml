@@ -17,6 +17,9 @@ services:
     # PROD: change it to http://server:8000
     environment: 
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
 
   redis:
     image: redis:7

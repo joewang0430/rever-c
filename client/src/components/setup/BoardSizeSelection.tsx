@@ -5,10 +5,9 @@ import { BoardSize } from '../../data/types/setup';
 interface BoardSizeSelectionProps {
     boardSize: BoardSize;
     onBoardSizeChange: (size: BoardSize) => void;
-    isAIAvailable: boolean;
 };
 
-const BoardSizeSelection = ({ boardSize, onBoardSizeChange, isAIAvailable }: BoardSizeSelectionProps) => {
+const BoardSizeSelection = ({ boardSize, onBoardSizeChange }: BoardSizeSelectionProps) => {
     const boardSizes: BoardSize[] = [6, 8, 12];
     const handleSizeChange = (size: BoardSize) => {
         onBoardSizeChange(size);

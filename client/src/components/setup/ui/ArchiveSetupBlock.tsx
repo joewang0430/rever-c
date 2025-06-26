@@ -7,6 +7,7 @@
 import { useArchiveData } from '@/hooks/useArchiveData';
 import { PlayerConfig } from '@/data/types/setup';
 import Image from 'next/image';
+import { ArchiveEntry } from '@/data/types/archive';
 
 interface ArchiveSetupBlockProps {
     playerConfig: PlayerConfig;
@@ -24,7 +25,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side }: ArchiveSetupB
         toggleGroup
     } = useArchiveData(side, playerConfig, onConfigChange);
 
-    const handleArchiveSelect = (archive: any) => {
+    const handleArchiveSelect = (archive: ArchiveEntry) => {
         selectArchive(archive);
         
         // const updatedConfig: PlayerConfig = {
