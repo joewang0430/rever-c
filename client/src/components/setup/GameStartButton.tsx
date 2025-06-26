@@ -6,7 +6,7 @@
 
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SetupData } from '../../data/types/setup';
+import { SetupData, PlayerConfig } from '../../data/types/setup';
 import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/upload";
 import { v4 as uuid } from "uuid";
 
@@ -75,7 +75,7 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
         let missingArchiveGroup: string | null = null;
         let missingArchiveSide: "black" | "white" | null = null;
 
-        const players: { side: "black" | "white"; config: any; type: any }[] = [
+        const players: { side: "black" | "white"; config: PlayerConfig["config"]; type: PlayerConfig["type"] }[] = [
             { side: "black", config: setupData.black.config, type: setupData.black.type },
             { side: "white", config: setupData.white.config, type: setupData.white.type }
         ];

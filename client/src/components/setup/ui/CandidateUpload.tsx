@@ -1,6 +1,11 @@
+//
+// Component for uploading and managing Temporary Code (candidates) for players
+// in the setup process.
+//
+
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { PlayerConfig } from '@/data/types/setup';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { cleanupCandidate } from '@/api/upload';
@@ -16,23 +21,6 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const [hasProcessedFile, setHasProcessedFile] = useState(false);
     const [isButtonCooldown, setIsButtonCooldown] = useState(false);
     const { uploadStatus, processFile, pollStatus, cleanup } = useFileUpload('candidate');
-
-    // if polling indicates failure, reset config
-    // TODO: not needed for now, consider deleted it
-    // useEffect(() => {
-    //     if (uploadStatus.currentStep === 'failed' && (playerConfig.config?.customCodeId || playerConfig.config?.customName)) {
-    //         const resetConfig: PlayerConfig = {
-    //             ...playerConfig,
-    //             config: {
-    //                 ...playerConfig.config,
-    //                 customName: undefined,
-    //                 customCodeId: undefined
-    //             }
-    //         };
-    //         onConfigChange(resetConfig);
-    //         setHasProcessedFile(false);
-    //     }
-    // }, [uploadStatus.currentStep, playerConfig, onConfigChange]);
 
     // Handle file selection
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,15 +94,6 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
 
         // If we are in a failed state, implement Reload logic
         if (uploadStatus.currentStep === 'failed') {
-
-            // TODO: delted it later, not needed for now, as clean conflicts
-            // if (playerConfig.config?.customCodeId) {
-            //     try {
-            //         await cleanupCandidate(playerConfig.config.customCodeId);
-            //     } catch (error) {
-            //         console.error('Failed to cleanup old file:', error);
-            //     }
-            // }
             
             // Reset UploadStatus
             await cleanup();

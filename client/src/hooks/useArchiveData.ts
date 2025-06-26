@@ -67,7 +67,7 @@ export const useArchiveData = (side: 'black' | 'white', playerConfig: PlayerConf
             };
             onConfigChange(updatedConfig);
         }
-    }, [selectedArchive]); // prevent infinite dep loop
+    }, [selectedArchive, onConfigChange]); // prevent infinite dep loop
 
     // Select archive
     const selectArchive = (archive: ArchiveEntry) => {

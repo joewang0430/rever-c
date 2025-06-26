@@ -7,7 +7,7 @@
 import { useSetupData } from "@/hooks/useSetupData";
 import { SetupData } from "@/data/types/setup";
 import { useSearchParams } from "next/navigation";
-import { use, useRef, useEffect } from "react";
+import { use, useRef, useEffect, useMemo } from "react";
 import BoardSizeSelection from "@/components/setup/BoardSizeSelection";
 import GameStartButton from "@/components/setup/GameStartButton";
 import PlayerSetupBlock from "@/components/setup/PlayerSetupBlock";
@@ -64,7 +64,7 @@ export default function SetupPage({ params }: SetupPageProps) {
 
     // If the user tries to leave the page, send cleanup requests for custom setups, in corresponding apis
     useEffect(() => {
-        const handleUnload = (event: BeforeUnloadEvent) => {
+        const handleUnload = () => {
             try {
                 if (blackCandidateRef.current) {
                     navigator.sendBeacon(
@@ -84,13 +84,8 @@ export default function SetupPage({ params }: SetupPageProps) {
         return () => window.removeEventListener("beforeunload", handleUnload);
     }, []);
 
-    // TODO: consider move into a separate component
-    // const handleStartGame = () => {
-    //     if (isValid) {
-    //         console.log('Starting game with:', setupData);
-    //         // TODO: nav to the game page with setupData
-    //     }
-    // };
+    const memorizedBlackConfig = useMemo(() => setupData.black,[setupData.black]);
+    const memorizedWhiteConfig = useMemo(() => setupData.white,[setupData.white]);
 
     return (
         <main className="min-h-screen bg-gray-50 p-6">
@@ -123,14 +118,14 @@ export default function SetupPage({ params }: SetupPageProps) {
                     <div className="flex justify-between items-start mb-4 px-4">
                         <div className="flex-1 flex justify-start">
                             <SetupNameDisplay 
-                                playerConfig={setupData.black}
+                                playerConfig={memorizedBlackConfig}
                                 side="black"
                             />
                         </div>
                         
                         <div className="flex-1 flex justify-end">
                             <SetupNameDisplay 
-                                playerConfig={setupData.white}
+                                playerConfig={memorizedWhiteConfig}
                                 side="white"
                             />
                         </div>
@@ -143,7 +138,7 @@ export default function SetupPage({ params }: SetupPageProps) {
                         <div className="flex flex-col">
                             
                             <PlayerSetupBlock 
-                                playerConfig={setupData.black}
+                                playerConfig={memorizedBlackConfig}
                                 onConfigChange={updateBlackPlayer}
                                 side="black"
                                 isAIAvailable={isAIAvailable()}
@@ -153,8 +148,8 @@ export default function SetupPage({ params }: SetupPageProps) {
                         {/* Middle - Player Type Selection */}
                         <div className="flex flex-col items-center">
                             <PlayerTypeSelection 
-                                blackPlayerConfig={setupData.black}
-                                whitePlayerConfig={setupData.white}
+                                blackPlayerConfig={memorizedBlackConfig}
+                                whitePlayerConfig={memorizedWhiteConfig}
                                 onBlackPlayerChange={updateBlackPlayer}
                                 onWhitePlayerChange={updateWhitePlayer}
                                 isAIAvailable={isAIAvailable()}
@@ -166,7 +161,7 @@ export default function SetupPage({ params }: SetupPageProps) {
                         <div className="flex flex-col">
                             
                             <PlayerSetupBlock 
-                                playerConfig={setupData.white}
+                                playerConfig={memorizedWhiteConfig}
                                 onConfigChange={updateWhitePlayer}
                                 side="white"
                                 isAIAvailable={isAIAvailable()}

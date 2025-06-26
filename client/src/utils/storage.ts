@@ -30,11 +30,11 @@ export const storage = {
         }
     },
     
-    setJSON: (key: string, value: any) => {
+    setJSON: <T>(key: string, value: T) => {
         storage.setItem(key, JSON.stringify(value));
     },
     
-    getJSON: (key: string): any => {
+    getJSON: <T>(key: string): T | null => {
         const item = storage.getItem(key);
         return item ? JSON.parse(item) : null;
     }

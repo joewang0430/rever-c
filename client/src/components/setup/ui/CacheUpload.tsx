@@ -1,7 +1,11 @@
+//
+// Component for uploading and managing Stored Code (cache) for players
+// in the setup process.
+//
+
 "use client";
 
 import { useState, useEffect } from 'react';
-// import { useCacheManager } from '@/hooks/useCacheManager';
 import { useCacheContext } from '@/contexts/CacheContext';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { PlayerConfig } from '@/data/types/setup';
