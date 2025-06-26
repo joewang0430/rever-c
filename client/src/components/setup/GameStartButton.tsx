@@ -7,7 +7,7 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { SetupData } from '../../data/types/setup';
-import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache } from "@/api/upload";
+import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/upload";
 import { v4 as uuid } from "uuid";
 
 interface GameStartButtonProps {
@@ -67,10 +67,14 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
     const handleStartGame = async () => {
         if (!isValid) return;
 
-        // Check if both players have valid custom files
-        let missing = false;
-        let missingType: "candidate" | "cache" | null = null;
-        const players = [
+        // Check if both players have valid custom / archive files
+        let missingCustom = false;
+        let missingCustomType: "candidate" | "cache" | null = null;
+        let missingArchive = false;
+        let missingArchiveGroup: string | null = null;
+        let missingArchiveSide: "black" | "white" | null = null;
+
+        const players: { side: "black" | "white"; config: any; type: any }[] = [
             { side: "black", config: setupData.black.config, type: setupData.black.type },
             { side: "white", config: setupData.white.config, type: setupData.white.type }
         ];
@@ -81,24 +85,52 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
                 if (customType && customCodeId) {
                     const exists = await checkCustomFileExists(customType, customCodeId);
                     if (!exists) {
-                        missing = true;
-                        missingType = customType;
-                        break; // No need to check further if one is missing
+                        missingCustom = true;
+                        missingCustomType = customType;
+                        break; // No need to check further if one is missingCustom
+                    }
+                }
+            } else if (player.type === "archive") {
+                const { archiveGroup, archiveId } = player.config || {};
+                if (archiveGroup && archiveId) {
+                    const exists = await checkArchiveExists(archiveGroup, archiveId);
+                    if (!exists) {
+                        missingArchive = true;
+                        missingArchiveGroup = archiveGroup;
+                        missingArchiveSide = player.side;
                     }
                 }
             }
         }
-        // If any custom file is missing, prompt user to reconfigure
-        if (missing) {
+        // If any custom file is missingCustom, prompt user to reconfigure
+        if (missingCustom) {
             if (
                 window.confirm(
                     "Your game setup has timed out, or the uploaded file does not exist. Please reconfigure your game. Click confirm to return."
                 )
             ) {
                 await cleanupExistingCandidates();
-                if (missingType === "cache") {
+                if (missingCustomType === "cache") {
                     await cleanupExistingCache();
                 }
+                const newMatchId = uuid();
+                router.push(`/setup/${newMatchId}`);
+            }
+            return;
+
+        // If any archive in backend file is missing, prompt user to reconfigure as well
+        } else if (missingArchive) {
+            let message = "";
+            if (missingArchiveSide === "black") {
+                message = `The historic code for ${setupData.black.config?.archiveName} player does not exist. Please reconfigure your game. Click confirm to return.`;
+            } else if (missingArchiveSide === "white") {
+                message = `The historic code for ${setupData.white.config?.archiveName} player does not exist. Please reconfigure your game. Click confirm to return.`;
+            }
+            if (
+                window.confirm(message)
+            ) {
+                await cleanupExistingCandidates();
+                await cleanupExistingCache();
                 const newMatchId = uuid();
                 router.push(`/setup/${newMatchId}`);
             }
