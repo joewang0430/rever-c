@@ -20,7 +20,7 @@ class SetupDataRequest(BaseModel):
 async def save_setup_data(req: SetupDataRequest):
     key = f"game:{req.matchId}:setup"
     try:
-        await redis_client.set(key, json.dumps(req.setupData))
+        await redis_client.set(key, json.dumps(req.setupData), ex=14400)  # Set expiration to 4 hours
         return {"success": "ok"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
