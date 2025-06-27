@@ -1,6 +1,3 @@
-# For anyone fetching and trying this project locally: 
-# feel free to change this to your needs
-
 .vscode/
 .DS_Store
-
+dump.rdb
