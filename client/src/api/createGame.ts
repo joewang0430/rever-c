@@ -18,3 +18,13 @@ export async function saveSetupDataToGame(matchId: string, setupData: SetupData)
     }
     return await res.json();
 }
+
+export async function getSetupData(matchId: string) {
+    const res = await fetch(`${API_BASE_URL}/api/game/setup/${matchId}`, {
+        method: "GET",
+    });
+    if (!res.ok) {
+        throw new Error("Failed to fetch setup data");
+    }
+    return await res.json(); 
+}

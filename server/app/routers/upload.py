@@ -166,7 +166,7 @@ def compile_code(code_id: str, file_type: str) -> dict:
         return {"success": False, "error": f"Compilation error: {str(e)}"}
 
 
-# ==================== CANDIDATE ROUTES ====================
+# ==================== CANDIDATE ROUTERS ====================
 
 async def process_candidate_async(code_id: str):
     """
@@ -320,7 +320,7 @@ async def get_candidate_status(code_id: str) -> StatusResponse:
         raise HTTPException(status_code=500, detail=f"Failed to get status: {str(e)}")
     
 
-# ==================== CACHE ROUTES ====================
+# ==================== CACHE ROUTERS ====================
 
 async def process_cache_async(code_id: str):
     """

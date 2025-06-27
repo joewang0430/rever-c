@@ -15,7 +15,7 @@ interface GameStartButtonProps {
     isValid: boolean;
     setupData: SetupData;
     matchId: string;
-}
+};
 
 const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) => {
     const router = useRouter();
