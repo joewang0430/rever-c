@@ -1,5 +1,5 @@
 '''
-Router for handling file uploads before the game starts.
+Routers for handling file uploads before the game starts.
 '''
 
 from fastapi import APIRouter, UploadFile, File, HTTPException, Request
@@ -34,7 +34,7 @@ class StatusResponse(BaseModel):
     test_return_value: Optional[int] = None
 
 
-# Helper functions
+# Tool functions
 def get_status_file_path(code_id: str, file_type: str) -> str:
     """ Generate the file path for the status file """
     return f"data/status/{file_type}s/{file_type}_{code_id}.json"
