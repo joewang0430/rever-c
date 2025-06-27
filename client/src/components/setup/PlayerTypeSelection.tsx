@@ -3,7 +3,7 @@
 //
 
 import { PlayerConfig, PlayerType } from '../../data/types/setup';
-import { cleanupCandidate } from '../../api/upload';
+import { cleanupCandidate } from '../../api/uploadApi';
 import { useEffect, useCallback } from 'react';
 import { storage } from '@/utils/storage';
 

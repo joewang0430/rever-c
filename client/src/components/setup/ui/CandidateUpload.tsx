@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { PlayerConfig } from '@/data/types/setup';
 import { useFileUpload } from '@/hooks/useFileUpload';
-import { cleanupCandidate } from '@/api/upload';
+import { cleanupCandidate } from '@/api/uploadApi';
 
 interface CandidateUploadProps {
     playerConfig: PlayerConfig;

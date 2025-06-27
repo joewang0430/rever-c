@@ -7,7 +7,7 @@
 
 import { useState, useEffect } from "react";
 import { PlayerConfig } from "@/data/types/setup";
-import { cleanupCandidate } from "@/api/upload";
+import { cleanupCandidate } from "@/api/uploadApi";
 import CacheUpload from "./CacheUpload";
 import CandidateUpload from "./CandidateUpload";
 

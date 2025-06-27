@@ -11,7 +11,7 @@ import {
     CACHE_EXPIRY_HOURS, 
     CACHE_STORAGE_KEY,
 } from '../data/types/upload';
-import { processCache, cleanupCache } from '../api/upload';
+import { processCache, cleanupCache } from '../api/uploadApi';
 import { storage } from '@/utils/storage';
 
 /* Helper Functions */

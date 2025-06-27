@@ -7,8 +7,8 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { SetupData, PlayerConfig } from '../../data/types/setup';
-import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/upload";
-import { saveSetupDataToGame } from "@/api/createGame";
+import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/uploadApi";
+import { saveSetupDataToGame } from "@/api/gameApi";
 import { v4 as uuid } from "uuid";
 
 interface GameStartButtonProps {

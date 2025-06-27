@@ -5,7 +5,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getSetupData } from "@/api/createGame";
+import { getSetupData } from "@/api/gameApi";
 import { SetupData } from "@/data/types/setup";
 
 interface GameProps {

@@ -7,7 +7,7 @@
 
 import { useState, useCallback } from 'react';
 import { UploadStatus, ProcessResponse, StatusResponse } from '@/data/types/upload';
-import { processCandidate, processCache, getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache} from '@/api/upload';
+import { processCandidate, processCache, getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache} from '@/api/uploadApi';
 
 export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') => {
     const [uploadStatus, setUploadStatus] = useState<UploadStatus>({
