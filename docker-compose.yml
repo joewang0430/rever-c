@@ -1,13 +1,19 @@
+#
+# Uncomment the redis service when deploying to production.
+#
+
 version: '3'
 services:
   server:
     build: ./server
     ports:
       - "8000:8000"
-    depends_on:
-      - redis
-    environment:
+    # depends_on:
+    #   - redis
+    # environment:
       # - REDIS_URL=redis://redis:6379 # PROD: added it
+    environment:
+      REDIS_URL: redis://host.docker.internal:6379  # PROD: change / delete this
 
   client:
     build: ./client
@@ -20,7 +26,7 @@ services:
       - ./client:/app
       - /app/node_modules
 
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
+  # redis:
+  #   image: redis:7
+  #   ports:
+  #     - "6379:6379"

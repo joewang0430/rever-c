@@ -7,15 +7,15 @@ from pydantic import BaseModel
 import json
 from app.core.redis import redis_client
 
-router = APIRouter()
+game_router = APIRouter()
 
 class SetupDataRequest(BaseModel):
     matchId: str
     setupData: dict
 
-@router.post("/api/game/setup")
+@game_router.post("/setup")
 async def save_setup_data(req: SetupDataRequest):
-    key = f"match:{req.matchId}:setup"
+    key = f"game:{req.matchId}:setup"
     try:
         await redis_client.set(key, json.dumps(req.setupData))
         return {"success": "ok"}

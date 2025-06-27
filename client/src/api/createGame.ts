@@ -5,8 +5,10 @@
 
 import { SetupData } from "@/data/types/setup";
 
-export async function saveSetupData(matchId: string, setupData: SetupData) {
-    const res = await fetch("/api/match/setup", {
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
+export async function saveSetupDataToGame(matchId: string, setupData: SetupData) {
+    const res = await fetch(`${API_BASE_URL}/api/game/setup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ matchId, setupData }),

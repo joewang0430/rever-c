@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { SetupData, PlayerConfig } from '../../data/types/setup';
 import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/upload";
+import { saveSetupDataToGame } from "@/api/createGame";
 import { v4 as uuid } from "uuid";
 
 interface GameStartButtonProps {
@@ -135,6 +136,13 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
                 const newMatchId = uuid();
                 router.push(`/setup/${newMatchId}`);
             }
+            return;
+        }
+
+        try {
+            await saveSetupDataToGame(matchId, setupData);
+        } catch (e) {
+            alert("Failed to save game setup. Please try again.");
             return;
         }
 
