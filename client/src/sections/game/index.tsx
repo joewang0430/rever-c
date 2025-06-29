@@ -40,7 +40,10 @@ export default function Game({ matchId}: GameProps) {
 
     return (
         <div className="flex flex-col justify-center items-center h-full">
-            <PieceCountDisplay />
+            <PieceCountDisplay 
+                blackCount={game.playerStats.B.pieceCount}
+                whiteCount={game.playerStats.W.pieceCount}
+            />
             <h1>Game Page for Match ID: {matchId}</h1>
             <pre>{JSON.stringify(setupData, null, 2)}</pre>
             {/* Render game components here */}

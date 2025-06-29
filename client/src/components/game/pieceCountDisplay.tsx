@@ -2,9 +2,16 @@
 // Component to display the count of pieces in a game. At the middle upper.
 //
 
-const PieceCountDisplay = () => {
+interface PieceCountDisplayProps {
+    blackCount: number;
+    whiteCount: number;
+}
+
+const PieceCountDisplay = ({ blackCount, whiteCount}: PieceCountDisplayProps) => {
     return (
-        <>PieceCountDisplay</>
+        <>
+        <span>● {blackCount} : {whiteCount} ○</span>
+        </>
     );
 };
 
