@@ -11,8 +11,8 @@ import { Move,
     MoveHistoryItem 
 } from '@/data/types/game';
 
-export const useGame = (setupData: SetupData) => {
-    const [board, setBoard] = useState<string[][]>(() => createInitialBoard(setupData.boardSize)); 
+export const useGame = (setupData: SetupData | null) => {
+    const [board, setBoard] = useState<string[][]>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
     const [turn, setTurn] = useState<Turn>('B');
     const [move, setMove] = useState<Move | null>(null);
     const [placeCount, setPlaceCount] = useState<number>(0);
@@ -28,6 +28,25 @@ export const useGame = (setupData: SetupData) => {
     const [errorState, setErrorState] = useState<string | null>(null);
     const [certificateReady, setCertificateReady] = useState<boolean>(false);
     const [moveHistory, setMoveHistory] = useState<MoveHistoryItem[]>([]);
+
+    useEffect(() => {
+        if (setupData) {
+            setBoard(createInitialBoard(setupData.boardSize));
+            setTurn('B');
+            setMove(null);
+            setPlaceCount(0);
+            setGameOver(false);
+            setPlayerStats({
+                B: { pieceCount: 2, mobility: 4 },
+                W: { pieceCount: 2, mobility: 4 }
+            });
+            setWaiter(null);
+            setWinner(null);
+            setErrorState(null);
+            setCertificateReady(false);
+            setMoveHistory([]);
+        }
+    }, [setupData]);
 
     return {
         board,

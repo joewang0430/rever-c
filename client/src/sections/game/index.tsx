@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { getSetupData } from "@/api/gameApi";
 import { SetupData } from "@/data/types/setup";
 import { useGame } from "@/hooks/useGame";
+import PieceCountDisplay from "@/components/game/pieceCountDisplay";
 
 interface GameProps {
     matchId: string;
@@ -17,6 +18,7 @@ export default function Game({ matchId}: GameProps) {
     const [setupData, setSetupData] = useState<SetupData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const game = useGame(setupData);
 
     useEffect(() => {
         if (!matchId) return;
@@ -37,7 +39,8 @@ export default function Game({ matchId}: GameProps) {
     if (!setupData) return <div>No setup data found.</div>;
 
     return (
-        <div>
+        <div className="flex flex-col justify-center items-center h-full">
+            <PieceCountDisplay />
             <h1>Game Page for Match ID: {matchId}</h1>
             <pre>{JSON.stringify(setupData, null, 2)}</pre>
             {/* Render game components here */}
