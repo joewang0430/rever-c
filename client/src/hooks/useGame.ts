@@ -1,3 +1,7 @@
+//
+// Managing game state for a board game.
+//
+
 import { useState, useEffect } from 'react';
 import { SetupData } from '../data/types/setup';
 import { Move, 
@@ -24,5 +28,31 @@ export const useGame = (setupData: SetupData) => {
     const [errorState, setErrorState] = useState<string | null>(null);
     const [certificateReady, setCertificateReady] = useState<boolean>(false);
     const [moveHistory, setMoveHistory] = useState<MoveHistoryItem[]>([]);
+
+    return {
+        board,
+        turn,
+        move,
+        placeCount,
+        gameOver,
+        playerStats,
+        waiter,
+        winner,
+        errorState,
+        certificateReady,
+        moveHistory,
+
+        setBoard,
+        setTurn,
+        setMove,
+        setPlaceCount,
+        setGameOver,
+        setPlayerStats,
+        setWaiter,  
+        setWinner,
+        setErrorState,
+        setCertificateReady,
+        setMoveHistory
+    };
 };
 

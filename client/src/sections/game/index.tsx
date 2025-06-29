@@ -7,6 +7,7 @@
 import { useState, useEffect } from "react";
 import { getSetupData } from "@/api/gameApi";
 import { SetupData } from "@/data/types/setup";
+import { useGame } from "@/hooks/useGame";
 
 interface GameProps {
     matchId: string;
