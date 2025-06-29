@@ -5,7 +5,7 @@
 interface PieceCountDisplayProps {
     blackCount: number;
     whiteCount: number;
-}
+};
 
 const PieceCountDisplay = ({ blackCount, whiteCount}: PieceCountDisplayProps) => {
     return (
