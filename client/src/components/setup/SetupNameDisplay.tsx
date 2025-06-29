@@ -1,4 +1,5 @@
 import { PlayerConfig } from '../../data/types/setup';
+import { getDisplayName } from '../../utils/nameConverters';
 
 interface SetupNameDisplayProps {
     playerConfig: PlayerConfig;
@@ -6,26 +7,26 @@ interface SetupNameDisplayProps {
 }
 
 const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
-    const getDisplayName = (): string => {
-        if (!playerConfig.config) {
-            return "Not Selected";
-        }
+    // const getDisplayName = (): string => {
+    //     if (!playerConfig.config) {
+    //         return "Not Selected";
+    //     }
         
-        switch (playerConfig.type) {
-            case 'custom':
-                return playerConfig.config.customName || "(Uploaded Code)";
-            case 'archive':
-                return playerConfig.config.archiveName || "(Historic Algorithm)";
-            case 'human':
-                return playerConfig.config.humanName || "(Human Player)";
-            case 'ai':
-                return playerConfig.config.aiName || "(AI Player)";
-            default:
-                return "(Not Selected)";
-        }
-    };
+    //     switch (playerConfig.type) {
+    //         case 'custom':
+    //             return playerConfig.config.customName || "(Uploaded Code)";
+    //         case 'archive':
+    //             return playerConfig.config.archiveName || "(Historic Algorithm)";
+    //         case 'human':
+    //             return playerConfig.config.humanName || "(Human Player)";
+    //         case 'ai':
+    //             return playerConfig.config.aiName || "(AI Player)";
+    //         default:
+    //             return "(Not Selected)";
+    //     }
+    // };
 
-    const displayName = getDisplayName();
+    const displayName = getDisplayName(playerConfig);
     const sideLabel = side === 'black' ? 'Black' : 'White';
     const sideColor = side === 'black' ? 'text-gray-800' : 'text-gray-600';
 
