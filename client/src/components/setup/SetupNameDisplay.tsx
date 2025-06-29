@@ -1,5 +1,5 @@
 import { PlayerConfig } from '../../data/types/setup';
-import { getDisplayName } from '../../utils/nameConverters';
+import { getPlayerName } from '../../utils/nameConverters';
 
 interface SetupNameDisplayProps {
     playerConfig: PlayerConfig;
@@ -7,7 +7,7 @@ interface SetupNameDisplayProps {
 }
 
 const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
-    // const getDisplayName = (): string => {
+    // const getPlayerName = (): string => {
     //     if (!playerConfig.config) {
     //         return "Not Selected";
     //     }
@@ -26,7 +26,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
     //     }
     // };
 
-    const displayName = getDisplayName(playerConfig);
+    const displayName = getPlayerName(playerConfig);
     const sideLabel = side === 'black' ? 'Black' : 'White';
     const sideColor = side === 'black' ? 'text-gray-800' : 'text-gray-600';
 

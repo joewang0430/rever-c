@@ -5,18 +5,38 @@
 
 import { PlayerConfig } from "@/data/types/setup";
 import { PlayerStats } from "@/data/types/game";
-import { getDisplayName } from "@/utils/nameConverters";
+import { getPlayerName, getPlayerDescription } from "@/utils/nameConverters";
 
-interface PlayerInfoDisplay {
+interface PlayerInfoDisplayProps {
     playerConfig: PlayerConfig;
     playerStats: PlayerStats;
 };
 
-const PlayerInfoDisplay = ({ playerConfig, playerStats }: PlayerInfoDisplay) => {
-    const playerName = getDisplayName(playerConfig);
+const PlayerInfoDisplay = ({ playerConfig, playerStats }: PlayerInfoDisplayProps) => {
+    const playerName = getPlayerName(playerConfig);
+    const playerDescription = getPlayerDescription(playerConfig);
+    const isCode: boolean = (playerConfig.type === 'custom' || playerConfig.type === 'archive');
+
     return (
         <div className="flex flex-col justify-center">
             <div className="text-4xl font-bold">{playerName}</div>
+            <div className="text-2xl text-gray-700" >{playerDescription}</div>
+            <div className="h-12"></div>
+            <div className="mb-4">Available Moves</div>
+            <div>{playerStats.mobility}</div>
+
+            {isCode && (
+            <>
+                <div className="mb-4">Total Thinking</div>
+                <div>{playerStats.totalTime}</div>
+                <div className="mb-4">Maximum Thinking</div>
+                <div>{playerStats.maxTime}</div>
+                <div className="mb-4">Return Value</div>
+                <div>{playerStats.returnValue}</div>
+            </>
+            )}
         </div>
     );
 };
+
+export default PlayerInfoDisplay;
