@@ -61,6 +61,12 @@ export default function Game({ matchId}: GameProps) {
                 
                 {/* Render game components here */}
             </div>
+            <div>
+                <PlayerInfoDisplay 
+                    playerConfig={setupData.white}
+                    playerStats={game.playersStats.W || defaultPlayerStats}
+                />
+            </div>
         </div>
     );
 }

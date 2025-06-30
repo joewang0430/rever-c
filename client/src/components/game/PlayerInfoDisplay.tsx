@@ -18,9 +18,9 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
     const isCode: boolean = (playerConfig.type === 'custom' || playerConfig.type === 'archive');
 
     return (
-        <div className="flex flex-col justify-center">
-            <div className="text-4xl font-bold">{playerName}</div>
-            <div className="text-2xl text-gray-700" >{playerDescription}</div>
+        <div className="flex flex-col justify-center items-center">
+            <div className="text-4xl font-bold text-center">{playerName}</div>
+            <div className="text-2xl text-gray-400 text-center" >{playerDescription}</div>
             <div className="h-8"></div>
             <div className="mt-4">Available Moves</div>
             <div>{playerStats.mobility}</div>
@@ -28,9 +28,9 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
             {isCode && (
             <>
                 <div className="mt-4">Total Thinking</div>
-                <div>{playerStats.totalTime}</div>
+                <div>{playerStats.totalTime === 0 ? '-': playerStats.totalTime }</div>
                 <div className="mt-4">Maximum Thinking</div>
-                <div>{playerStats.maxTime}</div>
+                <div>{playerStats.maxTime === 0 ? '-' : playerStats.maxTime }</div>
                 <div className="mt-4">Return Value</div>
                 <div>{playerStats.returnValue ?? '-'}</div>
             </>
