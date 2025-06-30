@@ -18,9 +18,9 @@ export const useGame = (setupData: SetupData | null) => {
     const [placeCount, setPlaceCount] = useState<number>(0);
     const [gameOver, setGameOver] = useState<boolean>(false);
 
-    const [playerStats, setPlayerStats] = useState<{ B: PlayerStats; W: PlayerStats }>({
-        B: { pieceCount: 2, mobility: 4 },
-        W: { pieceCount: 2, mobility: 4 }
+    const [playersStats, setPlayersStats] = useState<{ B: PlayerStats; W: PlayerStats }>({
+        B: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null },
+        W: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
     const [waiter, setWaiter] = useState<Turn | null>(null);
@@ -36,9 +36,9 @@ export const useGame = (setupData: SetupData | null) => {
             setMove(null);
             setPlaceCount(0);
             setGameOver(false);
-            setPlayerStats({
-                B: { pieceCount: 2, mobility: 4 },
-                W: { pieceCount: 2, mobility: 4 }
+            setPlayersStats({
+                B: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null },
+                W: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null }
             });
             setWaiter(null);
             setWinner(null);
@@ -54,7 +54,7 @@ export const useGame = (setupData: SetupData | null) => {
         move,
         placeCount,
         gameOver,
-        playerStats,
+        playersStats,
         waiter,
         winner,
         errorState,
@@ -66,7 +66,7 @@ export const useGame = (setupData: SetupData | null) => {
         setMove,
         setPlaceCount,
         setGameOver,
-        setPlayerStats,
+        setPlayersStats,
         setWaiter,  
         setWinner,
         setErrorState,

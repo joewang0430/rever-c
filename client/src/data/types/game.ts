@@ -13,10 +13,18 @@ export interface Move {
 export interface PlayerStats {
     pieceCount: number;
     mobility: number;
-    totalTime?: number; // only used if player type is 'archive' or 'custom'
-    maxTime?: number; // only used if player type is 'archive' or 'custom'
-    returnValue?: number; // only used if player type is 'archive' or 'custom'
+    totalTime: number; // only manipulated if player type is 'archive' or 'custom'
+    maxTime: number; // only manipulated if player type is 'archive' or 'custom'
+    returnValue: number | null; // only manipulated if player type is 'archive' or 'custom'
 }
+
+export const defaultPlayerStats: PlayerStats = {
+  pieceCount: 0,
+  mobility: 0,
+  totalTime: 0,
+  maxTime: 0,
+  returnValue: null,
+};
 
 export interface MoveHistoryItem {
   index: number;    // how many moves have been made

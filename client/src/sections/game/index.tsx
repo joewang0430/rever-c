@@ -8,8 +8,10 @@ import { useState, useEffect } from "react";
 import { getSetupData } from "@/api/gameApi";
 import { SetupData } from "@/data/types/setup";
 import { useGame } from "@/hooks/useGame";
+import { defaultPlayerStats } from "@/data/types/game";
 import PieceCountDisplay from "@/components/game/pieceCountDisplay";
 import GameStatusDisplay from "@/components/game/GameStatusDisplay";
+import PlayerInfoDisplay from "@/components/game/PlayerInfoDisplay";
 
 interface GameProps {
     matchId: string;
@@ -40,18 +42,25 @@ export default function Game({ matchId}: GameProps) {
     if (!setupData) return <div>No setup data found.</div>;
 
     return (
-        <div className="flex flex-col justify-center items-center h-full">
-            <GameStatusDisplay gameOver={game.gameOver} />
-            <PieceCountDisplay 
-                blackCount={game.playerStats.B.pieceCount}
-                whiteCount={game.playerStats.W.pieceCount}
-            />
-            <div className="text-gray-300">
-                <h1>Game Page for Match ID: {matchId}</h1>
-                <pre>{JSON.stringify(setupData, null, 2)}</pre>
+        <div className="flex flex-row justify-center">
+            <div>
+                <PlayerInfoDisplay 
+                    playerConfig={setupData.black}
+                    playerStats={game.playersStats.B || defaultPlayerStats}/>
             </div>
-            
-            {/* Render game components here */}
+            <div className="flex flex-col justify-center items-center h-full">
+                <GameStatusDisplay gameOver={game.gameOver} />
+                <PieceCountDisplay 
+                    blackCount={game.playersStats.B.pieceCount}
+                    whiteCount={game.playersStats.W.pieceCount}
+                />
+                <div className="text-gray-300">
+                    <h1>Game Page for Match ID: {matchId}</h1>
+                    <pre>{JSON.stringify(setupData, null, 2)}</pre>
+                </div>
+                
+                {/* Render game components here */}
+            </div>
         </div>
     );
 }
