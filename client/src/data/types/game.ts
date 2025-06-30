@@ -3,11 +3,12 @@
 //
 
 export type Turn = 'B' | 'W';
+export type Board = string[][];
 
 export interface Move {
     row: number;
     col: number;
-    turn: Turn;
+    // turn: Turn;
 }
 
 export interface PlayerStats {

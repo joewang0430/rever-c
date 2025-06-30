@@ -4,15 +4,16 @@
 
 import { useState, useEffect } from 'react';
 import { SetupData } from '../data/types/setup';
-import { Move, 
+import { Turn,
+    Board,
+    Move, 
     createInitialBoard, 
-    Turn, 
     PlayerStats, 
     MoveHistoryItem 
 } from '@/data/types/game';
 
 export const useGame = (setupData: SetupData | null) => {
-    const [board, setBoard] = useState<string[][]>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
+    const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
     const [turn, setTurn] = useState<Turn>('B');
     const [move, setMove] = useState<Move | null>(null);
     const [placeCount, setPlaceCount] = useState<number>(0);
@@ -47,6 +48,10 @@ export const useGame = (setupData: SetupData | null) => {
             setMoveHistory([]);
         }
     }, [setupData]);
+
+    const handleMove = async(move: Move) => {
+        
+    };
 
     return {
         board,

@@ -16,7 +16,7 @@ import RoundDisplay from "@/components/game/RoundDisplay";
 
 interface GameProps {
     matchId: string;
-}
+};
 
 export default function Game({ matchId}: GameProps) {
     const [setupData, setSetupData] = useState<SetupData | null>(null);
@@ -71,5 +71,5 @@ export default function Game({ matchId}: GameProps) {
             </div>
         </div>
     );
-}
+};
 
