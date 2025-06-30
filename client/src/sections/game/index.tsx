@@ -12,6 +12,7 @@ import { defaultPlayerStats } from "@/data/types/game";
 import PieceCountDisplay from "@/components/game/pieceCountDisplay";
 import GameStatusDisplay from "@/components/game/GameStatusDisplay";
 import PlayerInfoDisplay from "@/components/game/PlayerInfoDisplay";
+import RoundDisplay from "@/components/game/RoundDisplay";
 
 interface GameProps {
     matchId: string;
@@ -54,6 +55,7 @@ export default function Game({ matchId}: GameProps) {
                     blackCount={game.playersStats.B.pieceCount}
                     whiteCount={game.playersStats.W.pieceCount}
                 />
+                <RoundDisplay placeCount={game.placeCount} />
                 <div className="text-gray-300">
                     <h1>Game Page for Match ID: {matchId}</h1>
                     <pre>{JSON.stringify(setupData, null, 2)}</pre>

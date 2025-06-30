@@ -31,7 +31,7 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
                 <div>{playerStats.totalTime === 0 ? '-': playerStats.totalTime }</div>
                 <div className="mt-4">Maximum Thinking</div>
                 <div>{playerStats.maxTime === 0 ? '-' : playerStats.maxTime }</div>
-                <div className="mt-4">Return Value</div>
+                <div className="mt-4">Code Return Value</div>
                 <div>{playerStats.returnValue ?? '-'}</div>
             </>
             )}
