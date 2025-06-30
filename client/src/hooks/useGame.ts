@@ -11,6 +11,8 @@ import { Turn,
     PlayerStats, 
     MoveHistoryItem 
 } from '@/data/types/game';
+import { raiseGameErrorWindow, checkLegalMove } from '@/utils/gameLogic';
+import { getPlayerName } from '@/utils/nameConverters';
 
 export const useGame = (setupData: SetupData | null) => {
     const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
@@ -49,8 +51,21 @@ export const useGame = (setupData: SetupData | null) => {
         }
     }, [setupData]);
 
-    const handleMove = async(move: Move) => {
-        
+    const handleMove = async(board: Board, turn: Turn, move: Move) => {
+        if (!checkLegalMove(board, turn, move)) {
+            let color = 'unknown color';
+            let playerName = 'unknown player'
+
+            if (turn === 'B') {
+                color = 'black';
+                playerName = setupData ? getPlayerName(setupData?.black) : playerName;
+            } else if (turn === 'W') {
+                color = 'white';
+                playerName = setupData ? getPlayerName(setupData?.white) : playerName;
+            }
+            const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly. Select `
+            raiseGameErrorWindow(msg);
+        }
     };
 
     return {

@@ -4,8 +4,15 @@
 
 import { Turn, Move, Board } from "@/data/types/game";
 
-// Check if current move is valid
-export const checkLegalMove = (board: Board, turn: Turn, move: Move) => {
-    return true;    // TODO: finish it
+// Issue the window to show the error, and quit the game. This function only used in game stage.
+export const raiseGameErrorWindow = (msg: string) => {
+    if (window.confirm(msg)) {
+        return; //TODO: finish it
+    }
 };
 
+// Check if current move is valid
+export const checkLegalMove = (board: Board, turn: Turn, move: Move) => {
+    // Check in bound first
+    return true;    // TODO: finish it
+};
