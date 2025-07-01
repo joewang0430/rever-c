@@ -140,9 +140,10 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
 
         // Then, if all good, we get our match ID.
         const matchId = uuid();
+        const setupDataWithId = { ...setupData, matchId};
 
         try {
-            await saveSetupDataToGame(matchId, setupData);
+            await saveSetupDataToGame(matchId, setupDataWithId);
         } catch (e) {
             alert("Failed to save game setup. Please try again.");
             return;
