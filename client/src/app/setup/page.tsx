@@ -6,8 +6,7 @@
 
 import { useSetupData } from "@/hooks/useSetupData";
 import { SetupData } from "@/data/types/setup";
-import { useSearchParams } from "next/navigation";
-import { use, useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import BoardSizeSelection from "@/components/setup/BoardSizeSelection";
 import GameStartButton from "@/components/setup/GameStartButton";
 import PlayerSetupBlock from "@/components/setup/PlayerSetupBlock";
@@ -16,30 +15,8 @@ import SetupNameDisplay from "@/components/setup/SetupNameDisplay";
 import SetupTitle from "@/components/setup/SetupTitle";
 import { CacheProvider } from '@/contexts/CacheContext';
 
-interface SetupPageProps {
-    params: Promise<{ matchId: string }>
-}
+export default function SetupPage() {
 
-export default function SetupPage({ params }: SetupPageProps) {
-    const { matchId } = use(params);
-    const searchParams = useSearchParams();
-
-    // Get initial configuration from URL parameters
-    const getInitialConfig = (): Partial<SetupData> | undefined => {
-        const configParam = searchParams.get('config');
-        if (configParam) {
-            try {
-                const decoded = decodeURIComponent(configParam);
-                return JSON.parse(decoded) as Partial<SetupData>;
-            } catch (error) {
-                console.error('Failed to parse initial config:', error);
-                return undefined;
-            }
-        }
-        return undefined;
-    };
-
-    const initialConfig = getInitialConfig();
     const {
         setupData,
         updateBoardSize,
@@ -47,7 +24,7 @@ export default function SetupPage({ params }: SetupPageProps) {
         updateWhitePlayer,
         isAIAvailable,
         isValid
-    } = useSetupData(matchId, initialConfig);
+    } = useSetupData();
 
     // Prevent back nav, which causing data leak
     const blackCandidateRef = useRef<string | null>(null);
@@ -97,15 +74,6 @@ export default function SetupPage({ params }: SetupPageProps) {
                         <SetupTitle />
                     </div>
                     
-                    {/* Pre-settings Reminder */}
-                    {initialConfig && (
-                        <div className="mb-6 p-3 bg-blue-100 border border-blue-300 rounded-lg text-center">
-                            <p className="text-blue-800">
-                                ℹ️ Configuration loaded from previous game
-                            </p>
-                        </div>
-                    )}
-                    
                     {/* Board Size Selection */}
                     <div className="flex justify-center mb-8">
                         <BoardSizeSelection 
@@ -153,7 +121,6 @@ export default function SetupPage({ params }: SetupPageProps) {
                                 onBlackPlayerChange={updateBlackPlayer}
                                 onWhitePlayerChange={updateWhitePlayer}
                                 isAIAvailable={isAIAvailable()}
-                                matchId={matchId}
                             />
                         </div>
                         
@@ -174,7 +141,6 @@ export default function SetupPage({ params }: SetupPageProps) {
                         <GameStartButton 
                             isValid={isValid}
                             setupData={setupData}
-                            matchId={matchId}
                         />
                     </div>
                     

@@ -7,24 +7,24 @@
 import { useState, useCallback, useEffect } from 'react';
 import { SetupData, PlayerConfig, BoardSize } from '../data/types/setup';
 
-export const useSetupData = (matchId: string, initialConfig?: Partial<SetupData>) => {
+export const useSetupData = () => {
     const [setupData, setSetupData] = useState<SetupData>({
-        matchId,
+        matchId: "",
         boardSize: 8,
         black: { type: null }, 
         white: { type: null }  
     });
 
-    // if there is an initial configuration, merge it with the default setup data
-    useEffect(() => {
-        if (initialConfig) {
-            setSetupData(prev => ({
-                ...prev,
-                ...initialConfig,
-                matchId // ensure matchId not overridden
-            }));
-        }
-    }, [initialConfig, matchId]);
+    // // if there is an initial configuration, merge it with the default setup data
+    // useEffect(() => {
+    //     if (initialConfig) {
+    //         setSetupData(prev => ({
+    //             ...prev,
+    //             ...initialConfig,
+    //             matchId // ensure matchId not overridden
+    //         }));
+    //     }
+    // }, [initialConfig, matchId]);
 
     // update board size
     const updateBoardSize = useCallback((size: BoardSize) => {
