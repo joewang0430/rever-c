@@ -22,8 +22,8 @@ export const useGame = (setupData: SetupData | null) => {
     const [gameOver, setGameOver] = useState<boolean>(false);
 
     const [playersStats, setPlayersStats] = useState<{ B: PlayerStats; W: PlayerStats }>({
-        B: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null },
-        W: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null }
+        B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
+        W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
     const [waiter, setWaiter] = useState<Turn | null>(null);
@@ -40,8 +40,8 @@ export const useGame = (setupData: SetupData | null) => {
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
-                B: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null },
-                W: { pieceCount: 2, mobility: 4, totalTime: 0, maxTime: 0, returnValue: null }
+                B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
+                W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
             });
             setWaiter(null);
             setWinner(null);
@@ -53,9 +53,10 @@ export const useGame = (setupData: SetupData | null) => {
 
     const handleMove = async(board: Board, turn: Turn, move: Move) => {
         if (!checkLegalMove(board, turn, move)) {
+            // TODO: set error state
+
             let color = 'unknown color';
             let playerName = 'unknown player'
-
             if (turn === 'B') {
                 color = 'black';
                 playerName = setupData ? getPlayerName(setupData?.black) : playerName;
@@ -66,6 +67,8 @@ export const useGame = (setupData: SetupData | null) => {
             const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly. Select `
             raiseGameErrorWindow(msg);
         }
+
+
     };
 
     return {

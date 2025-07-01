@@ -7,7 +7,7 @@ import { Turn, Move, Board } from "@/data/types/game";
 // Issue the window to show the error, and quit the game. This function only used in game stage.
 export const raiseGameErrorWindow = (msg: string) => {
     if (window.confirm(msg)) {
-        return; //TODO: finish it
+        return; //TODO: finish it: api to get to the setup page and clean the game data original.
     }
 };
 
