@@ -4,14 +4,23 @@
 
 import { useState, useEffect } from 'react';
 import { SetupData } from '../data/types/setup';
-import { Turn,
+import { 
+    Turn,
     Board,
     Move, 
     createInitialBoard, 
     PlayerStats, 
     MoveHistoryItem 
 } from '@/data/types/game';
-import { raiseGameErrorWindow, checkLegalMove } from '@/utils/gameLogic';
+import { 
+    raiseGameErrorWindow, 
+    checkLegalMove,
+    getUpdatedBoard,
+    toggleTurn,
+    checkGameOver,
+    getPieceCount,
+    getMobility
+} from '@/utils/gameLogic';
 import { getPlayerName } from '@/utils/nameConverters';
 
 export const useGame = (setupData: SetupData | null) => {
@@ -51,8 +60,11 @@ export const useGame = (setupData: SetupData | null) => {
         }
     }, [setupData]);
 
-    const handleMove = async(board: Board, turn: Turn, move: Move) => {
-        if (!checkLegalMove(board, turn, move)) {
+    const handleMove = async(move: Move) => {
+
+        /* check the validity first */
+        const legalCheck = checkLegalMove(board, turn, move);
+        if (!legalCheck.valid) {
             // TODO: set error state
 
             let color = 'unknown color';
@@ -64,10 +76,65 @@ export const useGame = (setupData: SetupData | null) => {
                 color = 'white';
                 playerName = setupData ? getPlayerName(setupData?.white) : playerName;
             }
-            const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly. Select `
+            const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly.`
             raiseGameErrorWindow(msg);
+            return;
         }
 
+        /* UPDATE */ // TODO: write them in the correct order 
+
+        // Board, Flips
+        const { board: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move);
+        setBoard(newBoard);
+        
+        // PlaceCount
+        setPlaceCount(placeCount + 1);
+
+        // PlayerStats: pieceCount, mobility
+        const blackPieceCount = getPieceCount(newBoard, 'B');
+        const whitePieceCount = getPieceCount(newBoard, 'W');
+        const blackMobility = getMobility(newBoard, 'B');
+        const whiteMobility = getMobility(newBoard, 'W');
+
+        if (turn === 'B') {
+            // for the being-flipped side, just keep the flips this round to be zero
+            setPlayersStats(prev => ({
+                B: {
+                    ...prev.B,
+                    flips: flipsCount,
+                    pieceCount: blackPieceCount,
+                    mobility: blackMobility
+                },
+                W: {
+                    ...prev.W,
+                    flips: 0,
+                    pieceCount: whitePieceCount,
+                    mobility: whiteMobility
+                }
+            }));
+        } else {
+            setPlayersStats(prev => ({
+                B: {
+                    ...prev.B,
+                    flips: 0,
+                    pieceCount: blackPieceCount,
+                    mobility: blackMobility
+                },
+                W: {
+                    ...prev.W,
+                    flips: flipsCount,
+                    pieceCount: whitePieceCount,
+                    mobility: whiteMobility
+                }
+            }));
+        }
+
+        // GameOver?
+        const isGameOver = checkGameOver(newBoard);
+        setGameOver(isGameOver);
+
+        // Turn // TODO: put it at the end
+        setTurn(prev => toggleTurn(turn));
 
     };
 
