@@ -63,9 +63,11 @@ export const useGame = (setupData: SetupData | null) => {
     }, [setupData]);
 
     const handleMove = async(move: Move) => {
+        if (!setupData) return;
+        const size = setupData.boardSize;
 
         /* check the validity first */
-        const legalCheck = checkLegalMove(board, turn, move);
+        const legalCheck = checkLegalMove(board, turn, move, size);
         if (!legalCheck.valid) {
             // TODO: set error state
 
@@ -73,10 +75,10 @@ export const useGame = (setupData: SetupData | null) => {
             let playerName = 'unknown player'
             if (turn === 'B') {
                 color = 'black';
-                playerName = setupData ? getPlayerName(setupData?.black) : playerName;
+                playerName = setupData ? getPlayerName(setupData.black) : playerName;
             } else if (turn === 'W') {
                 color = 'white';
-                playerName = setupData ? getPlayerName(setupData?.white) : playerName;
+                playerName = setupData ? getPlayerName(setupData.white) : playerName;
             }
             const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly.`
             raiseGameErrorWindow(msg);
@@ -86,17 +88,17 @@ export const useGame = (setupData: SetupData | null) => {
         /* UPDATE */ // TODO: write them in the correct order 
 
         // Board, Flips
-        const { board: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move);
+        const { board: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move, size);
         setBoard(newBoard);
         
         // PlaceCount
         setPlaceCount(prev => prev + 1);
 
         // PlayerStats: pieceCount, mobility
-        const blackPieceCount = getPieceCount(newBoard, 'B');
-        const whitePieceCount = getPieceCount(newBoard, 'W');
-        const blackMobility = getMobility(newBoard, 'B');
-        const whiteMobility = getMobility(newBoard, 'W');
+        const blackPieceCount = getPieceCount(newBoard, 'B', size);
+        const whitePieceCount = getPieceCount(newBoard, 'W', size);
+        const blackMobility = getMobility(newBoard, 'B', size);
+        const whiteMobility = getMobility(newBoard, 'W', size);
 
         if (turn === 'B') {
             // for the being-flipped side, just keep the flips this round to be zero
@@ -142,7 +144,7 @@ export const useGame = (setupData: SetupData | null) => {
         setMoveHistory(prev => [...prev, newMoveHistoryItem]);
 
         // GameOver?
-        const isGameOver = checkGameOver(newBoard);
+        const isGameOver = checkGameOver(newBoard, size);
         setGameOver(isGameOver);
 
         // Winner
@@ -164,10 +166,10 @@ export const useGame = (setupData: SetupData | null) => {
         // Certificate
         if (isGameOver) {
             // Code challenger wins in black
-            if (setupData?.black.type === 'custom' && setupData.white.type === 'archive' && gameWinner === 'B') {
+            if (setupData.black.type === 'custom' && setupData.white.type === 'archive' && gameWinner === 'B') {
                 setCertificate('IN BLACK');
             // Code challenger wins in white
-            } else if (setupData?.black.type === 'archive' && setupData.white.type === 'custom' && gameWinner === 'W') {
+            } else if (setupData.black.type === 'archive' && setupData.white.type === 'custom' && gameWinner === 'W') {
                 setCertificate('IN WHITE');
             // Draw / Lose / Other modes
             } else {

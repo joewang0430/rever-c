@@ -15,7 +15,8 @@ export const raiseGameErrorWindow = (msg: string) => {
 export const checkLegalMove = (
     board: Board, 
     turn: Turn, 
-    move: Move
+    move: Move,
+    size: number
 ): {valid: boolean, msg: string} => {
     // Check network? first
     // Check return first
@@ -28,8 +29,9 @@ export const getUpdatedBoard = (
     board: Board, 
     turn: Turn, 
     move: Move, 
+    size: number
 ): { board: Board, flipsCount: number } => {
-    const flipsCount = -1;
+    const flipsCount = 0;
     return { board, flipsCount};   // TODO: finish it
 };
 
@@ -39,16 +41,16 @@ export const toggleTurn = (turn: Turn): Turn => {
 };
 
 // Check if game over
-export const checkGameOver = (board: Board): boolean => {
+export const checkGameOver = (board: Board, size: number): boolean => {
     return false; // TODO: finish it
 };
 
 // Get how many pieces certain color in the board
-export const getPieceCount = (board: Board, turn: Turn): number => {
+export const getPieceCount = (board: Board, turn: Turn, size: number): number => {
     return -1;  // TODO: finish it
 };
 
 // Get how many available moves certain color in the board
-export const getMobility = (board: Board, turn: Turn): number => {
+export const getMobility = (board: Board, turn: Turn, size: number): number => {
     return -1;  // TODO: finish it 
 };
