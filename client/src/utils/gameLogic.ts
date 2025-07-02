@@ -2,7 +2,7 @@
 // All the functions related handling the reversi logic in the front-end.
 //
 
-import { Turn, Move, Board, PlayerStats } from "@/data/types/game";
+import { Turn, Move, Board, PlayerStats, DIRECTIONS } from "@/data/types/game";
 
 // Issue the window to show the error, and quit the game. This function only used in game stage.
 export const raiseGameErrorWindow = (msg: string) => {
@@ -14,14 +14,51 @@ export const raiseGameErrorWindow = (msg: string) => {
 // ------------------------------------------------------ Check if current move is valid
 export const checkLegalMove = (
     board: Board, 
-    turn: Turn, 
+    color: Turn, 
     move: Move,
     size: number
 ): {valid: boolean, msg: string} => {
     // Check network? first
     // Check return first
     // Check in bound first
-    return {valid: true, msg: 'ok'};    // TODO: finish it
+    if (!isInBound(move, size)) {
+        return {valid: false, msg: `The move at position (${move.row}, ${move.col}) is out of bound.`}
+    } else if (isCellOccupied(board, move, size)) {
+        return {valid: false, msg: `There is already a piece on (${move.row}, ${move.col}).`}
+    } else if (!isLegalMove(board, move.row, move.col, color, size)) {
+        return {valid: false, msg: `The move at position (${move.row}, ${move.col}) has no flips.`}
+    }
+    return {valid: true, msg: ""};
+};
+
+const isInBound = (move: Move, size: number): boolean => {
+    return (
+        move.row >= 0 && move.row < size &&
+        move.col >=0 && move.col < size
+    );
+};
+
+const isCellOccupied = (board: Board, move: Move, size: number): boolean => {
+    const cellColor = board[move.row][move.col];
+    if (cellColor !== 'U' && isInBound(move, size)) {
+        return true;
+    }
+    return false;
+}
+
+const isLegalMove = (
+    board: Board,
+    row: number,
+    col: number,
+    color: Turn,
+    size: number,
+): boolean => {
+    for (const [dr, dc] of DIRECTIONS) {
+        if (checkDirectionValid(board, row, col, color, dr, dc, size)) {
+            return true;
+        }
+    }
+    return false;
 };
 
 const checkDirectionValid = (
@@ -67,7 +104,7 @@ export const getUpdatedBoard = (
     newBoard[move.row][move.col] = turn;
     const flipsCount = flipAllDirections(newBoard, move.row, move.col, turn, size);
 
-    return { newBoard, flipsCount};   // TODO: finish it
+    return { newBoard, flipsCount}; 
 };
 
 const createBoardCopy = (board: Board, size: number): Board => {
@@ -85,13 +122,8 @@ const flipAllDirections = (
     color: Turn,
     size: number
 ): number => {
-    const directions = [
-        [-1, -1],   [-1, 0],    [-1, 1],
-        [0, -1],                [0, 1],
-        [1, -1],    [1, 0],     [1, 1]
-    ];
     let totalFlips = 0;
-    for (const [dr, dc] of directions) {
+    for (const [dr, dc] of DIRECTIONS) {
         totalFlips += flipInDirection(board, row, col, color, dr, dc, size);
     }
     return totalFlips;
@@ -155,7 +187,16 @@ export const getPieceCount = (board: Board, turn: Turn, size: number): number =>
     return -1;  // TODO: finish it
 };
 
-// Get how many available moves certain color in the board
+// ------------------------------------------------------ Get how many avaible moves
 export const getMobility = (board: Board, turn: Turn, size: number): number => {
-    return -1;  // TODO: finish it 
+    let count = 0;
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+            if (board[row][col] !== 'U') continue;
+            if (isLegalMove(board, row, col, turn, size)) {
+                count++;
+            }
+        }
+    }
+    return count;
 };

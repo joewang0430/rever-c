@@ -2,6 +2,12 @@
 // Frontend data sturctures for game-related data.
 //
 
+export const DIRECTIONS = [
+        [-1, -1],   [-1, 0],  [-1, 1],
+        [0, -1],              [0, 1],
+        [1, -1],    [1, 0],   [1, 1]
+    ];
+
 export type Turn = 'B' | 'W';
 export type Draw = 'D';
 export type Board = string[][];
