@@ -64,6 +64,8 @@ export const useGame = (setupData: SetupData | null) => {
 
     const handleMove = async(move: Move) => {
         if (!setupData) return;
+        if (gameOver) return;
+
         const size = setupData.boardSize;
 
         /* check the validity first */
@@ -101,7 +103,8 @@ export const useGame = (setupData: SetupData | null) => {
         const whiteMobility = getMobility(newBoard, 'W', size);
 
         if (turn === 'B') {
-            // for the being-flipped side, just keep the flips this round to be zero
+            // for the being-flipped side, just keep the flips this round to be    
+            // the same with previous move
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
@@ -111,7 +114,7 @@ export const useGame = (setupData: SetupData | null) => {
                 },
                 W: {
                     ...prev.W,
-                    flips: 0,
+                    // flips: 0,
                     pieceCount: whitePieceCount,
                     mobility: whiteMobility
                 }
@@ -120,7 +123,7 @@ export const useGame = (setupData: SetupData | null) => {
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
-                    flips: 0,
+                    // flips: 0,
                     pieceCount: blackPieceCount,
                     mobility: blackMobility
                 },
@@ -176,19 +179,43 @@ export const useGame = (setupData: SetupData | null) => {
             }
         }
 
-        // Turn
-        setTurn(prev => toggleTurn(prev));
-
-        // Waiter
-        if (isGameOver) {
+        // Turn & Waiter
+        if (gameOver) {
             setWaiter(null);
         } else {
-            if (turn === 'B') {    // this is the turn before move
-                setWaiter('W');
+            const nextTurn = toggleTurn(turn);
+            const nextMobility = getMobility(newBoard, nextTurn, size);
+            const currMobility = getMobility(newBoard, turn, size);
+
+            if (nextMobility > 0) {
+                // Next opponent move is available
+                setTurn(nextTurn);
+                setWaiter(nextTurn);
+            } else if (currMobility > 0) {
+                // Next opponent move is NOT available
+                // then still this side
+                setTurn(turn);
+                setWaiter(turn);
             } else {
-                setWaiter('B');
+                // This means game over, keep for safety
+                setGameOver(true);
+                setWaiter(null);
             }
         }
+
+        // // Turn
+        // setTurn(prev => toggleTurn(prev));
+
+        // // Waiter
+        // if (isGameOver) {
+        //     setWaiter(null);
+        // } else {
+        //     if (turn === 'B') {    // this is the turn before move
+        //         setWaiter('W');
+        //     } else {
+        //         setWaiter('B');
+        //     }
+        // }
         
 
     };
