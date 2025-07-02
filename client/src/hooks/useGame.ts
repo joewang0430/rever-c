@@ -27,7 +27,7 @@ import { getPlayerName } from '@/utils/nameConverters';
 
 export const useGame = (setupData: SetupData | null) => {
     const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
-    const [turn, setTurn] = useState<Turn>('B');
+    const [turn, setTurn] = useState<Turn | null>('B');
     const [move, setMove] = useState<Move | null>(null);
     const [lastMove, setLastMove] = useState<Move | null>(null);
     const [placeCount, setPlaceCount] = useState<number>(0);
@@ -38,7 +38,6 @@ export const useGame = (setupData: SetupData | null) => {
         W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
-    const [waiter, setWaiter] = useState<Turn | null>(null);
     const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
     const [certificate, setCertificate] = useState<CertificateType | null>(null);
@@ -56,7 +55,6 @@ export const useGame = (setupData: SetupData | null) => {
                 B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
                 W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
             });
-            setWaiter(null);
             setWinner(null);
             setErrorState(null);
             setCertificate(null);
@@ -67,6 +65,7 @@ export const useGame = (setupData: SetupData | null) => {
     const handleMove = async(move: Move) => {
         if (!setupData) return;
         if (gameOver) return;
+        if (!turn) return;
 
         const size = setupData.boardSize;
 
@@ -183,7 +182,7 @@ export const useGame = (setupData: SetupData | null) => {
 
         // Turn & Waiter
         if (gameOver) {
-            setWaiter(null);
+            setTurn(null);
         } else {
             const nextTurn = toggleTurn(turn);
             const nextMobility = getMobility(newBoard, nextTurn, size);
@@ -192,17 +191,15 @@ export const useGame = (setupData: SetupData | null) => {
             if (nextMobility > 0) {
                 // Next opponent move is available
                 setTurn(nextTurn);
-                setWaiter(nextTurn);
             } else if (currMobility > 0) {
                 // Next opponent move is NOT available
                 // then still this side
                 setTurn(turn);
-                setWaiter(turn);
             } else {
                 // nextMobility = currMobility = 0
                 // This means game over, keep for safety
                 setGameOver(true);
-                setWaiter(null);
+                setTurn(null);
             }
         }
 
@@ -217,7 +214,6 @@ export const useGame = (setupData: SetupData | null) => {
         placeCount,
         gameOver,
         playersStats,
-        waiter,
         winner,
         errorState,
         certificate,
@@ -229,7 +225,6 @@ export const useGame = (setupData: SetupData | null) => {
         setPlaceCount,
         setGameOver,
         setPlayersStats,
-        setWaiter,  
         setWinner,
         setErrorState,
         setCertificate,

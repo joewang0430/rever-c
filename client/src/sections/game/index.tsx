@@ -4,11 +4,11 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getSetupData } from "@/api/gameApi";
 import { SetupData } from "@/data/types/setup";
 import { useGame } from "@/hooks/useGame";
-import { defaultPlayerStats } from "@/data/types/game";
+import { defaultPlayerStats, Move } from "@/data/types/game";
 import PieceCountDisplay from "@/components/game/pieceCountDisplay";
 import GameStatusDisplay from "@/components/game/GameStatusDisplay";
 import PlayerInfoDisplay from "@/components/game/PlayerInfoDisplay";
@@ -37,6 +37,30 @@ export default function Game({ matchId}: GameProps) {
                 setLoading(false);
             })
     }, [matchId]);
+
+    // Process the move from computer ("custom" | "archive" | "ai")
+    const isRequestingComputer = useRef(false);
+    useEffect(() => {
+        if (!setupData || !game.turn || game.gameOver) return;
+        if (isRequestingComputer.current) return;   // Is requesting, return imdtl
+        const side = game.turn === 'B' ? 'black' : 'white';
+
+        const fetchComputerMove = async() => {
+            isRequestingComputer.current = true;
+            try {
+                let computerMove: Move | null = null;
+                if (setupData[side].type === 'custom' || setupData[side].type === 'archive') {
+                    computerMove = await /* fetch code api */
+                } else if (setupData[side].type === 'ai') {
+                    computerMove = await /* fetch ai api */
+                }
+                if (computerMove) { game.handleMove(computerMove); }
+            } finally {
+                isRequestingComputer.current = false;
+            }
+        }
+        fetchComputerMove();
+    }, [game.turn, setupData, game.gameOver, game.board]);
 
     if (loading) return <div>Loading game data...</div>;
     if (error) return <div>Error: {error}</div>;
