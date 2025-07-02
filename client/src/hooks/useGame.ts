@@ -29,6 +29,7 @@ export const useGame = (setupData: SetupData | null) => {
     const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
     const [turn, setTurn] = useState<Turn>('B');
     const [move, setMove] = useState<Move | null>(null);
+    const [lastMove, setLastMove] = useState<Move | null>(null);
     const [placeCount, setPlaceCount] = useState<number>(0);
     const [gameOver, setGameOver] = useState<boolean>(false);
 
@@ -48,6 +49,7 @@ export const useGame = (setupData: SetupData | null) => {
             setBoard(createInitialBoard(setupData.boardSize));
             setTurn('B');
             setMove(null);
+            setLastMove(null);
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
@@ -204,21 +206,8 @@ export const useGame = (setupData: SetupData | null) => {
             }
         }
 
-        // // Turn
-        // setTurn(prev => toggleTurn(prev));
-
-        // // Waiter
-        // if (isGameOver) {
-        //     setWaiter(null);
-        // } else {
-        //     if (turn === 'B') {    // this is the turn before move
-        //         setWaiter('W');
-        //     } else {
-        //         setWaiter('B');
-        //     }
-        // }
-        
-
+        // lastMove
+        setLastMove(move);
     };
 
     return {
