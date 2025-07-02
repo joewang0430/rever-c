@@ -5,9 +5,11 @@
 import { useState, useEffect } from 'react';
 import { SetupData } from '../data/types/setup';
 import { 
+    Draw,
     Turn,
     Board,
     Move, 
+    CertificateType,
     createInitialBoard, 
     PlayerStats, 
     MoveHistoryItem 
@@ -36,9 +38,9 @@ export const useGame = (setupData: SetupData | null) => {
     });
 
     const [waiter, setWaiter] = useState<Turn | null>(null);
-    const [winner, setWinner] = useState<Turn | null>(null);
+    const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
-    const [certificateReady, setCertificateReady] = useState<boolean>(false);
+    const [certificate, setCertificate] = useState<CertificateType | null>(null);
     const [moveHistory, setMoveHistory] = useState<MoveHistoryItem[]>([]);
 
     useEffect(() => {
@@ -55,7 +57,7 @@ export const useGame = (setupData: SetupData | null) => {
             setWaiter(null);
             setWinner(null);
             setErrorState(null);
-            setCertificateReady(false);
+            setCertificate(null);
             setMoveHistory([]);
         }
     }, [setupData]);
@@ -88,7 +90,7 @@ export const useGame = (setupData: SetupData | null) => {
         setBoard(newBoard);
         
         // PlaceCount
-        setPlaceCount(placeCount + 1);
+        setPlaceCount(prev => prev + 1);
 
         // PlayerStats: pieceCount, mobility
         const blackPieceCount = getPieceCount(newBoard, 'B');
@@ -129,12 +131,64 @@ export const useGame = (setupData: SetupData | null) => {
             }));
         }
 
+        // moveHistory
+        const newMoveHistoryItem: MoveHistoryItem = {
+            index: placeCount + 1,
+            color: turn,
+            position: { row: move.row, col: move.col},
+            pieceCount: { B: blackPieceCount, W: whitePieceCount },
+            mobility: { B: blackMobility, W: whiteMobility }
+        };
+        setMoveHistory(prev => [...prev, newMoveHistoryItem]);
+
         // GameOver?
         const isGameOver = checkGameOver(newBoard);
         setGameOver(isGameOver);
 
-        // Turn // TODO: put it at the end
-        setTurn(prev => toggleTurn(turn));
+        // Winner
+        let gameWinner: Turn | Draw | null = null;
+        if (isGameOver) {
+            if (blackPieceCount > whitePieceCount) {
+                // setWinner('B');
+                gameWinner = 'B'
+            } else if (blackPieceCount < whitePieceCount) {
+                // setWinner('W');
+                gameWinner = 'W'
+            } else {
+                // setWinner('D');
+                gameWinner = 'D';
+            }
+            setWinner(gameWinner);
+        }
+
+        // Certificate
+        if (isGameOver) {
+            // Code challenger wins in black
+            if (setupData?.black.type === 'custom' && setupData.white.type === 'archive' && gameWinner === 'B') {
+                setCertificate('IN BLACK');
+            // Code challenger wins in white
+            } else if (setupData?.black.type === 'archive' && setupData.white.type === 'custom' && gameWinner === 'W') {
+                setCertificate('IN WHITE');
+            // Draw / Lose / Other modes
+            } else {
+                setCertificate(null);
+            }
+        }
+
+        // Turn
+        setTurn(prev => toggleTurn(prev));
+
+        // Waiter
+        if (isGameOver) {
+            setWaiter(null);
+        } else {
+            if (turn === 'B') {    // this is the turn before move
+                setWaiter('W');
+            } else {
+                setWaiter('B');
+            }
+        }
+        
 
     };
 
@@ -148,7 +202,7 @@ export const useGame = (setupData: SetupData | null) => {
         waiter,
         winner,
         errorState,
-        certificateReady,
+        certificate,
         moveHistory,
 
         setBoard,
@@ -160,7 +214,7 @@ export const useGame = (setupData: SetupData | null) => {
         setWaiter,  
         setWinner,
         setErrorState,
-        setCertificateReady,
+        setCertificate,
         setMoveHistory
     };
 };

@@ -3,7 +3,9 @@
 //
 
 export type Turn = 'B' | 'W';
+export type Draw = 'D';
 export type Board = string[][];
+export type CertificateType = 'IN BLACK' | 'IN WHITE';
 
 export interface Move {
     row: number;
