@@ -95,14 +95,14 @@ const checkDirectionValid = (
 // ------------------------------------------------------ Update the board
 export const getUpdatedBoard = (
     board: Board, 
-    turn: Turn, 
+    color: Turn, 
     move: Move, 
     size: number
 ): { newBoard: Board, flipsCount: number } => {
 
     const newBoard = createBoardCopy(board, size);
-    newBoard[move.row][move.col] = turn;
-    const flipsCount = flipAllDirections(newBoard, move.row, move.col, turn, size);
+    newBoard[move.row][move.col] = color;
+    const flipsCount = flipAllDirections(newBoard, move.row, move.col, color, size);
 
     return { newBoard, flipsCount}; 
 };
@@ -170,30 +170,66 @@ const flipInDirection = (
     return flips;
 };
 
-// ------------------------------------------------------ Other tool functions
-
-// Switch the player turn
+// ------------------------------------------------------ Switch sides
 export const toggleTurn = (turn: Turn): Turn => {
     return turn === 'B' ? 'W' : 'B';
 };
 
-// Check if game over
+// ------------------------------------------------------ Check if game over
 export const checkGameOver = (board: Board, size: number): boolean => {
-    return false; // TODO: finish it
+    return (
+        isFull(board, size) || 
+        (!canMove(board, 'B', size) && !canMove(board, 'W', size))
+    );
 };
 
-// Get how many pieces certain color in the board
-export const getPieceCount = (board: Board, turn: Turn, size: number): number => {
-    return -1;  // TODO: finish it
+export const canMove = (board: Board, color: Turn, size: number): boolean => {
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+
+            if (board[row][col] === 'U') {
+                if (isLegalMove(board, row, col, color, size)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+
+const isFull = (board: Board, size: number) => {
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+
+            if (board[row][col] === 'U') {
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+// ------------------------------------------------------ Get piece number
+export const getPieceCount = (board: Board, color: Turn, size: number): number => {
+    let count = 0;
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+
+            if (board[row][col] === color) {
+                count++;
+            }
+        }
+    }
+    return count;
 };
 
 // ------------------------------------------------------ Get how many avaible moves
-export const getMobility = (board: Board, turn: Turn, size: number): number => {
+export const getMobility = (board: Board, color: Turn, size: number): number => {
     let count = 0;
     for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
             if (board[row][col] !== 'U') continue;
-            if (isLegalMove(board, row, col, turn, size)) {
+            if (isLegalMove(board, row, col, color, size)) {
                 count++;
             }
         }
