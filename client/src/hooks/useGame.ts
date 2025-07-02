@@ -88,7 +88,7 @@ export const useGame = (setupData: SetupData | null) => {
         /* UPDATE */ // TODO: write them in the correct order 
 
         // Board, Flips
-        const { board: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move, size);
+        const { newBoard: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move, size);
         setBoard(newBoard);
         
         // PlaceCount
@@ -134,14 +134,16 @@ export const useGame = (setupData: SetupData | null) => {
         }
 
         // moveHistory
-        const newMoveHistoryItem: MoveHistoryItem = {
-            index: placeCount + 1,
-            color: turn,
-            position: { row: move.row, col: move.col},
-            pieceCount: { B: blackPieceCount, W: whitePieceCount },
-            mobility: { B: blackMobility, W: whiteMobility }
-        };
-        setMoveHistory(prev => [...prev, newMoveHistoryItem]);
+        setMoveHistory(prev => [
+            ...prev, 
+            {
+                index: prev.length + 1,
+                color: turn,
+                position: { row: move.row, col: move.col },
+                pieceCount: { B: blackPieceCount, W: whitePieceCount },
+                mobility: { B: blackMobility, W: whiteMobility }
+            }
+        ]);
 
         // GameOver?
         const isGameOver = checkGameOver(newBoard, size);
@@ -151,13 +153,10 @@ export const useGame = (setupData: SetupData | null) => {
         let gameWinner: Turn | Draw | null = null;
         if (isGameOver) {
             if (blackPieceCount > whitePieceCount) {
-                // setWinner('B');
                 gameWinner = 'B'
             } else if (blackPieceCount < whitePieceCount) {
-                // setWinner('W');
                 gameWinner = 'W'
             } else {
-                // setWinner('D');
                 gameWinner = 'D';
             }
             setWinner(gameWinner);
@@ -217,7 +216,9 @@ export const useGame = (setupData: SetupData | null) => {
         setWinner,
         setErrorState,
         setCertificate,
-        setMoveHistory
+        setMoveHistory,
+
+        handleMove,
     };
 };
 

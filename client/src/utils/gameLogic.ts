@@ -11,7 +11,7 @@ export const raiseGameErrorWindow = (msg: string) => {
     }
 };
 
-// Check if current move is valid
+// ------------------------------------------------------ Check if current move is valid
 export const checkLegalMove = (
     board: Board, 
     turn: Turn, 
@@ -24,16 +24,121 @@ export const checkLegalMove = (
     return {valid: true, msg: 'ok'};    // TODO: finish it
 };
 
-// Update the board
+const checkDirectionValid = (
+    board: Board, 
+    row: number, 
+    col: number, 
+    color: Turn, 
+    deltaRow: number,
+    deltaCol: number,
+    size: number
+): boolean => {
+    let r = row + deltaRow;
+    let c = col + deltaCol;
+    const opponent = color === 'B' ? 'W' : 'B';
+    let foundOpponent = false;
+
+    while (
+        r >= 0 && r < size && 
+        c >= 0 && c < size &&
+        board[r][c] === opponent
+    ) {
+        foundOpponent = true;
+        r += deltaRow;
+        c += deltaCol;
+    }
+    return (
+        foundOpponent &&
+        r >= 0 && r < size &&
+        c >= 0 && c < size &&
+        board[r][c] === color
+    );
+};
+
+// ------------------------------------------------------ Update the board
 export const getUpdatedBoard = (
     board: Board, 
     turn: Turn, 
     move: Move, 
     size: number
-): { board: Board, flipsCount: number } => {
-    const flipsCount = 0;
-    return { board, flipsCount};   // TODO: finish it
+): { newBoard: Board, flipsCount: number } => {
+
+    const newBoard = createBoardCopy(board, size);
+    newBoard[move.row][move.col] = turn;
+    const flipsCount = flipAllDirections(newBoard, move.row, move.col, turn, size);
+
+    return { newBoard, flipsCount};   // TODO: finish it
 };
+
+const createBoardCopy = (board: Board, size: number): Board => {
+    const newBoard: Board = [];
+    for (let row = 0; row < size; row++) {
+        newBoard[row] = [...board[row]];
+    }
+    return newBoard;
+};
+
+const flipAllDirections = (
+    board: Board,
+    row: number,
+    col: number,
+    color: Turn,
+    size: number
+): number => {
+    const directions = [
+        [-1, -1],   [-1, 0],    [-1, 1],
+        [0, -1],                [0, 1],
+        [1, -1],    [1, 0],     [1, 1]
+    ];
+    let totalFlips = 0;
+    for (const [dr, dc] of directions) {
+        totalFlips += flipInDirection(board, row, col, color, dr, dc, size);
+    }
+    return totalFlips;
+};
+
+const flipInDirection = (
+    board: Board, 
+    row: number,
+    col: number,
+    color: Turn,
+    deltaRow: number,
+    deltaCol: number,
+    size: number
+): number => {
+    let r = row + deltaRow;
+    let c = col + deltaCol;
+    let flips = 0;
+    const opponent = color === 'B' ? 'W' : 'B';
+
+    // Collect the can-be-flipped piece locations first
+    const toFlip: [number, number][] = [];
+    while (
+        r >= 0 && r < size &&
+        c >= 0 && c < size && 
+        board[r][c] === opponent
+    ) {
+        toFlip.push([r, c]);
+        r += deltaRow;
+        c += deltaCol;
+    }
+
+    // Only valid and flip if self-side are met
+    if (
+        toFlip.length > 0 && 
+        r >= 0 && r < size &&
+        c >= 0 && c < size &&
+        board[r][c] === color
+    ) {
+        for (const [fr, fc] of toFlip) {
+            board[fr][fc] = color;
+            flips ++;
+        }
+    }
+    return flips;
+};
+
+// ------------------------------------------------------ Other tool functions
 
 // Switch the player turn
 export const toggleTurn = (turn: Turn): Turn => {
