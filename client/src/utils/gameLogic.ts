@@ -3,6 +3,7 @@
 //
 
 import { Turn, Move, Board, PlayerStats, DIRECTIONS } from "@/data/types/game";
+import { getRowName, getColName } from "./nameConverters";
 
 // Issue the window to show the error, and quit the game. This function only used in game stage.
 export const raiseGameErrorWindow = (msg: string) => {
@@ -21,12 +22,14 @@ export const checkLegalMove = (
     // Check network? first
     // Check return first
     // Check in bound first
+    const rowName = getRowName(move.row);
+    const colName = getColName(move.col);
     if (!isInBound(move, size)) {
-        return {valid: false, msg: `The move at position (${move.row}, ${move.col}) is out of bound.`}
+        return {valid: false, msg: `The move at position (${rowName}, ${colName}) is out of bound.`}
     } else if (isCellOccupied(board, move, size)) {
-        return {valid: false, msg: `There is already a piece on (${move.row}, ${move.col}).`}
+        return {valid: false, msg: `There is already a piece on (${rowName}, ${colName}).`}
     } else if (!isLegalMove(board, move.row, move.col, color, size)) {
-        return {valid: false, msg: `The move at position (${move.row}, ${move.col}) has no flips.`}
+        return {valid: false, msg: `The move at position (${rowName}, ${colName}) has no flips.`}
     }
     return {valid: true, msg: ""};
 };

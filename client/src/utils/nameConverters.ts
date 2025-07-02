@@ -67,4 +67,15 @@ export const getPlayerDescription = (playerConfig: PlayerConfig) => {
         default:
             return "(Not Selected)";
     }
-}
+};
+
+// International standard naming of reversi position:
+export const getRowName = (rowIdx: number): string => {
+    // row 0-7 -> a-h
+    return String.fromCharCode("a".charCodeAt(0) + rowIdx);
+};
+
+export const getColName = (colIdx: number): string => {
+    // col 0-7 -> 1-8
+    return (colIdx + 1).toString();
+};
