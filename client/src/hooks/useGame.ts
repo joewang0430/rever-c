@@ -197,6 +197,7 @@ export const useGame = (setupData: SetupData | null) => {
                 setTurn(turn);
                 setWaiter(turn);
             } else {
+                // nextMobility = currMobility = 0
                 // This means game over, keep for safety
                 setGameOver(true);
                 setWaiter(null);
