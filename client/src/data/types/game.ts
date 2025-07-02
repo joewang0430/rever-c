@@ -3,7 +3,9 @@
 //
 
 export type Turn = 'B' | 'W';
+export type Draw = 'D';
 export type Board = string[][];
+export type CertificateType = 'IN BLACK' | 'IN WHITE';
 
 export interface Move {
     row: number;
@@ -14,6 +16,7 @@ export interface Move {
 export interface PlayerStats {
     pieceCount: number;
     mobility: number;
+    flips: number;
     totalTime: number; // only manipulated if player type is 'archive' or 'custom'
     maxTime: number; // only manipulated if player type is 'archive' or 'custom'
     returnValue: number | null; // only manipulated if player type is 'archive' or 'custom'
@@ -22,6 +25,7 @@ export interface PlayerStats {
 export const defaultPlayerStats: PlayerStats = {
   pieceCount: 0,
   mobility: 0,
+  flips: 0,
   totalTime: 0,
   maxTime: 0,
   returnValue: null,

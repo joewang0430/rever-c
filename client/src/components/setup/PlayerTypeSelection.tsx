@@ -13,7 +13,6 @@ interface PlayerTypeSelectionProps {
     onBlackPlayerChange: (config: PlayerConfig) => void;
     onWhitePlayerChange: (config: PlayerConfig) => void;
     isAIAvailable: boolean;
-    matchId: string;
 }
 
 const PlayerTypeSelection = ({ 

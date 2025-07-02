@@ -14,10 +14,9 @@ import { v4 as uuid } from "uuid";
 interface GameStartButtonProps {
     isValid: boolean;
     setupData: SetupData;
-    matchId: string;
 };
 
-const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) => {
+const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
     const router = useRouter();
 
     // Check if custom file exists in backend, if not, game cannot start, we need to reconfigure the game
@@ -139,8 +138,12 @@ const GameStartButton = ({ isValid, setupData, matchId }: GameStartButtonProps) 
             return;
         }
 
+        // Then, if all good, we get our match ID.
+        const matchId = uuid();
+        const setupDataWithId = { ...setupData, matchId};
+
         try {
-            await saveSetupDataToGame(matchId, setupData);
+            await saveSetupDataToGame(matchId, setupDataWithId);
         } catch (e) {
             alert("Failed to save game setup. Please try again.");
             return;
