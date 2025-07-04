@@ -15,6 +15,7 @@ import {
     MoveHistoryItem 
 } from '@/data/types/game';
 import { 
+    getInitialAvailableMoves,
     raiseGameErrorWindow, 
     checkLegalMove,
     getUpdatedBoard,
@@ -27,17 +28,22 @@ import { getPlayerName } from '@/utils/nameConverters';
 
 export const useGame = (setupData: SetupData | null) => {
     const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
-    const [turn, setTurn] = useState<Turn>('B');
+    const [turn, setTurn] = useState<Turn | null>('B');
     const [move, setMove] = useState<Move | null>(null);
+    const [lastMove, setLastMove] = useState<Move | null>(null);
     const [placeCount, setPlaceCount] = useState<number>(0);
     const [gameOver, setGameOver] = useState<boolean>(false);
 
     const [playersStats, setPlayersStats] = useState<{ B: PlayerStats; W: PlayerStats }>({
         B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
-        W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
+        W: { pieceCount: 2, mobility: 0, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
-    const [waiter, setWaiter] = useState<Turn | null>(null);
+    const [flipped, setFlipped] = useState<Move[]>([]);
+    const [availableMoves, setAvailableMoves] = useState<Move[]>(
+        setupData ? getInitialAvailableMoves(setupData.boardSize) : []
+    );
+
     const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
     const [certificate, setCertificate] = useState<CertificateType | null>(null);
@@ -48,13 +54,15 @@ export const useGame = (setupData: SetupData | null) => {
             setBoard(createInitialBoard(setupData.boardSize));
             setTurn('B');
             setMove(null);
+            setLastMove(null);
+            setFlipped([]);
+            setAvailableMoves(getInitialAvailableMoves(setupData.boardSize));
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
                 B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
-                W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
+                W: { pieceCount: 2, mobility: 0, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
             });
-            setWaiter(null);
             setWinner(null);
             setErrorState(null);
             setCertificate(null);
@@ -63,9 +71,15 @@ export const useGame = (setupData: SetupData | null) => {
     }, [setupData]);
 
     const handleMove = async(move: Move) => {
+        console.log("handleMove called.")
+        if (!setupData) return;
+        if (gameOver) return;
+        if (!turn) return;
+
+        const size = setupData.boardSize;
 
         /* check the validity first */
-        const legalCheck = checkLegalMove(board, turn, move);
+        const legalCheck = checkLegalMove(board, turn, move, size);
         if (!legalCheck.valid) {
             // TODO: set error state
 
@@ -73,45 +87,52 @@ export const useGame = (setupData: SetupData | null) => {
             let playerName = 'unknown player'
             if (turn === 'B') {
                 color = 'black';
-                playerName = setupData ? getPlayerName(setupData?.black) : playerName;
+                playerName = setupData ? getPlayerName(setupData.black) : playerName;
             } else if (turn === 'W') {
                 color = 'white';
-                playerName = setupData ? getPlayerName(setupData?.white) : playerName;
+                playerName = setupData ? getPlayerName(setupData.white) : playerName;
             }
             const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly.`
             raiseGameErrorWindow(msg);
             return;
         }
 
-        /* UPDATE */ // TODO: write them in the correct order 
+        /* UPDATE */
 
-        // Board, Flips
-        const { board: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move);
+        // Board, FlipsCount, Flipped
+        const { newBoard: newBoard, flipsCount: flipsCount, flippedPositions: flippedPositions } = getUpdatedBoard(board, turn, move, size);
+        setFlipped(flippedPositions);
         setBoard(newBoard);
+
+        // TODO: set time out (maybe)
         
         // PlaceCount
         setPlaceCount(prev => prev + 1);
 
-        // PlayerStats: pieceCount, mobility
-        const blackPieceCount = getPieceCount(newBoard, 'B');
-        const whitePieceCount = getPieceCount(newBoard, 'W');
-        const blackMobility = getMobility(newBoard, 'B');
-        const whiteMobility = getMobility(newBoard, 'W');
+        // PlayerStats: pieceCount, mobility; available moves
+        const blackPieceCount = getPieceCount(newBoard, 'B', size);
+        const whitePieceCount = getPieceCount(newBoard, 'W', size);
+        
+        // Mobility of next turn:
+        // echoMobility: this is tricky, this means if the opponent next has 0 move and back to us, how many moves we have then
+        const {mobility: nextMobility, availableMoves: nextAvailableMoves} = getMobility(newBoard, toggleTurn(turn), size);
+        const {mobility: echoMobility, availableMoves: currAvailableMoves} = getMobility(newBoard, turn, size);
 
         if (turn === 'B') {
-            // for the being-flipped side, just keep the flips this round to be zero
+            // For the being-flipped side, set to 0 if not your turn
+            // same for the mobility, 
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
                     flips: flipsCount,
                     pieceCount: blackPieceCount,
-                    mobility: blackMobility
+                    mobility: 0
                 },
                 W: {
                     ...prev.W,
                     flips: 0,
                     pieceCount: whitePieceCount,
-                    mobility: whiteMobility
+                    mobility: nextMobility
                 }
             }));
         } else {
@@ -120,42 +141,53 @@ export const useGame = (setupData: SetupData | null) => {
                     ...prev.B,
                     flips: 0,
                     pieceCount: blackPieceCount,
-                    mobility: blackMobility
+                    mobility: nextMobility
                 },
                 W: {
                     ...prev.W,
                     flips: flipsCount,
                     pieceCount: whitePieceCount,
-                    mobility: whiteMobility
+                    mobility: 0
                 }
             }));
         }
+        setAvailableMoves(nextAvailableMoves);
 
         // moveHistory
-        const newMoveHistoryItem: MoveHistoryItem = {
-            index: placeCount + 1,
-            color: turn,
-            position: { row: move.row, col: move.col},
-            pieceCount: { B: blackPieceCount, W: whitePieceCount },
-            mobility: { B: blackMobility, W: whiteMobility }
-        };
-        setMoveHistory(prev => [...prev, newMoveHistoryItem]);
+        setMoveHistory(prev => [
+            ...prev, 
+            {
+                index: prev.length + 1,
+                color: turn,
+                position: { row: move.row, col: move.col },
+                pieceCount: { B: blackPieceCount, W: whitePieceCount },
+                mobility: { 
+                // Our mobility this round is the mobility focused on this move round (about to move)
+                // Opponent's molitily this round is the it's mobility after this move
+                    B: turn === 'B' ? prev[prev.length-1]?.mobility.B ?? 4 : nextMobility,
+                    W: turn === 'W' ? prev[prev.length-1]?.mobility.W ?? 4 : nextMobility
+                },
+                flips: {
+                // Our flips this round is the # of opponent pieces flipped by us this move
+                // Opponent's flips this round is 0, nothing, this is different from the mobility before
+                    B: turn === 'B' ? flipsCount : 0,
+                    W: turn === 'W' ? flipsCount : 0
+                }
+            }
+        ]);
 
         // GameOver?
-        const isGameOver = checkGameOver(newBoard);
+        const isGameOver = checkGameOver(newBoard, size);
         setGameOver(isGameOver);
 
         // Winner
         let gameWinner: Turn | Draw | null = null;
         if (isGameOver) {
             if (blackPieceCount > whitePieceCount) {
-                // setWinner('B');
                 gameWinner = 'B'
             } else if (blackPieceCount < whitePieceCount) {
-                // setWinner('W');
                 gameWinner = 'W'
             } else {
-                // setWinner('D');
                 gameWinner = 'D';
             }
             setWinner(gameWinner);
@@ -164,10 +196,10 @@ export const useGame = (setupData: SetupData | null) => {
         // Certificate
         if (isGameOver) {
             // Code challenger wins in black
-            if (setupData?.black.type === 'custom' && setupData.white.type === 'archive' && gameWinner === 'B') {
+            if (setupData.black.type === 'custom' && setupData.white.type === 'archive' && gameWinner === 'B') {
                 setCertificate('IN BLACK');
             // Code challenger wins in white
-            } else if (setupData?.black.type === 'archive' && setupData.white.type === 'custom' && gameWinner === 'W') {
+            } else if (setupData.black.type === 'archive' && setupData.white.type === 'custom' && gameWinner === 'W') {
                 setCertificate('IN WHITE');
             // Draw / Lose / Other modes
             } else {
@@ -176,30 +208,40 @@ export const useGame = (setupData: SetupData | null) => {
         }
 
         // Turn
-        setTurn(prev => toggleTurn(prev));
-
-        // Waiter
-        if (isGameOver) {
-            setWaiter(null);
+        if (gameOver) {
+            setTurn(null);
         } else {
-            if (turn === 'B') {    // this is the turn before move
-                setWaiter('W');
+            const nextTurn = toggleTurn(turn);
+
+            if (nextMobility > 0) {
+                // Next opponent move is available
+                setTurn(nextTurn);
+            } else if (echoMobility > 0) {
+                // Next opponent move is NOT available
+                // then still this side
+                setTurn(turn);
             } else {
-                setWaiter('B');
+                // nextMobility = echoMobility = 0
+                // This means game over, keep for safety
+                setGameOver(true);
+                setTurn(null);
             }
         }
-        
 
+        // lastMove
+        setLastMove(move);
     };
 
     return {
         board,
         turn,
         move,
+        lastMove,
+        flipped,
+        availableMoves,
         placeCount,
         gameOver,
         playersStats,
-        waiter,
         winner,
         errorState,
         certificate,
@@ -208,14 +250,18 @@ export const useGame = (setupData: SetupData | null) => {
         setBoard,
         setTurn,
         setMove,
+        setLastMove,
+        setFlipped,
+        setAvailableMoves,
         setPlaceCount,
         setGameOver,
         setPlayersStats,
-        setWaiter,  
         setWinner,
         setErrorState,
         setCertificate,
-        setMoveHistory
+        setMoveHistory,
+
+        handleMove,
     };
 };
 
