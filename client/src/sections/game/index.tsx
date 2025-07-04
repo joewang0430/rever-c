@@ -42,7 +42,7 @@ export default function Game({ matchId}: GameProps) {
     // _____ uncomment this later ____
 
     // Process the move from computer ("custom" | "archive" | "ai")
-    const isRequestingComputer = useRef(false);
+    // const isRequestingComputer = useRef(false);
     // useEffect(() => {
     //     if (!setupData || !game.turn || game.gameOver) return;
     //     if (isRequestingComputer.current) return;   // Is requesting, return imdtl

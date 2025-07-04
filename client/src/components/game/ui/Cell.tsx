@@ -29,8 +29,7 @@ const Cell = ({
                 ${canClick ? "cursor-pointer" : "cursor-default"}
                 ${isFlipping ? "animate-pulse" : ""}
             `}
-            onClick={canClick ? onClick : undefined} // Change Back
-            // onClick={onClick}
+            onClick={canClick ? onClick : undefined}
         >
             {value === "B" && <div className="w-5 h-5 rounded-full bg-black" />}
             {value === "W" && <div className="w-5 h-5 rounded-full bg-white border border-black" />}

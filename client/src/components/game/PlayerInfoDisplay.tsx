@@ -23,7 +23,7 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
             <div className="text-2xl text-gray-400 text-center" >{playerDescription}</div>
             <div className="h-8"></div>
             <div className="mt-4">Available Moves</div>
-            <div>{playerStats.mobility}</div>
+            <div>{playerStats.mobility === 0 ? '-' : playerStats.mobility}</div>
 
             {isCode && (
             <>

@@ -36,7 +36,7 @@ export const useGame = (setupData: SetupData | null) => {
 
     const [playersStats, setPlayersStats] = useState<{ B: PlayerStats; W: PlayerStats }>({
         B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
-        W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
+        W: { pieceCount: 2, mobility: 0, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
     const [flipped, setFlipped] = useState<Move[]>([]);
@@ -61,7 +61,7 @@ export const useGame = (setupData: SetupData | null) => {
             setGameOver(false);
             setPlayersStats({
                 B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
-                W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
+                W: { pieceCount: 2, mobility: 0, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
             });
             setWinner(null);
             setErrorState(null);
@@ -119,12 +119,13 @@ export const useGame = (setupData: SetupData | null) => {
 
         if (turn === 'B') {
             // for the being-flipped side, just keep the flips & mobility this round to be    
-            // the same with previous move
+            // but for the mobility, set to 0 if not your turn
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
                     flips: flipsCount,
                     pieceCount: blackPieceCount,
+                    mobility: 0
                 },
                 W: {
                     ...prev.W,
@@ -143,6 +144,7 @@ export const useGame = (setupData: SetupData | null) => {
                     ...prev.W,
                     flips: flipsCount,
                     pieceCount: whitePieceCount,
+                    mobility: 0
                 }
             }));
         }
