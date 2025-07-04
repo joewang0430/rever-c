@@ -233,15 +233,22 @@ export const getPieceCount = (board: Board, color: Turn, size: number): number =
 };
 
 // ------------------------------------------------------ Get how many avaible moves
-export const getMobility = (board: Board, color: Turn, size: number): number => {
+export const getMobility = (
+    board: Board, 
+    color: Turn, 
+    size: number
+): {mobility: number, availableMoves: Move[]} => {
     let count = 0;
+    let availableMoves: Move[] = [];
+
     for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
             if (board[row][col] !== 'U') continue;
             if (isLegalMove(board, row, col, color, size)) {
                 count++;
+                availableMoves.push({ row: row, col: col })
             }
         }
     }
-    return count;
+    return{ mobility: count, availableMoves};
 };

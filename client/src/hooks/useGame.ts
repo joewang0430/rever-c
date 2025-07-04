@@ -39,7 +39,7 @@ export const useGame = (setupData: SetupData | null) => {
     });
 
     const [flipped, setFlipped] = useState<Move[]>([]);
-    const [legalMoves, setLegalMoves] = useState<Move[]>([]);
+    const [availableMoves, setAvailableMoves] = useState<Move[]>([]);
 
     const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
@@ -53,6 +53,7 @@ export const useGame = (setupData: SetupData | null) => {
             setMove(null);
             setLastMove(null);
             setFlipped([]);
+            setAvailableMoves([]);
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
@@ -104,45 +105,44 @@ export const useGame = (setupData: SetupData | null) => {
         // PlaceCount
         setPlaceCount(prev => prev + 1);
 
-        // PlayerStats: pieceCount, mobility
+        // PlayerStats: pieceCount, mobility; available moves
         const blackPieceCount = getPieceCount(newBoard, 'B', size);
         const whitePieceCount = getPieceCount(newBoard, 'W', size);
-        const blackMobility = getMobility(newBoard, 'B', size);
-        const whiteMobility = getMobility(newBoard, 'W', size);
+        
+        // Mobility of next turn:
+        const {mobility: nextMobility, availableMoves: nextAvailableMoves} = getMobility(newBoard, toggleTurn(turn), size);
+        const {mobility: currMobility, availableMoves: currAvailableMoves} = getMobility(newBoard, turn, size);
 
         if (turn === 'B') {
-            // for the being-flipped side, just keep the flips this round to be    
+            // for the being-flipped side, just keep the flips & mobility this round to be    
             // the same with previous move
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
                     flips: flipsCount,
                     pieceCount: blackPieceCount,
-                    mobility: blackMobility
                 },
                 W: {
                     ...prev.W,
-                    // flips: 0,
                     pieceCount: whitePieceCount,
-                    mobility: whiteMobility
+                    mobility: nextMobility
                 }
             }));
         } else {
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
-                    // flips: 0,
                     pieceCount: blackPieceCount,
-                    mobility: blackMobility
+                    mobility: nextMobility
                 },
                 W: {
                     ...prev.W,
                     flips: flipsCount,
                     pieceCount: whitePieceCount,
-                    mobility: whiteMobility
                 }
             }));
         }
+        setAvailableMoves(nextAvailableMoves);
 
         // moveHistory
         setMoveHistory(prev => [
@@ -152,7 +152,10 @@ export const useGame = (setupData: SetupData | null) => {
                 color: turn,
                 position: { row: move.row, col: move.col },
                 pieceCount: { B: blackPieceCount, W: whitePieceCount },
-                mobility: { B: blackMobility, W: whiteMobility }
+                mobility: {
+                    B: turn === 'B' ? prev[prev.length-1]?.mobility.B ?? 4 : nextMobility,
+                    W: turn === 'W' ? prev[prev.length-1]?.mobility.W ?? 4 : nextMobility,
+                 }
             }
         ]);
 
@@ -192,8 +195,6 @@ export const useGame = (setupData: SetupData | null) => {
             setTurn(null);
         } else {
             const nextTurn = toggleTurn(turn);
-            const nextMobility = getMobility(newBoard, nextTurn, size);
-            const currMobility = getMobility(newBoard, turn, size);
 
             if (nextMobility > 0) {
                 // Next opponent move is available
@@ -220,7 +221,7 @@ export const useGame = (setupData: SetupData | null) => {
         move,
         lastMove,
         flipped,
-        legalMoves,
+        availableMoves,
         placeCount,
         gameOver,
         playersStats,
@@ -234,7 +235,7 @@ export const useGame = (setupData: SetupData | null) => {
         setMove,
         setLastMove,
         setFlipped,
-        setLegalMoves,
+        setAvailableMoves,
         setPlaceCount,
         setGameOver,
         setPlayersStats,

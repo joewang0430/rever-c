@@ -97,7 +97,7 @@ export default function Game({ matchId}: GameProps) {
                     turn={game.turn}
                     lastMove={game.lastMove}   
                     flipped={game.flipped}
-                    legalMoves={game.legal}     // TODO
+                    legalMoves={game.availableMoves}     // TODO
                     setupData={setupData}
                     onCellClick={game.handleMove}
                 />
