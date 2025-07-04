@@ -102,7 +102,10 @@ export default function Game({ matchId}: GameProps) {
                     onCellClick={game.handleMove}
                 />
                 
-                {/* Render game components here */}
+                {/* Debug: show all useGame data */}
+                <div>
+                    <pre>{JSON.stringify(game, null, 2)}</pre>
+                </div>
             </div>
             <div>
                 <PlayerInfoDisplay 

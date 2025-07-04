@@ -15,6 +15,7 @@ import {
     MoveHistoryItem 
 } from '@/data/types/game';
 import { 
+    getInitialAvailableMoves,
     raiseGameErrorWindow, 
     checkLegalMove,
     getUpdatedBoard,
@@ -39,7 +40,9 @@ export const useGame = (setupData: SetupData | null) => {
     });
 
     const [flipped, setFlipped] = useState<Move[]>([]);
-    const [availableMoves, setAvailableMoves] = useState<Move[]>([]);
+    const [availableMoves, setAvailableMoves] = useState<Move[]>(
+        setupData ? getInitialAvailableMoves(setupData.boardSize) : []
+    );
 
     const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
@@ -53,7 +56,7 @@ export const useGame = (setupData: SetupData | null) => {
             setMove(null);
             setLastMove(null);
             setFlipped([]);
-            setAvailableMoves([]);
+            setAvailableMoves(getInitialAvailableMoves(setupData.boardSize));
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
@@ -68,6 +71,7 @@ export const useGame = (setupData: SetupData | null) => {
     }, [setupData]);
 
     const handleMove = async(move: Move) => {
+        console.log("handleMove called.")
         if (!setupData) return;
         if (gameOver) return;
         if (!turn) return;

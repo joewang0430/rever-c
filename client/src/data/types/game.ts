@@ -6,7 +6,7 @@ export const DIRECTIONS = [
         [-1, -1],   [-1, 0],  [-1, 1],
         [0, -1],              [0, 1],
         [1, -1],    [1, 0],   [1, 1]
-    ];
+];
 
 export type Turn = 'B' | 'W';
 export type Draw = 'D';

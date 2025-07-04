@@ -12,6 +12,17 @@ export const raiseGameErrorWindow = (msg: string) => {
     }
 };
 
+// Initial available moves for black for the start of the game
+export function getInitialAvailableMoves(size: number): Move[] {
+    const mid = size / 2;
+    return [
+        { row: mid - 2, col: mid - 1 },
+        { row: mid - 1, col: mid - 2 }, 
+        { row: mid,     col: mid + 1 }, 
+        { row: mid + 1, col: mid }      
+    ];
+}
+
 // ------------------------------------------------------ Check if current move is valid
 export const checkLegalMove = (
     board: Board, 

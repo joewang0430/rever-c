@@ -54,7 +54,8 @@ const GameBoard = ({
                             isFlipping={isFlipping}
                             isLegal={isLegal}
                             canClick={!!canClick}
-                            onClick={() => canClick && onCellClick({row, col})}
+                            onClick={() => canClick && onCellClick({row, col})}  // Change Back
+                            // onClick={() => onCellClick({row, col})}
                         />
                     );
                 })
