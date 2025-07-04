@@ -114,8 +114,9 @@ export const useGame = (setupData: SetupData | null) => {
         const whitePieceCount = getPieceCount(newBoard, 'W', size);
         
         // Mobility of next turn:
+        // echoMobility: this is tricky, this means if the opponent next has 0 move and back to us, how many moves we have then
         const {mobility: nextMobility, availableMoves: nextAvailableMoves} = getMobility(newBoard, toggleTurn(turn), size);
-        const {mobility: currMobility, availableMoves: currAvailableMoves} = getMobility(newBoard, turn, size);
+        const {mobility: echoMobility, availableMoves: currAvailableMoves} = getMobility(newBoard, turn, size);
 
         if (turn === 'B') {
             // For the being-flipped side, set to 0 if not your turn
@@ -160,10 +161,18 @@ export const useGame = (setupData: SetupData | null) => {
                 color: turn,
                 position: { row: move.row, col: move.col },
                 pieceCount: { B: blackPieceCount, W: whitePieceCount },
-                mobility: {
+                mobility: { 
+                // Our mobility this round is the mobility focused on this move round (about to move)
+                // Opponent's molitily this round is the it's mobility after this move
                     B: turn === 'B' ? prev[prev.length-1]?.mobility.B ?? 4 : nextMobility,
-                    W: turn === 'W' ? prev[prev.length-1]?.mobility.W ?? 4 : nextMobility,
-                 }
+                    W: turn === 'W' ? prev[prev.length-1]?.mobility.W ?? 4 : nextMobility
+                },
+                flips: {
+                // Our flips this round is the # of opponent pieces flipped by us this move
+                // Opponent's flips this round is 0, nothing, this is different from the mobility before
+                    B: turn === 'B' ? flipsCount : 0,
+                    W: turn === 'W' ? flipsCount : 0
+                }
             }
         ]);
 
@@ -198,7 +207,7 @@ export const useGame = (setupData: SetupData | null) => {
             }
         }
 
-        // Turn & Waiter
+        // Turn
         if (gameOver) {
             setTurn(null);
         } else {
@@ -207,12 +216,12 @@ export const useGame = (setupData: SetupData | null) => {
             if (nextMobility > 0) {
                 // Next opponent move is available
                 setTurn(nextTurn);
-            } else if (currMobility > 0) {
+            } else if (echoMobility > 0) {
                 // Next opponent move is NOT available
                 // then still this side
                 setTurn(turn);
             } else {
-                // nextMobility = currMobility = 0
+                // nextMobility = echoMobility = 0
                 // This means game over, keep for safety
                 setGameOver(true);
                 setTurn(null);

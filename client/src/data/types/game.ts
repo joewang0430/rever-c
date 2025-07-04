@@ -44,6 +44,7 @@ export interface MoveHistoryItem {
   position: { row: number; col: number };   // the position of the piece that was placed
   pieceCount: { B: number; W: number };     // the number of pieces for each color after this move
   mobility: { B: number; W: number };       // how many legal moves each color has after this move
+  flips: {B: number; W: number };           // how many opponent's pieces were flipped after this move
 };
 
 export function createInitialBoard(n: number): Board {
