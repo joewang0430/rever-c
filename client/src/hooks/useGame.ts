@@ -118,8 +118,8 @@ export const useGame = (setupData: SetupData | null) => {
         const {mobility: currMobility, availableMoves: currAvailableMoves} = getMobility(newBoard, turn, size);
 
         if (turn === 'B') {
-            // for the being-flipped side, just keep the flips & mobility this round to be    
-            // but for the mobility, set to 0 if not your turn
+            // For the being-flipped side, set to 0 if not your turn
+            // same for the mobility, 
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
@@ -129,6 +129,7 @@ export const useGame = (setupData: SetupData | null) => {
                 },
                 W: {
                     ...prev.W,
+                    flips: 0,
                     pieceCount: whitePieceCount,
                     mobility: nextMobility
                 }
@@ -137,6 +138,7 @@ export const useGame = (setupData: SetupData | null) => {
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
+                    flips: 0,
                     pieceCount: blackPieceCount,
                     mobility: nextMobility
                 },
