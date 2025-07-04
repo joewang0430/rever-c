@@ -38,6 +38,9 @@ export const useGame = (setupData: SetupData | null) => {
         W: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
+    const [flipped, setFlipped] = useState<Move[]>([]);
+    const [legalMoves, setLegalMoves] = useState<Move[]>([]);
+
     const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
     const [certificate, setCertificate] = useState<CertificateType | null>(null);
@@ -49,6 +52,7 @@ export const useGame = (setupData: SetupData | null) => {
             setTurn('B');
             setMove(null);
             setLastMove(null);
+            setFlipped([]);
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
@@ -88,11 +92,14 @@ export const useGame = (setupData: SetupData | null) => {
             return;
         }
 
-        /* UPDATE */ // TODO: write them in the correct order 
+        /* UPDATE */
 
-        // Board, Flips
-        const { newBoard: newBoard, flipsCount: flipsCount } = getUpdatedBoard(board, turn, move, size);
+        // Board, FlipsCount, Flipped
+        const { newBoard: newBoard, flipsCount: flipsCount, flippedPositions: flippedPositions } = getUpdatedBoard(board, turn, move, size);
+        setFlipped(flippedPositions);
         setBoard(newBoard);
+
+        // TODO: set time out (maybe)
         
         // PlaceCount
         setPlaceCount(prev => prev + 1);
@@ -211,6 +218,9 @@ export const useGame = (setupData: SetupData | null) => {
         board,
         turn,
         move,
+        lastMove,
+        flipped,
+        legalMoves,
         placeCount,
         gameOver,
         playersStats,
@@ -222,6 +232,9 @@ export const useGame = (setupData: SetupData | null) => {
         setBoard,
         setTurn,
         setMove,
+        setLastMove,
+        setFlipped,
+        setLegalMoves,
         setPlaceCount,
         setGameOver,
         setPlayersStats,

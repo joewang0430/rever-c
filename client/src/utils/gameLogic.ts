@@ -101,13 +101,13 @@ export const getUpdatedBoard = (
     color: Turn, 
     move: Move, 
     size: number
-): { newBoard: Board, flipsCount: number } => {
+): { newBoard: Board, flipsCount: number, flippedPositions: Move[] } => {
 
     const newBoard = createBoardCopy(board, size);
     newBoard[move.row][move.col] = color;
-    const flipsCount = flipAllDirections(newBoard, move.row, move.col, color, size);
+    const { flipsCount, flippedPositions } = flipAllDirections(newBoard, move.row, move.col, color, size);
 
-    return { newBoard, flipsCount}; 
+    return { newBoard, flipsCount, flippedPositions }; 
 };
 
 const createBoardCopy = (board: Board, size: number): Board => {
@@ -124,12 +124,16 @@ const flipAllDirections = (
     col: number,
     color: Turn,
     size: number
-): number => {
+): { flipsCount: number, flippedPositions: Move[] } => {
     let totalFlips = 0;
+    let flippedPositions: Move[] = [];
+
     for (const [dr, dc] of DIRECTIONS) {
-        totalFlips += flipInDirection(board, row, col, color, dr, dc, size);
+        const { flips, positions } = flipInDirection(board, row, col, color, dr, dc, size);
+        totalFlips += flips;
+        flippedPositions.push(...positions);
     }
-    return totalFlips;
+    return { flipsCount: totalFlips, flippedPositions }; 
 };
 
 const flipInDirection = (
@@ -140,7 +144,7 @@ const flipInDirection = (
     deltaRow: number,
     deltaCol: number,
     size: number
-): number => {
+): { flips: number, positions: Move[] } => {
     let r = row + deltaRow;
     let c = col + deltaCol;
     let flips = 0;
@@ -159,6 +163,7 @@ const flipInDirection = (
     }
 
     // Only valid and flip if self-side are met
+    let flipped: Move[] = [];
     if (
         toFlip.length > 0 && 
         r >= 0 && r < size &&
@@ -168,9 +173,10 @@ const flipInDirection = (
         for (const [fr, fc] of toFlip) {
             board[fr][fc] = color;
             flips ++;
+            flipped.push({ row: fr, col: fc });
         }
     }
-    return flips;
+    return { flips, positions: flipped };
 };
 
 // ------------------------------------------------------ Switch sides

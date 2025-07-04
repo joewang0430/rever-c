@@ -4,6 +4,7 @@
 
 import { PlayerConfig } from "@/data/types/setup";
 import communityData from '@/data/constants/community.json';
+import { Turn } from "@/data/types/game";
 
 // player type: custom, archive, human, ai, null
 export const playerTypeToFolder = (customType: 'cache' | 'candidate'): string => {
@@ -79,3 +80,13 @@ export const getColName = (colIdx: number): string => {
     // col 0-7 -> 1-8
     return (colIdx + 1).toString();
 };
+
+// 'B' to 'black'
+export const getSetupTurnName = (turn: Turn): 'black' | 'white' => {
+    return turn === 'B' ? 'black' : 'white';
+}
+
+// 'black' to 'B'
+export const getGameTurnName = (side: 'black' | 'white'): Turn => {
+    return side === 'black' ? 'B' : 'W';
+}
