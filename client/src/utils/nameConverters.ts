@@ -90,3 +90,30 @@ export const getSetupTurnName = (turn: Turn): 'black' | 'white' => {
 export const getGameTurnName = (side: 'black' | 'white'): Turn => {
     return side === 'black' ? 'B' : 'W';
 }
+
+// Readable time display
+export function formatElapsed(us: number): string {
+    if (us < 1000) {
+        // < 1ms
+        return `${us} μs`;
+    }
+    const ms = us / 1000;
+    if (ms < 1000) {
+        // < 1s
+        return `${ms.toFixed(1)} ms`;
+    }
+    const s = ms / 1000;
+    if (s < 60) {
+        // < 1min
+        return `${Math.floor(s)}s  ${Math.round(ms % 1000)}ms`;
+    }
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    if (m < 60) {
+        // < 1h
+        return `${m}m  ${sec}s`;
+    }
+    const h = Math.floor(m / 60);
+    const min = m % 60;
+    return `${h}h  ${min}m  ${sec}s`;
+}

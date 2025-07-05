@@ -13,7 +13,7 @@ class CMoveCaller:
         Call makeMove() function in .c file, 
         which extracted from lab 8, APS105, 2022 version, University of Toronto.
 
-        It returns row, col, elapsed(ms), returnValue
+        It returns row, col, elapsed, returnValue
 
         board: list[list[str]]
         size: int
@@ -62,7 +62,7 @@ class CMoveCaller:
         # Timing and calling
         start = time.time()
         return_value = make_move(board_array, size, turn.encode('utf-8'), ctypes.byref(row), ctypes.byref(col))
-        elapsed = int((time.time() - start) * 1000) # ms
+        elapsed = int((time.time() - start) * 1000 * 1000) # us
 
         #  Return
         return {

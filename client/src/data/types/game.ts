@@ -17,7 +17,6 @@ export type CertificateType = 'IN BLACK' | 'IN WHITE';
 export interface Move {
     row: number;
     col: number;
-    // turn: Turn;
 };
 
 export interface PlayerStats {
@@ -55,7 +54,7 @@ export interface FetchCodeMoveParams {
 
 export interface FetchCodeMoveResult {
     move: Move;
-    elapsed: number;        // how long "makeMove()" takes ROUGHLY in ms
+    elapsed: number;        // how long "makeMove()" takes ROUGHLY
     returnValue: number;    // return value of "int makeMove()"
 }
 

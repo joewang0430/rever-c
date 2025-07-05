@@ -6,6 +6,7 @@
 import { PlayerConfig } from "@/data/types/setup";
 import { PlayerStats, defaultPlayerStats } from "@/data/types/game";
 import { getPlayerName, getPlayerDescription } from "@/utils/nameConverters";
+import { formatElapsed } from "@/utils/nameConverters";
 
 interface PlayerInfoDisplayProps {
     playerConfig: PlayerConfig;
@@ -28,9 +29,9 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
             {isCode && (
             <>
                 <div className="mt-4">Total Thinking</div>
-                <div>{playerStats.totalTime === 0 ? '-': playerStats.totalTime }</div>
+                <div>{playerStats.totalTime === 0 ? '-': formatElapsed(playerStats.totalTime) }</div>
                 <div className="mt-4">Maximum Thinking</div>
-                <div>{playerStats.maxTime === 0 ? '-' : playerStats.maxTime }</div>
+                <div>{playerStats.maxTime === 0 ? '-' : formatElapsed(playerStats.maxTime) }</div>
                 <div className="mt-4">Code Return Value</div>
                 <div>{playerStats.returnValue ?? '-'}</div>
             </>
