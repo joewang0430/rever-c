@@ -8,7 +8,7 @@ import time
 
 class CMoveCaller:
     @staticmethod
-    def call_make_move_105(board, size, turn, code_type, code_path):
+    def call_make_move_105(board, size, turn, data_path):
         """
         Call makeMove() function in .c file, 
         which extracted from lab 8, APS105, 2022 version, University of Toronto.
@@ -19,13 +19,10 @@ class CMoveCaller:
         size: int
         turn: str ('B' or 'W')
         code_type: 'candidate' | 'cache' | 'archive'
-        code_path: .so file path, relative
+        data_path: .so file path, relative
         """
         # Create .so path
-        if code_type == "archive":
-            so_file_path = f"data/shared_libs/archives/{code_path}.so"
-        else:
-            so_file_path = f"data/shared_libs/{code_type}s/{code_path}.so"
+        so_file_path = f"data/shared_libs/{data_path}.so"
         if not os.path.exists(so_file_path):
             raise FileNotFoundError(f"Shared library not found: {so_file_path}")
         

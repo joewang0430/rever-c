@@ -30,13 +30,13 @@ async def fetch_custom_move(
     params: FetchCodeMoveParams
 ):
     try:
-        code_path = custom_code_id
+        # data_path = custom_code_id
+        data_path = f"{custom_type}s/{custom_type}_{custom_code_id}"
         move_result = CMoveCaller.call_make_move_105(
             board=params.board,
             size=params.size,
             turn=params.turn,
-            code_type=custom_type,
-            code_path=code_path,
+            data_path=data_path,
         )
         return CodeMoveResult (
             row=move_result["row"],
@@ -55,13 +55,12 @@ async def fetch_archive_move(
     params: FetchCodeMoveParams
 ):
     try:
-        code_path = f"{archive_group}/{archive_id}"
+        data_path = f"archives/{archive_group}/{archive_id}"
         move_result = CMoveCaller.call_make_move_105(
             board=params.board,
             size=params.size,
             turn=params.turn,
-            code_type="archive",
-            code_path=code_path,
+            data_path=data_path,
         )
         return CodeMoveResult (
             row=move_result["row"],
