@@ -2,9 +2,13 @@
 // UI component for the game board.
 //
 
+"use client";
+
+import { useState, useEffect } from "react";
 import { Board, Turn, Move } from "@/data/types/game";
 import { PlayerType, SetupData } from "@/data/types/setup";
 import { getSetupTurnName } from "@/utils/nameConverters";
+import { toggleTurn } from "@/utils/gameLogic";
 import Cell from "./ui/Cell";
 
 
@@ -16,6 +20,7 @@ interface GameBoardProps {
     flipped: Move[];
     legalMoves: Move[];
     setupData: SetupData;
+    isEcho: boolean;
     onCellClick: (move: Move)  => void;
 };
 
@@ -27,8 +32,27 @@ const GameBoard = ({
     flipped,
     legalMoves,
     setupData,
+    isEcho,
     onCellClick
 }: GameBoardProps) => {
+
+    // Magage tip show up: for if opponenet has no available move
+    const tipMsg = turn 
+        ? `No avilable moves for ${getSetupTurnName(toggleTurn(turn))}, still the move for ${getSetupTurnName(turn)}.` 
+        : null;
+        
+    const [showTip, setShowTip] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (isEcho) {
+            setShowTip(true);
+            const timer = setTimeout(() => setShowTip(false), 2000);
+            return () => clearTimeout(timer);
+        } else {
+            setShowTip(false);
+        }
+    }, [isEcho, board.flat().join("")]);
+
     return (
         <div 
         className={`grid border border-black`}
@@ -38,6 +62,11 @@ const GameBoard = ({
             height: `${size * 32}px`,
         }}
         >
+            {showTip && tipMsg && (
+                <div className="fixed top-8 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded shadow z-50 transition-all">
+                    {tipMsg}
+                </div>
+            )}
 
             {board.map((rowArr, row) => 
                 rowArr.map((cell, col) => {
