@@ -43,6 +43,7 @@ export const useGame = (setupData: SetupData | null) => {
     const [availableMoves, setAvailableMoves] = useState<Move[]>(
         setupData ? getInitialAvailableMoves(setupData.boardSize) : []
     );
+    const [isEcho, setIsEcho] = useState<boolean>(false);
 
     const [winner, setWinner] = useState<Turn | Draw | null>(null);
     const [errorState, setErrorState] = useState<string | null>(null);
@@ -57,6 +58,7 @@ export const useGame = (setupData: SetupData | null) => {
             setLastMove(null);
             setFlipped([]);
             setAvailableMoves(getInitialAvailableMoves(setupData.boardSize));
+            setIsEcho(false);
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
@@ -116,7 +118,7 @@ export const useGame = (setupData: SetupData | null) => {
         // Mobility of next turn:
         // echoMobility: this is tricky, this means if the opponent next has 0 move and back to us, how many moves we have then
         const {mobility: nextMobility, availableMoves: nextAvailableMoves} = getMobility(newBoard, toggleTurn(turn), size);
-        const {mobility: echoMobility, availableMoves: currAvailableMoves} = getMobility(newBoard, turn, size);
+        const {mobility: echoMobility, availableMoves: echoAvailableMoves} = getMobility(newBoard, turn, size);
 
         if (turn === 'B') {
             // For the being-flipped side, set to 0 if not your turn
@@ -151,7 +153,7 @@ export const useGame = (setupData: SetupData | null) => {
                 }
             }));
         }
-        setAvailableMoves(nextAvailableMoves);
+        // setAvailableMoves(nextAvailableMoves);
 
         // moveHistory
         setMoveHistory(prev => [
@@ -207,22 +209,28 @@ export const useGame = (setupData: SetupData | null) => {
             }
         }
 
-        // Turn
+        // Turn & Available Moves & echo
         if (gameOver) {
             setTurn(null);
+            setAvailableMoves([]);
         } else {
             const nextTurn = toggleTurn(turn);
 
             if (nextMobility > 0) {
                 // Next opponent move is available
+                setAvailableMoves(nextAvailableMoves);
+                setIsEcho(false);
                 setTurn(nextTurn);
             } else if (echoMobility > 0) {
                 // Next opponent move is NOT available
                 // then still this side
+                setAvailableMoves(echoAvailableMoves);
+                setIsEcho(true);
                 setTurn(turn);
             } else {
                 // nextMobility = echoMobility = 0
                 // This means game over, keep for safety
+                setAvailableMoves([]);
                 setGameOver(true);
                 setTurn(null);
             }
@@ -239,6 +247,7 @@ export const useGame = (setupData: SetupData | null) => {
         lastMove,
         flipped,
         availableMoves,
+        isEcho,
         placeCount,
         gameOver,
         playersStats,
@@ -253,6 +262,7 @@ export const useGame = (setupData: SetupData | null) => {
         setLastMove,
         setFlipped,
         setAvailableMoves,
+        setIsEcho,
         setPlaceCount,
         setGameOver,
         setPlayersStats,

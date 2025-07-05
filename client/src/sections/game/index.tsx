@@ -99,6 +99,7 @@ export default function Game({ matchId}: GameProps) {
                     flipped={game.flipped}
                     legalMoves={game.availableMoves}     // TODO
                     setupData={setupData}
+                    isEcho={game.isEcho}
                     onCellClick={game.handleMove}
                 />
                 
