@@ -8,12 +8,21 @@ import { useState, useEffect, useRef } from "react";
 import { getSetupData } from "@/api/gameApi";
 import { SetupData } from "@/data/types/setup";
 import { useGame } from "@/hooks/useGame";
-import { defaultPlayerStats, Move } from "@/data/types/game";
 import PieceCountDisplay from "@/components/game/pieceCountDisplay";
 import GameStatusDisplay from "@/components/game/GameStatusDisplay";
 import PlayerInfoDisplay from "@/components/game/PlayerInfoDisplay";
 import RoundDisplay from "@/components/game/RoundDisplay";
 import GameBoard from "@/components/game/GameBoard";
+import { 
+    defaultPlayerStats, 
+    Move, 
+    Turn,
+    FetchCodeMoveParams, 
+    FetchCodeMoveResult
+} from "@/data/types/game";
+import { getSetupTurnName } from "@/utils/nameConverters";
+import { fetchCustomMove, fetchArchiveMove } from "@/api/playApi";
+import { raiseGameErrorWindow } from "@/utils/gameLogic";
 
 interface GameProps {
     matchId: string;
@@ -46,23 +55,54 @@ export default function Game({ matchId}: GameProps) {
     useEffect(() => {
         if (!setupData || !game.turn || game.gameOver) return;
         if (isRequestingComputer.current) return;   // Is requesting, return imdtl
-        const side = game.turn === 'B' ? 'black' : 'white';
+        const side = getSetupTurnName(game.turn);
 
         const fetchComputerMove = async() => {
             isRequestingComputer.current = true;
             try {
-                let computerMove: Move | null = null;
+                let computerMove: FetchCodeMoveResult | null = null;
+
                 if (setupData[side].type === 'custom') {
-                    computerMove = await /* fetch custom api */
+                    const customPlayerType = setupData[side].config?.customType;
+                    const customPlayerCodeId = setupData[side].config?.customCodeId;
+
+                    if (!customPlayerType || !customPlayerCodeId) {
+                        raiseGameErrorWindow("Uploaded code config is missing.");
+                        isRequestingComputer.current = false;
+                        return;
+                    }
+                    computerMove = await fetchCustomMove({
+                        board: game.board,
+                        turn: game.turn as Turn,
+                        size: setupData.boardSize,
+                    }, customPlayerType, customPlayerCodeId);
+
                 } else if (setupData[side].type === 'archive'){
-                    computerMove = await /* fetch archive api */
+                    const archivePlayerGroup = setupData[side].config?.archiveGroup;
+                    const archivePlayerId = setupData[side].config?.archiveId;
+                    
+                    if (!archivePlayerGroup || !archivePlayerId) {
+                        raiseGameErrorWindow("Archived code config is missing.");
+                        isRequestingComputer.current = false;
+                        return;
+                    }
+                    computerMove = await fetchArchiveMove({
+                        board: game.board,
+                        turn: game.turn as Turn,
+                        size: setupData.boardSize,
+                    }, archivePlayerGroup, archivePlayerId);
                 }
-                 else if (setupData[side].type === 'ai') {
-                    computerMove = await /* fetch ai api */
-                }
+                // else if (setupData[side].type === 'ai') {
+                //     computerMove = await /* fetch ai api */  // TODO: implement AI
+                // }
                 // TODO: clean up data & exit window if not valid (related to network / basic form)
                 // sice handleMove process some other basic error
-                if (computerMove) { game.handleMove(computerMove); }
+                if (computerMove) { 
+                    game.handleMove(computerMove.move); 
+                }
+            } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : String(error);
+                raiseGameErrorWindow(errorMsg);
             } finally {
                 isRequestingComputer.current = false;
             }
