@@ -122,13 +122,13 @@ export const useGame = (setupData: SetupData | null) => {
 
         if (turn === 'B') {
             // For the being-flipped side, set to 0 if not your turn
-            // same for the mobility, 
+            // but for the mobility, keep the previous version
             setPlayersStats(prev => ({
                 B: {
                     ...prev.B,
                     flips: flipsCount,
                     pieceCount: blackPieceCount,
-                    mobility: 0
+                    // mobility: 0
                 },
                 W: {
                     ...prev.W,
@@ -149,7 +149,7 @@ export const useGame = (setupData: SetupData | null) => {
                     ...prev.W,
                     flips: flipsCount,
                     pieceCount: whitePieceCount,
-                    mobility: 0
+                    // mobility: 0
                 }
             }));
         }

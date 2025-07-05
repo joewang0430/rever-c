@@ -56,11 +56,13 @@ export default function Game({ matchId}: GameProps) {
         if (!setupData || !game.turn || game.gameOver) return;
         if (isRequestingComputer.current) return;   // Is requesting, return imdtl
         const side = getSetupTurnName(game.turn);
+        const turn = game.turn;
 
         const fetchComputerMove = async() => {
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | null = null;
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 500));
 
                 if (setupData[side].type === 'custom') {
                     const customPlayerType = setupData[side].config?.customType;
@@ -97,8 +99,27 @@ export default function Game({ matchId}: GameProps) {
                 // }
                 // TODO: clean up data & exit window if not valid (related to network / basic form)
                 // sice handleMove process some other basic error
+
+                await delayPromise; // Ensure at leas wait 0.5s
+
                 if (computerMove) { 
                     game.handleMove(computerMove.move); 
+                    
+                    if (setupData[side].type !== 'ai') {
+                        game.setPlayersStats(prev => {
+                            const newStats = { ...prev };
+                            newStats[turn] = {
+                                ...newStats[turn],
+                                // Accumulate total thinking time
+                                totalTime: (newStats[turn].totalTime || 0) + (computerMove.elapsed || 0),
+                                // Update max thinking time
+                                maxTime: Math.max(newStats[turn].maxTime || 0, computerMove.elapsed || 0),
+                                // Update returnValue
+                                returnValue: computerMove.returnValue ?? null,
+                            };
+                            return newStats;
+                        });
+                    }
                 }
             } catch (error) {
                 const errorMsg = error instanceof Error ? error.message : String(error);
@@ -130,10 +151,7 @@ export default function Game({ matchId}: GameProps) {
                     whiteCount={game.playersStats.W.pieceCount}
                 />
                 <RoundDisplay placeCount={game.placeCount} />
-                <div className="text-gray-300">
-                    <h1>Game Page for Match ID: {matchId}</h1>
-                    <pre>{JSON.stringify(setupData, null, 2)}</pre>
-                </div>
+                
                 <GameBoard 
                     board={game.board}
                     size={setupData.boardSize}
@@ -145,6 +163,11 @@ export default function Game({ matchId}: GameProps) {
                     isEcho={game.isEcho}
                     onCellClick={game.handleMove}
                 />
+
+                <div className="text-gray-300">
+                    <h1>Game Page for Match ID: {matchId}</h1>
+                    <pre>{JSON.stringify(setupData, null, 2)}</pre>
+                </div>
                 
                 {/* Debug: show all useGame data */}
                 <div>
