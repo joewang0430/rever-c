@@ -35,8 +35,8 @@ async def fetch_custom_move(
             board=params.board,
             size=params.size,
             turn=params.turn,
-            code_type = custom_type,
-            file_path = file_path,
+            code_type=custom_type,
+            file_path=file_path,
         )
         return CodeMoveResult (
             row=move_result["row"],
@@ -60,8 +60,8 @@ async def fetch_archive_move(
             board=params.board,
             size=params.size,
             turn=params.turn,
-            code_type = "archive",
-            file_path = file_path,
+            code_type="archive",
+            file_path=file_path,
         )
         return CodeMoveResult (
             row=move_result["row"],
