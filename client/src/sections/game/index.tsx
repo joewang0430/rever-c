@@ -42,30 +42,33 @@ export default function Game({ matchId}: GameProps) {
     // _____ uncomment this later ____
 
     // Process the move from computer ("custom" | "archive" | "ai")
-    // const isRequestingComputer = useRef(false);
-    // useEffect(() => {
-    //     if (!setupData || !game.turn || game.gameOver) return;
-    //     if (isRequestingComputer.current) return;   // Is requesting, return imdtl
-    //     const side = game.turn === 'B' ? 'black' : 'white';
+    const isRequestingComputer = useRef(false);
+    useEffect(() => {
+        if (!setupData || !game.turn || game.gameOver) return;
+        if (isRequestingComputer.current) return;   // Is requesting, return imdtl
+        const side = game.turn === 'B' ? 'black' : 'white';
 
-    //     const fetchComputerMove = async() => {
-    //         isRequestingComputer.current = true;
-    //         try {
-    //             let computerMove: Move | null = null;
-    //             if (setupData[side].type === 'custom' || setupData[side].type === 'archive') {
-    //                 computerMove = await /* fetch code api */
-    //             } else if (setupData[side].type === 'ai') {
-    //                 computerMove = await /* fetch ai api */
-    //             }
-    //             // TODO: clean up data & exit window if not valid (related to network / basic form)
-    //             // sice handleMove process some other basic error
-    //             if (computerMove) { game.handleMove(computerMove); }
-    //         } finally {
-    //             isRequestingComputer.current = false;
-    //         }
-    //     }
-    //     fetchComputerMove();
-    // }, [game.turn, setupData, game.gameOver, game.board]);
+        const fetchComputerMove = async() => {
+            isRequestingComputer.current = true;
+            try {
+                let computerMove: Move | null = null;
+                if (setupData[side].type === 'custom') {
+                    computerMove = await /* fetch custom api */
+                } else if (setupData[side].type === 'archive'){
+                    computerMove = await /* fetch archive api */
+                }
+                 else if (setupData[side].type === 'ai') {
+                    computerMove = await /* fetch ai api */
+                }
+                // TODO: clean up data & exit window if not valid (related to network / basic form)
+                // sice handleMove process some other basic error
+                if (computerMove) { game.handleMove(computerMove); }
+            } finally {
+                isRequestingComputer.current = false;
+            }
+        }
+        fetchComputerMove();
+    }, [game.turn, setupData, game.gameOver, game.board]);
 
     // _____ uncomment this later ____
 
@@ -97,7 +100,7 @@ export default function Game({ matchId}: GameProps) {
                     turn={game.turn}
                     lastMove={game.lastMove}   
                     flipped={game.flipped}
-                    legalMoves={game.availableMoves}     // TODO
+                    legalMoves={game.availableMoves}
                     setupData={setupData}
                     isEcho={game.isEcho}
                     onCellClick={game.handleMove}

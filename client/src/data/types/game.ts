@@ -47,6 +47,18 @@ export interface MoveHistoryItem {
   flips: {B: number; W: number };           // how many opponent's pieces were flipped after this move
 };
 
+export interface FetchCodeMoveParams {
+    board: Board;
+    turn: Turn;
+    size: number;
+}
+
+export interface FetchCodeMoveResult {
+    move: Move;
+    elapsed: number;        // how long "makeMove()" takes ROUGHLY in ms
+    returnValue: number;    // return value of "int makeMove()"
+}
+
 export function createInitialBoard(n: number): Board {
     const board = Array.from({ length: n }, () => Array(n).fill('U'));
     const mid = n / 2;
