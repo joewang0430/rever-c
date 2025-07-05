@@ -1,5 +1,5 @@
 '''
-All the rooters, related to the single game management.
+Single game start/delete management routers.
 '''
 
 from fastapi import APIRouter, HTTPException

@@ -1,5 +1,5 @@
 '''
-Functions to test C code and shared libraries, in setup stage.
+Test C code and shared libraries, in setup stage.
 '''
 
 import ctypes
