@@ -108,7 +108,7 @@ export default function Game({ matchId}: GameProps) {
             }
         }
         fetchComputerMove();
-    }, [game.turn, setupData, game.gameOver, game.board]);
+    }, [game.turn, game.gameOver, game.board]);
 
     // _____ uncomment this later ____
 

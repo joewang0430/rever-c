@@ -5,7 +5,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import os
 from datetime import datetime, timedelta
 from app.utils import call_c, cleanup
-from app.routers import upload, game
+from app.routers import upload, game, play
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -41,6 +41,7 @@ app.add_middleware(
 # ---- Include routers ----
 app.include_router(upload.upload_router)
 app.include_router(game.game_router, prefix="/api/game")
+app.include_router(play.play_router, prefix="/api")
 
 # ---- API Endpoints ----
 @app.get("/ping")
