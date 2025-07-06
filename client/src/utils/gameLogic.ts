@@ -5,13 +5,14 @@
 import { Turn, Move, Board, PlayerStats, DIRECTIONS } from "@/data/types/game";
 import { getRowName, getColName } from "./nameConverters";
 
+// ------------------------------------------------------ Game error quit
 // Issue the window to show the error, and quit the game. This function only used in game stage.
 export const raiseGameErrorWindow = (msg: string) => {
-    if (window.confirm(msg)) {
-        return; //TODO: finish it: api to get to the setup page and clean the game data original.
-    }
+    window.confirm(msg)
+    
 };
 
+// ------------------------------------------------------ Initial available moves
 // Initial available moves for black for the start of the game
 export function getInitialAvailableMoves(size: number): Move[] {
     const mid = size / 2;

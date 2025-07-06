@@ -28,3 +28,14 @@ export async function getSetupData(matchId: string) {
     }
     return await res.json(); 
 }
+
+export async function cleanupSetupDataRDB (matchId: string) {
+    const res = await fetch(`${API_BASE_URL}/api/game/setup/${matchId}/cleanup`, {
+        method: "POST",
+    });
+    if (!res.ok) {
+        throw new Error ("Failed to cleanup setup data");
+
+    }
+    return await res.json();
+}
