@@ -33,3 +33,13 @@ async def get_setup_data(match_id: str):
     if not data:
         raise HTTPException(status_code=404, detail="Setup data not found")
     return {"setupData": json.loads(data)}
+
+
+@game_router.post("/setup/{match_id}/cleanup")
+async def cleanup_setup_data(match_id: str):
+    key = f"game:{match_id}:setup"
+    try: 
+        await redis_client.delete(key)
+        return {"success": "ok"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
