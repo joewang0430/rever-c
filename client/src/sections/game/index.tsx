@@ -23,6 +23,7 @@ import {
 import { getSetupTurnName } from "@/utils/nameConverters";
 import { fetchCustomMove, fetchArchiveMove } from "@/api/playApi";
 import { raiseGameErrorWindow } from "@/utils/gameLogic";
+import { useRouter } from 'next/navigation';
 
 interface GameProps {
     matchId: string;
@@ -33,6 +34,8 @@ export default function Game({ matchId}: GameProps) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const game = useGame(setupData);
+
+    const router = useRouter();
 
     useEffect(() => {
         if (!matchId) return;
@@ -69,7 +72,7 @@ export default function Game({ matchId}: GameProps) {
                     const customPlayerCodeId = setupData[side].config?.customCodeId;
 
                     if (!customPlayerType || !customPlayerCodeId) {
-                        raiseGameErrorWindow("Uploaded code config is missing.");
+                        raiseGameErrorWindow(setupData, "Uploaded code config is missing.", () => {router.push("/setup")});
                         isRequestingComputer.current = false;
                         return;
                     }
@@ -84,7 +87,7 @@ export default function Game({ matchId}: GameProps) {
                     const archivePlayerId = setupData[side].config?.archiveId;
                     
                     if (!archivePlayerGroup || !archivePlayerId) {
-                        raiseGameErrorWindow("Archived code config is missing.");
+                        raiseGameErrorWindow(setupData, "Archived code config is missing.", () => {router.push("/setup")});
                         isRequestingComputer.current = false;
                         return;
                     }
@@ -104,7 +107,7 @@ export default function Game({ matchId}: GameProps) {
 
                 if (computerMove) { 
                     game.handleMove(computerMove.move); 
-                    
+
                     if (setupData[side].type !== 'ai') {
                         game.setPlayersStats(prev => {
                             const newStats = { ...prev };
@@ -123,7 +126,7 @@ export default function Game({ matchId}: GameProps) {
                 }
             } catch (error) {
                 const errorMsg = error instanceof Error ? error.message : String(error);
-                raiseGameErrorWindow(errorMsg);
+                raiseGameErrorWindow(setupData, errorMsg, () => {router.push("/setup")});
             } finally {
                 isRequestingComputer.current = false;
             }

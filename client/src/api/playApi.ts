@@ -11,7 +11,7 @@ import {
     FetchCodeMoveResult 
 } from "@/data/types/game";
 
-
+// Get the move decision from backend when is custom uploade ("candidate" or "cache") mode
 export async function fetchCustomMove(params: FetchCodeMoveParams, customType: CustomType, customCodeId: string): Promise<FetchCodeMoveResult> {
     const res = await fetch(`${API_BASE_URL}/api/move/${customType}/${customCodeId}`, {
         method: 'POST',
@@ -27,6 +27,7 @@ export async function fetchCustomMove(params: FetchCodeMoveParams, customType: C
     };
 }
 
+// Get the move decision from backend when is historic code ("archive") mode
 export async function fetchArchiveMove(params: FetchCodeMoveParams, archiveGroup: string, archiveId: string): Promise<FetchCodeMoveResult> {
     const res = await fetch(`${API_BASE_URL}/api/move/archive/${archiveGroup}/${archiveId}`, {
         method: 'POST',

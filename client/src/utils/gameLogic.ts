@@ -2,19 +2,43 @@
 // All the functions related handling the reversi logic in the front-end.
 //
 
+"use client";
+
+import { useRouter } from "next/navigation"
 import { Turn, Move, Board, PlayerStats, DIRECTIONS } from "@/data/types/game";
 import { getRowName, getColName } from "./nameConverters";
+import { cleanupSetupDataRDB } from "@/api/gameApi";
+import { cleanupCandidate } from "@/api/uploadApi";
+import { SetupData } from '@/data/types/setup';
 
 // ------------------------------------------------------ Game error quit
 // Issue the window to show the error, and quit the game. This function only used in game stage.
-export const raiseGameErrorWindow = (msg: string) => {
+export const raiseGameErrorWindow = async(
+    setupData: SetupData, 
+    msg: string,
+    onQuit?: () => void
+) => {
     window.confirm(msg)
-    
+
+    try {
+        await cleanupSetupDataRDB(setupData.matchId);
+
+        if (setupData.black.config?.customType === 'candidate' && setupData.black.config.customCodeId) {
+            await cleanupCandidate(setupData.black.config.customCodeId);
+        }
+        if (setupData.white.config?.customType === 'candidate' && setupData.white.config.customCodeId) {
+            await cleanupCandidate(setupData.white.config.customCodeId);
+        }
+    } catch (error) {
+        console.error("Cleanup failed when quiting the game: ", error);
+    }
+
+    if (onQuit) onQuit();
 };
 
 // ------------------------------------------------------ Initial available moves
 // Initial available moves for black for the start of the game
-export function getInitialAvailableMoves(size: number): Move[] {
+export const getInitialAvailableMoves = (size: number): Move[] => {
     const mid = size / 2;
     return [
         { row: mid - 2, col: mid - 1 },

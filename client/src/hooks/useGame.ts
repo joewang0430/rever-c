@@ -25,6 +25,7 @@ import {
     getMobility
 } from '@/utils/gameLogic';
 import { getPlayerName } from '@/utils/nameConverters';
+import { useRouter } from 'next/navigation';
 
 export const useGame = (setupData: SetupData | null) => {
     const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
@@ -49,6 +50,8 @@ export const useGame = (setupData: SetupData | null) => {
     const [errorState, setErrorState] = useState<string | null>(null);
     const [certificate, setCertificate] = useState<CertificateType | null>(null);
     const [moveHistory, setMoveHistory] = useState<MoveHistoryItem[]>([]);
+
+    const router = useRouter();
 
     useEffect(() => {
         if (setupData) {
@@ -95,7 +98,7 @@ export const useGame = (setupData: SetupData | null) => {
                 playerName = setupData ? getPlayerName(setupData.white) : playerName;
             }
             const msg = `The ${color} player, ${playerName}, made a invalid move, thus the game quit unexpectedly.`
-            raiseGameErrorWindow(msg);
+            raiseGameErrorWindow(setupData, msg, () => {router.push("/setup")});
             return;
         }
 

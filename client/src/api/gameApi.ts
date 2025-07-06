@@ -7,6 +7,7 @@ import { SetupData } from "@/data/types/setup";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
+// In setup page, save the setupData into backend data storage (Redis server)
 export async function saveSetupDataToGame(matchId: string, setupData: SetupData) {
     const res = await fetch(`${API_BASE_URL}/api/game/setup`, {
         method: "POST",
@@ -19,6 +20,7 @@ export async function saveSetupDataToGame(matchId: string, setupData: SetupData)
     return await res.json();
 }
 
+// Get setupData that previously in Redis, when in game page
 export async function getSetupData(matchId: string) {
     const res = await fetch(`${API_BASE_URL}/api/game/setup/${matchId}`, {
         method: "GET",
@@ -29,6 +31,7 @@ export async function getSetupData(matchId: string) {
     return await res.json(); 
 }
 
+// Clean up the redis data for setupData, only when error occurs during the game
 export async function cleanupSetupDataRDB (matchId: string) {
     const res = await fetch(`${API_BASE_URL}/api/game/setup/${matchId}/cleanup`, {
         method: "POST",
