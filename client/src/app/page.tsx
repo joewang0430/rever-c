@@ -24,7 +24,7 @@ export default function HomePage() {
 
       { /* test */ }
       <div>
-        <button onClick={() => showTip("操作成功！")}>点我弹提示</button>
+        <button onClick={() => showTip("Operation Succeeded!")}>click on me to get tips</button>
         {tip && (
           <div className="fixed top-8 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded shadow z-50 transition-all">
             {tip}
@@ -33,4 +33,4 @@ export default function HomePage() {
       </div>
     </main>
   );
-}
+};
