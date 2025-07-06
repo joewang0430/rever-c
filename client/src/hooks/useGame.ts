@@ -23,7 +23,7 @@ import {
     checkGameOver,
     getPieceCount,
     getMobility
-} from '@/utils/gameLogic';
+} from '@/utils/gameLogistics';
 import { getPlayerName } from '@/utils/nameConverters';
 import { useRouter } from 'next/navigation';
 

@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { Board, Turn, Move } from "@/data/types/game";
 import { PlayerType, SetupData } from "@/data/types/setup";
 import { getSetupTurnName } from "@/utils/nameConverters";
-import { toggleTurn } from "@/utils/gameLogic";
+import { toggleTurn } from "@/utils/gameLogistics";
 import Cell from "./ui/Cell";
 
 

@@ -22,7 +22,7 @@ import {
 } from "@/data/types/game";
 import { getSetupTurnName } from "@/utils/nameConverters";
 import { fetchCustomMove, fetchArchiveMove } from "@/api/playApi";
-import { raiseGameErrorWindow } from "@/utils/gameLogic";
+import { raiseGameErrorWindow } from "@/utils/gameLogistics";
 import { useRouter } from 'next/navigation';
 
 interface GameProps {
