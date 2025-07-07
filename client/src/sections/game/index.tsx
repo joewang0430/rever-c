@@ -24,6 +24,7 @@ import { getSetupTurnName } from "@/utils/nameConverters";
 import { fetchCustomMove, fetchArchiveMove } from "@/api/playApi";
 import { raiseGameErrorWindow } from "@/utils/gameLogistics";
 import { useRouter } from 'next/navigation';
+import ReportSection from "../report";
 
 interface GameProps {
     matchId: string;
@@ -36,6 +37,16 @@ export default function Game({ matchId}: GameProps) {
     const game = useGame(setupData);
 
     const router = useRouter();
+
+    const [showReport, setShowReport] = useState(false);
+    const reportRef = useRef<HTMLDivElement>(null);
+
+    const handleShowReport = () => {
+        setShowReport(true);
+        setTimeout(() => {
+            reportRef.current?.scrollIntoView({behavior: "smooth"});
+        }, 100);    
+    };
 
     useEffect(() => {
         if (!matchId) return;
@@ -50,8 +61,6 @@ export default function Game({ matchId}: GameProps) {
                 setLoading(false);
             })
     }, [matchId]);
-
-    // _____ uncomment this later ____
 
     // Process the move from computer ("custom" | "archive" | "ai")
     const isRequestingComputer = useRef(false);
@@ -134,56 +143,67 @@ export default function Game({ matchId}: GameProps) {
         fetchComputerMove();
     }, [game.turn, game.gameOver, game.board]);
 
-    // _____ uncomment this later ____
-
     if (loading) return <div>Loading game data...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!setupData) return <div>No setup data found.</div>;
 
     return (
-        <div className="flex flex-row justify-center">
-            <div>
-                <PlayerInfoDisplay 
-                    playerConfig={setupData.black}
-                    playerStats={game.playersStats.B || defaultPlayerStats}/>
-            </div>
-            <div className="flex flex-col justify-center items-center h-full">
-                <GameStatusDisplay gameOver={game.gameOver} />
-                <PieceCountDisplay 
-                    blackCount={game.playersStats.B.pieceCount}
-                    whiteCount={game.playersStats.W.pieceCount}
-                />
-                <RoundDisplay placeCount={game.placeCount} />
-                
-                <GameBoard 
-                    board={game.board}
-                    size={setupData.boardSize}
-                    turn={game.turn}
-                    lastMove={game.lastMove}   
-                    flipped={game.flipped}
-                    legalMoves={game.availableMoves}
-                    setupData={setupData}
-                    isEcho={game.isEcho}
-                    onCellClick={game.handleMove}
-                />
-
-                <div className="text-gray-300">
-                    <h1>Game Page for Match ID: {matchId}</h1>
-                    <pre>{JSON.stringify(setupData, null, 2)}</pre>
-                </div>
-                
-                {/* Debug: show all useGame data */}
+        <section aria-label="Game Page">
+            <div className="flex flex-row justify-center">
                 <div>
-                    <pre>{JSON.stringify(game, null, 2)}</pre>
+                    <PlayerInfoDisplay 
+                        playerConfig={setupData.black}
+                        playerStats={game.playersStats.B || defaultPlayerStats}/>
+                </div>
+                <div className="flex flex-col justify-center items-center h-full">
+                    <GameStatusDisplay gameOver={game.gameOver} />
+                    <PieceCountDisplay 
+                        blackCount={game.playersStats.B.pieceCount}
+                        whiteCount={game.playersStats.W.pieceCount}
+                    />
+                    <RoundDisplay placeCount={game.placeCount} />
+                    
+                    <GameBoard 
+                        board={game.board}
+                        size={setupData.boardSize}
+                        turn={game.turn}
+                        lastMove={game.lastMove}   
+                        flipped={game.flipped}
+                        legalMoves={game.availableMoves}
+                        setupData={setupData}
+                        isEcho={game.isEcho}
+                        onCellClick={game.handleMove}
+                    />
+
+                    <div className="text-gray-300">
+                        <h1>Game Page for Match ID: {matchId}</h1>
+                        <pre>{JSON.stringify(setupData, null, 2)}</pre>
+                    </div>
+                    {/* Button Generates Report */}
+                    {game.gameOver && (
+                        <button onClick={handleShowReport}>Game Report</button>
+                    )}
+                    {showReport && (
+                        <div ref={reportRef}>
+                            <ReportSection matchId={matchId} />
+                        </div>
+                    )}
+                    
+                    {/* Debug: show all useGame data */}
+                    <div>
+                        <pre>{JSON.stringify(game, null, 2)}</pre>
+                    </div>
+                </div>
+                <div>
+                    <PlayerInfoDisplay 
+                        playerConfig={setupData.white}
+                        playerStats={game.playersStats.W || defaultPlayerStats}
+                    />
                 </div>
             </div>
-            <div>
-                <PlayerInfoDisplay 
-                    playerConfig={setupData.white}
-                    playerStats={game.playersStats.W || defaultPlayerStats}
-                />
-            </div>
-        </div>
+
+
+        </section>
     );
 };
 
