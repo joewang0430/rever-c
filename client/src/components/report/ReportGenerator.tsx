@@ -41,7 +41,7 @@ const ReportGenerator = ({ setupData, history }: ReportGeneratorProps) => {
         const logContent = openings + history
             .map(item =>    
                 `Step ${item.step}:\n` +
-                `${item.color === 'B' ? blackName : whiteName} placed ${getSetupTurnName(item.color)} at "${getColName(item.position.col)}${getRowName(item.position.row)}".\n` +
+                `${item.color === 'B' ? blackName : whiteName} placed ${getSetupTurnName(item.color)} at (${getColName(item.position.col)}${getRowName(item.position.row)}).\n` +
                 // `PieceCount: B=${item.pieceCount.B}, W=${item.pieceCount.W}\n`
                 `${boardToLogText(generateBoardFromHistory(history, item.step, setupData.boardSize))}\n`
             )

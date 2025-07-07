@@ -1,5 +1,5 @@
 //
-// Report section, shows below the game section, when generating report
+// Report section, shows below the game section, when generating report.
 //
 
 import { SetupData } from "@/data/types/setup";

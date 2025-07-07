@@ -1,5 +1,5 @@
 //
-// Gaming Page
+// Gaming Page.
 //
 
 "use client";
