@@ -140,6 +140,7 @@ def compile_code(code_id: str, file_type: str) -> dict:
             "-fPIC",            # position-independent code
             "-o", output_file,   # output file
             source_file,         # src file
+            "data/c_src/candidates/rvc_tools.c" if file_type == "candidate" else "data/c_src/caches/rvc_tools.c",   # link to reverc tools
             "-Wall",            # show all warnings
             "-Wextra",          # additional warnings
             "-std=c99"          # use C99 standard
