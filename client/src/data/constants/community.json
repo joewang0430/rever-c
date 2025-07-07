@@ -11,6 +11,7 @@
             "shortName": "H.Alex",
             "description": "#8 rank APS105 Leaderboard 2024",
             "shortDescription": "#8",
+            "rating": "",
             "image": "/images/archives/test_archive.jpg"
         },
         {
@@ -20,6 +21,7 @@
             "shortName": "W.Joe",
             "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
             "shortDescription": "#21",
+            "rating": "",
             "image": "/images/archives/test_archive.jpg"
         }
         ]
@@ -35,6 +37,33 @@
             "shortName": "test",
             "description": "test",
             "shortDescription": "test",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        }
+        ]
+    },
+    {
+        "id": "other_bots",
+        "name": "Other Bots",
+        "archives": [
+        {
+            "id": "absolute_random",
+            "groupId": "other_bots",
+            "name": "Absolute Random",
+            "shortName": "Random Move",
+            "description": "Naughty algorithm that makes random moves",
+            "shortDescription": "Move randomly",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "absolute_greedy",
+            "groupId": "other_bots",
+            "name": "Absolute Greedy",
+            "shortName": "Greedy Move",
+            "description": "Only wants to flip as much as possible in this round",
+            "shortDescription": "Maximize flipps",
+            "rating": "",
             "image": "/images/archives/test_archive.jpg"
         }
         ]

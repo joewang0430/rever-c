@@ -16,7 +16,6 @@ import SetupTitle from "@/components/setup/SetupTitle";
 import { CacheProvider } from '@/contexts/CacheContext';
 
 export default function Setup() {
-
     const {
         setupData,
         updateBoardSize,
