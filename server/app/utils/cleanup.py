@@ -15,11 +15,14 @@ def cleanup_ttl():
     base = os.getcwd()
     now  = time.time()
 
-    # define TTLs in seconds
+    # Define TTLs in seconds
     ttls = {
         "caches":       36 * 3600,    # `caches` are kept for 36 hours
         "candidates":   1 * 3600,    # `candidates` are kept for 1 hour
     }
+
+    # Files to ignore from cleaning up
+    ignore_files = {".gitkeep", "lab8part2.h", "liblab8part2.h", "rvc_tools.c", "rvc.h"}
 
     for category, ttl in ttls.items():
         for subdir in ("data/c_src", "data/shared_libs"):
@@ -27,8 +30,8 @@ def cleanup_ttl():
             if not os.path.isdir(path):
                 continue
             for fname in os.listdir(path):
-                # always skip .gitkeep
-                if fname == ".gitkeep":
+                # always skip these files
+                if fname in ignore_files:
                     continue
                 fpath = os.path.join(path, fname)
                 if not os.path.isfile(fpath):

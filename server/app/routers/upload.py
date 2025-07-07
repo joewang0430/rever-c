@@ -253,6 +253,13 @@ async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
             content = await file.read()
             await f.write(content)
 
+        # IMPORTANT: insert #include "rvc.h", otherwise will fail compiling
+        async with aiofiles.open(file_path, 'rb+') as f:
+            content = await f.read()
+            await f.seek(0)
+            await f.write(b'#include "rvc.h"\n' + content)
+            await f.truncate()
+
         # Start background compilation process
         asyncio.create_task(process_candidate_async(code_id))
 
@@ -409,6 +416,13 @@ async def process_cache(file: UploadFile = File(...)) -> ProcessResponse:
         async with aiofiles.open(file_path, 'wb') as f:
             content = await file.read()
             await f.write(content)
+
+        # IMPORTANT: insert #include "rvc.h", otherwise will fail compiling
+        async with aiofiles.open(file_path, 'rb+') as f:
+            content = await f.read()
+            await f.seek(0)
+            await f.write(b'#include "rvc.h"\n' + content)
+            await f.truncate()
 
         # Start background processing task
         asyncio.create_task(process_cache_async(code_id))
