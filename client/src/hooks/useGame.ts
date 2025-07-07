@@ -10,7 +10,6 @@ import {
     Board,
     Move, 
     CertificateType,
-    createInitialBoard, 
     PlayerStats, 
     MoveHistoryItem 
 } from '@/data/types/game';
@@ -22,7 +21,8 @@ import {
     toggleTurn,
     checkGameOver,
     getPieceCount,
-    getMobility
+    getMobility,
+    createInitialBoard, 
 } from '@/utils/gameLogistics';
 import { getPlayerName } from '@/utils/nameConverters';
 import { useRouter } from 'next/navigation';
@@ -162,7 +162,7 @@ export const useGame = (setupData: SetupData | null) => {
         setMoveHistory(prev => [
             ...prev, 
             {
-                index: prev.length + 1,
+                step: prev.length + 1,
                 color: turn,
                 position: { row: move.row, col: move.col },
                 pieceCount: { B: blackPieceCount, W: whitePieceCount },

@@ -185,7 +185,10 @@ export default function Game({ matchId}: GameProps) {
                     )}
                     {showReport && (
                         <div ref={reportRef}>
-                            <ReportSection matchId={matchId} />
+                            <ReportSection 
+                                setupData={setupData}
+                                history={game.moveHistory}
+                            />
                         </div>
                     )}
                     

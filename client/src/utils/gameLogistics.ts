@@ -5,7 +5,7 @@
 "use client";
 
 import { useRouter } from "next/navigation"
-import { Turn, Move, Board, PlayerStats, DIRECTIONS } from "@/data/types/game";
+import { Turn, Move, Board, PlayerStats, DIRECTIONS, MoveHistoryItem } from "@/data/types/game";
 import { getRowName, getColName } from "./nameConverters";
 import { cleanupSetupDataRDB } from "@/api/gameApi";
 import { cleanupCandidate } from "@/api/uploadApi";
@@ -61,11 +61,11 @@ export const checkLegalMove = (
     const rowName = getRowName(move.row);
     const colName = getColName(move.col);
     if (!isInBound(move, size)) {
-        return {valid: false, msg: `The move at position "${rowName}${colName}" is out of bound.`}
+        return {valid: false, msg: `The move at position "${colName}${rowName}" is out of bound.`}
     } else if (isCellOccupied(board, move, size)) {
-        return {valid: false, msg: `There is already a piece on position "${rowName}${colName}".`}
+        return {valid: false, msg: `There is already a piece on position "${colName}${rowName}".`}
     } else if (!isLegalMove(board, move.row, move.col, color, size)) {
-        return {valid: false, msg: `The move at position "${rowName}${colName}" has no flips.`}
+        return {valid: false, msg: `The move at position "${colName}${rowName}" has no flips.`}
     }
     return {valid: true, msg: ""};
 };
@@ -287,4 +287,30 @@ export const getMobility = (
         }
     }
     return{ mobility: count, availableMoves};
+};
+
+// ------------------------------------------------------ Get board after n setups
+export const generateBoardFromHistory = (
+    history: MoveHistoryItem[],
+    step: number,
+    size: number
+): Board => {
+    let board = createInitialBoard(size);
+    for (let i = 0; i < step; i++) {
+        const item = history[i];
+        const { newBoard } = getUpdatedBoard(board, item.color, item.position, size);
+        board = newBoard;
+    }
+    return board;
+};
+
+// ------------------------------------------------------ Get initial board settings
+export function createInitialBoard(n: number): Board {
+    const board = Array.from({ length: n }, () => Array(n).fill('U'));
+    const mid = n / 2;
+    board[mid - 1][mid - 1] = 'W';
+    board[mid - 1][mid] = 'B';
+    board[mid][mid - 1] = 'B';
+    board[mid][mid] = 'W';
+    return board;
 };

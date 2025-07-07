@@ -29,21 +29,21 @@ export interface PlayerStats {
 };
 
 export const defaultPlayerStats: PlayerStats = {
-  pieceCount: 0,
-  mobility: 0,
-  flips: 0,
-  totalTime: 0,
-  maxTime: 0,
-  returnValue: null,
+    pieceCount: 0,
+    mobility: 0,
+    flips: 0,
+    totalTime: 0,
+    maxTime: 0,
+    returnValue: null,
 };
 
 export interface MoveHistoryItem {
-  index: number;    // how many moves have been made
-  color: Turn;      // the color of the piece that was placed
-  position: { row: number; col: number };   // the position of the piece that was placed
-  pieceCount: { B: number; W: number };     // the number of pieces for each color after this move
-  mobility: { B: number; W: number };       // how many legal moves each color has after this move
-  flips: {B: number; W: number };           // how many opponent's pieces were flipped after this move
+    step: number;    // how many moves have been made
+    color: Turn;      // the color of the piece that was placed
+    position: { row: number; col: number };   // the position of the piece that was placed
+    pieceCount: { B: number; W: number };     // the number of pieces for each color after this move
+    mobility: { B: number; W: number };       // how many legal moves each color has after this move
+    flips: {B: number; W: number };           // how many opponent's pieces were flipped after this move
 };
 
 export interface FetchCodeMoveParams {
@@ -57,13 +57,3 @@ export interface FetchCodeMoveResult {
     elapsed: number;        // how long "makeMove()" takes ROUGHLY
     returnValue: number;    // return value of "int makeMove()"
 }
-
-export function createInitialBoard(n: number): Board {
-    const board = Array.from({ length: n }, () => Array(n).fill('U'));
-    const mid = n / 2;
-    board[mid - 1][mid - 1] = 'W';
-    board[mid - 1][mid] = 'B';
-    board[mid][mid - 1] = 'B';
-    board[mid][mid] = 'W';
-    return board;
-};
