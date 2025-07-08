@@ -51,7 +51,7 @@
             "groupId": "other_bots",
             "name": "Absolute Random",
             "shortName": "Random Move",
-            "description": "Naughty algorithm that makes random moves",
+            "description": "Naughty child that makes random move",
             "shortDescription": "Move randomly",
             "rating": "",
             "image": "/images/archives/test_archive.jpg"
@@ -61,7 +61,7 @@
             "groupId": "other_bots",
             "name": "Absolute Greedy",
             "shortName": "Greedy Move",
-            "description": "Only wants to flip as much as possible in this round",
+            "description": "Only wants to flip as much as possible in one round",
             "shortDescription": "Maximize flipps",
             "rating": "",
             "image": "/images/archives/test_archive.jpg"

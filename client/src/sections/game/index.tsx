@@ -74,7 +74,7 @@ export default function Game({ matchId}: GameProps) {
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | null = null;
-                const delayPromise = new Promise(resolve => setTimeout(resolve, 500));
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 600));
 
                 if (setupData[side].type === 'custom') {
                     const customPlayerType = setupData[side].config?.customType;
