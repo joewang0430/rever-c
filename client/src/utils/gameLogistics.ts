@@ -5,7 +5,7 @@
 "use client";
 
 import { useRouter } from "next/navigation"
-import { Turn, Move, Board, PlayerStats, DIRECTIONS, MoveHistoryItem } from "@/data/types/game";
+import { Turn, Move, Board, PlayerStats, DIRECTIONS, MoveHistoryItem, FetchAIMoveResult } from "@/data/types/game";
 import { getRowName, getColName } from "./nameConverters";
 import { cleanupSetupDataRDB } from "@/api/gameApi";
 import { cleanupCandidate } from "@/api/uploadApi";
@@ -313,4 +313,9 @@ export function createInitialBoard(n: number): Board {
     board[mid][mid - 1] = 'B';
     board[mid][mid] = 'W';
     return board;
+};
+
+// ------------------------------------------------------ Check if the return result is from AI
+export function isFetchAIMoveResult(obj: any): obj is FetchAIMoveResult {
+    return obj && typeof obj === 'object' && 'explanation' in obj;
 };

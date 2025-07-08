@@ -5,6 +5,7 @@
 import { PlayerConfig } from "@/data/types/setup";
 import communityData from '@/data/constants/community.json';
 import { Board, Turn } from "@/data/types/game";
+import { aiList } from "@/data/constants/ai";
 
 // player type: custom, archive, human, ai, null
 export const playerTypeToFolder = (customType: 'cache' | 'candidate'): string => {
@@ -64,7 +65,11 @@ export const getPlayerDescription = (playerConfig: PlayerConfig) => {
         case 'human':
             return "Human Player";
         case 'ai':
-            return "TODO";
+            const aiId = playerConfig.config.aiId;
+            if (aiId && aiList[aiId]) {
+                return aiList[aiId].description || "";
+            }
+    return "(AI Player)";
         default:
             return "(Not Selected)";
     }

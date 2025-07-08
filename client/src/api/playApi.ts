@@ -8,12 +8,14 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8
 import { CustomType } from "@/data/types/setup";
 import { 
     FetchCodeMoveParams, 
-    FetchCodeMoveResult 
+    FetchCodeMoveResult,
+    FetchAIMoveParams,
+    FetchAIMoveResult
 } from "@/data/types/game";
 
-// Get the move decision from backend when is custom uploade ("candidate" or "cache") mode
+// Get the move decision from backend when it is custom uploade ("candidate" or "cache") mode
 export async function fetchCustomMove(params: FetchCodeMoveParams, customType: CustomType, customCodeId: string): Promise<FetchCodeMoveResult> {
-    const res = await fetch(`${API_BASE_URL}/api/move/${customType}/${customCodeId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/move/custom/${customType}/${customCodeId}`, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
@@ -27,7 +29,7 @@ export async function fetchCustomMove(params: FetchCodeMoveParams, customType: C
     };
 }
 
-// Get the move decision from backend when is historic code ("archive") mode
+// Get the move decision from backend when it is historic code ("archive") mode
 export async function fetchArchiveMove(params: FetchCodeMoveParams, archiveGroup: string, archiveId: string): Promise<FetchCodeMoveResult> {
     const res = await fetch(`${API_BASE_URL}/api/move/archive/${archiveGroup}/${archiveId}`, {
         method: 'POST',
@@ -43,3 +45,17 @@ export async function fetchArchiveMove(params: FetchCodeMoveParams, archiveGroup
     };
 }
 
+// Get the move decision from backend when it is AI mode
+export async function fetchAIMove(params: FetchAIMoveParams, aiId: string): Promise<FetchAIMoveResult> {
+    const res = await fetch(`${API_BASE_URL}/api/move/ai/${aiId}`, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+    });
+    if (!res.ok) throw new Error("fetch AI api failed");
+    const data = await res.json();
+    return {
+        move: { row: data.row, col: data.col },
+        explanation: data.explanation,
+    };
+}

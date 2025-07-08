@@ -40,6 +40,12 @@ data/shared_libs/caches/*
 !data/shared_libs/candidates/.gitkeep
 !data/shared_libs/caches/.gitkeep
 
+data/status/candidates/*
+data/status/caches/*
+
+!data/status/candidates/.gitkeep
+!data/status/caches/.gitkeep
+
 # If switching to CMake or other build systems later, add their output directories here
 # Examples: build/, cmake-build-debug/, etc.
 # build/

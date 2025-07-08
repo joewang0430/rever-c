@@ -14,6 +14,9 @@ services:
       # - REDIS_URL=redis://redis:6379 # PROD: added it
     environment:
       REDIS_URL: redis://host.docker.internal:6379  # PROD: change / delete this
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    volumes:
+      - ./server:/app # PROD: DELETE IT
 
   client:
     build: ./client
@@ -30,3 +33,15 @@ services:
   #   image: redis:7
   #   ports:
   #     - "6379:6379"
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./start-ollama.sh:/start-ollama.sh
+    entrypoint: [ "sh", "/start-ollama.sh" ]
+
+volumes:
+  ollama_data:

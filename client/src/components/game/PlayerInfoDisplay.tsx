@@ -17,6 +17,7 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
     const playerName = getPlayerName(playerConfig);
     const playerDescription = getPlayerDescription(playerConfig);
     const isCode: boolean = (playerConfig.type === 'custom' || playerConfig.type === 'archive');
+    const isAI: boolean = (playerConfig.type === 'ai');
 
     return (
         <div className="flex flex-col justify-center items-center">
@@ -34,6 +35,12 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
                 <div>{playerStats.maxTime === 0 ? '-' : formatElapsed(playerStats.maxTime) }</div>
                 <div className="mt-4">Code Return Value</div>
                 <div>{playerStats.returnValue ?? '-'}</div>
+            </>
+            )}
+            {isAI && (
+            <>
+                <div className="mt-4">Explanation</div>
+                <div>{playerStats.explanation}</div>
             </>
             )}
         </div>

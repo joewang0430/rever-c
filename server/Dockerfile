@@ -52,4 +52,6 @@ COPY --from=builder /app/requirements.txt ./
 EXPOSE 8000
 
 # 5. Startup command: directly run Uvicorn, loading app.main
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"] # PROD: USE IT
+# PROD: DELETE IT BELOW, USE THE UPPER ONE
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 

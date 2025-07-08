@@ -26,6 +26,7 @@ export interface PlayerStats {
     totalTime: number; // only manipulated if player type is 'archive' or 'custom'
     maxTime: number; // only manipulated if player type is 'archive' or 'custom'
     returnValue: number | null; // only manipulated if player type is 'archive' or 'custom'
+    explanation?: string;    // only manipulated if player type is 'ai'
 };
 
 export const defaultPlayerStats: PlayerStats = {
@@ -56,4 +57,17 @@ export interface FetchCodeMoveResult {
     move: Move;
     elapsed: number;        // how long "makeMove()" takes ROUGHLY
     returnValue: number;    // return value of "int makeMove()"
+}
+
+export interface FetchAIMoveParams {
+    board: Board;
+    turn: Turn;
+    size: number;
+    availableMoves: Move[];
+    lastMove: Move | null;
+}
+
+export interface FetchAIMoveResult {
+    move: Move;
+    explanation: string;
 }

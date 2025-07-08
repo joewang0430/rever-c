@@ -6,6 +6,7 @@ import { PlayerConfig, PlayerType } from '../../data/types/setup';
 import { cleanupCandidate } from '../../api/uploadApi';
 import { useEffect, useCallback } from 'react';
 import { storage } from '@/utils/storage';
+import { aiList } from '@/data/constants/ai';
 
 interface PlayerTypeSelectionProps {
     blackPlayerConfig: PlayerConfig;
@@ -108,11 +109,18 @@ const PlayerTypeSelection = ({
                 break;
                 
             case "ai":
-                updateFunction({
+                // updateFunction({
+                //     type: "ai",
+                //     config: {
+                //         aiId: "",
+                //         aiName: "",
+                //     }
+                // });
+                updateFunction({    // TODO: change back later
                     type: "ai",
                     config: {
-                        aiId: "default",
-                        aiName: undefined
+                        aiId: "gemma3n:e4b",
+                        aiName: "AI Gemma",
                     }
                 });
                 break;
