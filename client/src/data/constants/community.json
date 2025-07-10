@@ -67,6 +67,92 @@
             "image": "/images/archives/test_archive.jpg"
         }
         ]
+    },
+    {
+        "id": "alex_family",
+        "name": "Alex Family",
+        "archives": [
+        {
+            "id": "hukaiqi1_1",
+            "groupId": "alex_family",
+            "name": "Baby Alex",
+            "shortName": "Baby Alex",
+            "description": "When Alex Hu is a baby",
+            "shortDescription": "When Alex is a baby",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_2",
+            "groupId": "alex_family",
+            "name": "Nano Alex",
+            "shortName": "Nano Alex",
+            "description": "Extremely low version of Alex Hu in APS105 2024",
+            "shortDescription": "Extremely Low version H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_3",
+            "groupId": "alex_family",
+            "name": "Mini Alex",
+            "shortName": "Mini Alex",
+            "description": "Very low version of Alex Hu in APS105 2024",
+            "shortDescription": "Very Low version H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_4",
+            "groupId": "alex_family",
+            "name": "Light Alex",
+            "shortName": "Light Alex",
+            "description": "Low version of Alex Hu in APS105 2024",
+            "shortDescription": "Low version H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_5",
+            "groupId": "alex_family",
+            "name": "Alex",
+            "shortName": "Alex",
+            "description": "#8 rank APS105 Leaderboard 2024",
+            "shortDescription": "H.Alex in APS105 2024",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_6",
+            "groupId": "alex_family",
+            "name": "EVO Alex",
+            "shortName": "EVO Alex",
+            "description": "Upgraded Alex Hu in APS105 2024",
+            "shortDescription": "Upgraded H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_7",
+            "groupId": "alex_family",
+            "name": "Super EVO Alex",
+            "shortName": "Super EVO Alex",
+            "description": "Extremely upgraded Alex Hu in APS105 2024",
+            "shortDescription": "Extreme H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_7x",
+            "groupId": "alex_family",
+            "name": "X Super EVO Alex",
+            "shortName": "X Super EVO Alex",
+            "description": "Super EVO Alex, but further trained",
+            "shortDescription": "Trained Extreme H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        }
+        ]
     }
     ]
 }

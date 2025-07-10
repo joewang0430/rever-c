@@ -15,8 +15,8 @@ services:
     environment:
       REDIS_URL: redis://host.docker.internal:6379  # PROD: change / delete this
       OLLAMA_BASE_URL: http://host.docker.internal:11434
-    volumes:
-      - ./server:/app # PROD: DELETE IT
+    # volumes:
+      # - ./server:/app # PROD: DELETE IT
 
   client:
     build: ./client
