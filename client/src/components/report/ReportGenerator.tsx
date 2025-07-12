@@ -43,6 +43,10 @@ const ReportGenerator = ({ setupData, history }: ReportGeneratorProps) => {
                 `Step ${item.step}:\n` +
                 `${item.color === 'B' ? blackName : whiteName} placed ${getSetupTurnName(item.color)} at (${getColName(item.position.col)}${getRowName(item.position.row)}).\n` +
                 // `PieceCount: B=${item.pieceCount.B}, W=${item.pieceCount.W}\n`
+                // ---
+                `Total pcs: ${item.pieceCount.B + item.pieceCount.W}\n` +
+                `Mobility: B: ${item.mobility.B}; W: ${item.mobility.W}\n` +
+                // ---
                 `${boardToLogText(generateBoardFromHistory(history, item.step, setupData.boardSize))}\n`
             )
             .join('\n') + endings;

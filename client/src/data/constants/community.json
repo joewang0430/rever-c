@@ -151,6 +151,26 @@
             "shortDescription": "Trained Extreme H.Alex",
             "rating": "",
             "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_7end",
+            "groupId": "alex_family",
+            "name": "Test Alex Kill Only",
+            "shortName": "Test Alex",
+            "description": "Test Alex",
+            "shortDescription": "Test Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "hukaiqi1_7origin",
+            "groupId": "alex_family",
+            "name": "Origin Middle Alex",
+            "shortName": "Origin Middle Alex",
+            "description": "Test Alex",
+            "shortDescription": "Test Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
         }
         ]
     }

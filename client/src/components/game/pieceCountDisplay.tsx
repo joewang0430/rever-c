@@ -11,6 +11,7 @@ const PieceCountDisplay = ({ blackCount, whiteCount}: PieceCountDisplayProps) =>
     return (
         <>
         <span>● {blackCount} : {whiteCount} ○</span>
+        <span>{blackCount+whiteCount}</span>
         </>
     );
 };
