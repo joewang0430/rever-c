@@ -125,8 +125,8 @@
         {
             "id": "hukaiqi1_6",
             "groupId": "alex_family",
-            "name": "EVO Alex",
-            "shortName": "EVO Alex",
+            "name": "Super Alex",
+            "shortName": "Super Alex",
             "description": "Upgraded Alex Hu in APS105 2024",
             "shortDescription": "Upgraded H.Alex",
             "rating": "",
@@ -135,8 +135,8 @@
         {
             "id": "hukaiqi1_7",
             "groupId": "alex_family",
-            "name": "Super EVO Alex",
-            "shortName": "Super EVO Alex",
+            "name": "Super Super Alex",
+            "shortName": "S.S. Alex",
             "description": "Extremely upgraded Alex Hu in APS105 2024",
             "shortDescription": "Extreme H.Alex",
             "rating": "",
@@ -145,30 +145,20 @@
         {
             "id": "hukaiqi1_7x",
             "groupId": "alex_family",
-            "name": "X Super EVO Alex",
-            "shortName": "X Super EVO Alex",
-            "description": "Super EVO Alex, but further trained",
+            "name": "Super Super Super Alex",
+            "shortName": "S.S.S Alex",
+            "description": "Extremely upgraded Alex Hu, and thinks longer",
+            "shortDescription": "More Extreme H.Alex",
+            "rating": "",
+            "image": "/images/archives/test_archive.jpg"
+        },
+        {
+            "id": "ajex",
+            "groupId": "alex_family",
+            "name": "AJEX",
+            "shortName": "AJEX",
+            "description": "Greately modified Alex Hu in APS105 2024, and professionally tuned by ReverC",
             "shortDescription": "Trained Extreme H.Alex",
-            "rating": "",
-            "image": "/images/archives/test_archive.jpg"
-        },
-        {
-            "id": "hukaiqi1_7end",
-            "groupId": "alex_family",
-            "name": "Test Alex Kill Only",
-            "shortName": "Test Alex",
-            "description": "Test Alex",
-            "shortDescription": "Test Alex",
-            "rating": "",
-            "image": "/images/archives/test_archive.jpg"
-        },
-        {
-            "id": "hukaiqi1_7origin",
-            "groupId": "alex_family",
-            "name": "Origin Middle Alex",
-            "shortName": "Origin Middle Alex",
-            "description": "Test Alex",
-            "shortDescription": "Test Alex",
             "rating": "",
             "image": "/images/archives/test_archive.jpg"
         }
