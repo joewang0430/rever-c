@@ -17,7 +17,7 @@ export default function HomePage() {
 
   return(
     <main>
-      <h1>Welcome to the Game!</h1>
+      <h1 className="text-rvc-primary-green">Welcome to the Game!</h1>
       <p>Click the button below to start a new game.</p>
       <StartButton />
       <CasheBlockHome />
