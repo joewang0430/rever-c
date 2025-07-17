@@ -1,5 +1,7 @@
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -9,7 +11,8 @@
 
   --color-rvc-primary-green: var(--rvc-primary-green);
   --color-rvc-primary-black: var(--rvc-primary-black);
-  --color-rvc-bg-white: var(--rvc-bg-white);
+  --color-rvc-primary-white: var(--rvc-primary-white);
+  --color-rvc-text-black: var(--rvc-text-black);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -51,7 +54,8 @@
 :root {
   --rvc-primary-green: #2D874C;
   --rvc-primary-black: #000000;
-  --rvc-bg-white: #f9f9f9;
+  --rvc-primary-white: #f9f9f9;
+  --rvc-text-black: #171717;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -90,7 +94,8 @@
 .dark {
   --rvc-primary-green: #2D874C;
   --rvc-primary-black: #000000;
-  --rvc-bg-white: #f9f9f9;
+  --rvc-primary-white: #f9f9f9;
+  --rvc-text-black: #171717;
   
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -132,6 +137,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.rvct-theme {
+  font-family: 'Funnel Sans', sans-serif;
+  font-weight: 400;
+}
+
+.rvct-theme-500 {
+  font-family: 'Funnel Sans', sans-serif;
+  font-weight: 500;
 }
 /* 
 
