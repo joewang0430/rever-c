@@ -16,6 +16,7 @@ const NavBar = () => {
     const [show, setShow] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const lastScroll = useRef(0);
+    const pathname = usePathname();
 
     // Listen the user scrolling operation, decede whether show nav
     useEffect(() => {
@@ -47,11 +48,14 @@ const NavBar = () => {
     return (
         <nav
             className={clsx(
-                "fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-rvc-bg-white",
+                "fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-rvc-bg-white min-h-12 border-b shadow",
                 show ? "translate-y-0" : "-translate-y-full"
             )}
         >
-            {isMobile ? <NavBarSmall /> : <NavBarLarge />}
+            {isMobile 
+            ? <NavBarSmall url={pathname}/> 
+            : <NavBarLarge url={pathname}/>
+            }
         </nav>
     );
 };

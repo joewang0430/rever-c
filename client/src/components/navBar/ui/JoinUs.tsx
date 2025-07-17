@@ -1,6 +1,15 @@
-const JoinUs = () => {
+import { NavigationMenuItem } from "@/components/ui/navigation-menu";
+
+interface JoinUsProps {
+    mobile: boolean;
+    url: string;
+};
+
+const JoinUs = ({mobile, url}: JoinUsProps) => {
     return (
-        <>JoinUs</>
+        <NavigationMenuItem>
+            <>Join Us</>
+        </NavigationMenuItem>
     );
 };
 
