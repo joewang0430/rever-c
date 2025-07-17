@@ -31,6 +31,10 @@ export default function HomePage() {
           </div>
         )}
       </div>
+
+      <div className="h-256 bg-rvc-primary-green">
+        test
+      </div>
     </main>
   );
 };

@@ -9,6 +9,7 @@
 
   --color-rvc-primary-green: var(--rvc-primary-green);
   --color-rvc-primary-black: var(--rvc-primary-black);
+  --color-rvc-bg-white: var(--rvc-bg-white);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -50,6 +51,7 @@
 :root {
   --rvc-primary-green: #2D874C;
   --rvc-primary-black: #000000;
+  --rvc-bg-white: #f9f9f9;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -88,6 +90,7 @@
 .dark {
   --rvc-primary-green: #2D874C;
   --rvc-primary-black: #000000;
+  --rvc-bg-white: #f9f9f9;
   
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
