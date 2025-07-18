@@ -48,7 +48,7 @@ const NavBar = () => {
     return (
         <nav
             className={clsx(
-                "fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-rvc-primary-white min-h-12 border-b shadow",
+                "fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-rvc-primary-white min-h-12",// border-b shadow
                 show ? "translate-y-0" : "-translate-y-full"
             )}
         >

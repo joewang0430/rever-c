@@ -37,7 +37,7 @@ const Faqs = ({mobile, url}: FaqsProps) => {
                 {isSameTab ? (
                     <Link
                         href={faqUrl}
-                        className="hover:text-rvc-primary-green rvct-theme-500"
+                        className="hover:text-rvc-primary-green rvct-theme-500 transition"
                     >
                         FAQs
                     </Link>
@@ -46,7 +46,7 @@ const Faqs = ({mobile, url}: FaqsProps) => {
                         href={faqUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-rvc-primary-green rvct-theme-500"
+                        className="hover:text-rvc-primary-green rvct-theme-500 transition"
                     >
                         FAQs
                     </Link>

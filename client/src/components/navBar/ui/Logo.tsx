@@ -40,6 +40,8 @@ const Logo = ({mobile, url}: LogoProps) => {
                     onConfirm={handleConfirm}
                     open={showDialog}
                     onOpenChange={setShowDialog}
+                    confirm="Back Home"
+                    cancel="cancel"
                 >
                     Your current game settings will not be saved.
                 </RvcDialog>

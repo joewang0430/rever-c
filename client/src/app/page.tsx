@@ -16,7 +16,7 @@ export default function HomePage() {
   }
 
   return(
-    <main>
+    <main className="bg-rvc-primary-white">
       <h1 className="text-rvc-primary-green">Welcome to the Game!</h1>
       <p>Click the button below to start a new game.</p>
       <StartButton />
