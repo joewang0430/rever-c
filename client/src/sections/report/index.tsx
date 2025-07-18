@@ -4,7 +4,7 @@
 
 import { SetupData } from "@/data/types/setup";
 import { MoveHistoryItem } from "@/data/types/game";
-import ReportGenerator from "@/components/report/ReportGenerator";
+import LogGenerator from "@/components/report/LogGenerator";
 
 interface ReportSectionProps {
     setupData: SetupData;
@@ -15,7 +15,7 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
     return (
         <div className="bg-green-200">
             report
-            <ReportGenerator 
+            <LogGenerator 
                 setupData={setupData}
                 history={history} 
             />

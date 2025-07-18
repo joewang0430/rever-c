@@ -12,7 +12,7 @@ interface ReportGeneratorProps {
     history: MoveHistoryItem[];
 };
 
-const ReportGenerator = ({ setupData, history }: ReportGeneratorProps) => {
+const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
     const handleGenerateLog = () => {
         // Openings
         const blackName = getPlayerName(setupData.black);
@@ -72,4 +72,4 @@ const ReportGenerator = ({ setupData, history }: ReportGeneratorProps) => {
     )
 };
 
-export default ReportGenerator;
+export default LogGenerator;
