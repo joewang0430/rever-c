@@ -27,28 +27,45 @@ const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
         const lastStep = history[history.length - 1];
         const blackScore = lastStep.pieceCount.B;
         const whiteScore = lastStep.pieceCount.W;
+        const totalBlackTime = history.reduce((sum, item) => sum + (item.time?.B ?? 0), 0);
+        const totalWhiteTime = history.reduce((sum, item) => sum + (item.time?.W ?? 0), 0);
+        const maxBlackTime = history.length > 0 ? Math.max(...history.map(item => item.time.B)) : 0;
+        const maxWhiteTime = history.length > 0 ? Math.max(...history.map(item => item.time.W)) : 0;
         let winner = "Draw";
+        let winnerColor = "";
         if (blackScore > whiteScore) {
             winner = blackName;
+            winnerColor = "Black";
         } else if (whiteScore > blackScore) {
             winner = whiteName;
+            winnerColor = "White";
         }
-        const endings =     // TODO: add total time and decleration
-            `\n\n-- Game Over --\n` +
+        const endings = 
+            `\n\n-- Game Over --\n\n` +
             `${blackName} ● ${blackScore} : ${whiteScore} ○ ${whiteName}\n` +
-            `Winner: ${winner}\n\n\n` +
-            `Provided by reverc.org`
-        
+            `Winner: ${winner} (${winnerColor})\n\n`+
+            ((setupData.black.type === 'archive' || setupData.black.type === 'custom') ? 
+                `${blackName} (Black) used ${formatElapsed(totalBlackTime)}, [max turn: ${formatElapsed(maxBlackTime)}]\n` : ''
+            ) +
+            ((setupData.white.type === 'archive' || setupData.white.type === 'custom') ? 
+                `${whiteName} (White) used ${formatElapsed(totalWhiteTime)}, [max turn: ${formatElapsed(maxWhiteTime)}]\n` : ''
+            ) + 
+            ((setupData.black.type === 'custom' || setupData.white.type === 'custom') ?
+                `* Note: All time data measured by reverc.org is for reference only and may not be fully accurate.` : ''
+            ) +
+            `\n\nProvided by reverc.org`
+        // General
         const logContent = openings + history
             .map(item =>    
                 `Step ${item.step}:\n` +
                 `${item.color === 'B' ? blackName : whiteName} placed ${getSetupTurnName(item.color)} at (${getColName(item.position.col)}${getRowName(item.position.row)}).\n` +
-                // --- 
-                // `PieceCount: B=${item.pieceCount.B}, W=${item.pieceCount.W}\n`
-                // `Total pcs: ${item.pieceCount.B + item.pieceCount.W}\n` +
-                // `Mobility: B: ${item.mobility.B}; W: ${item.mobility.W}\n` +
-                // ---
-                `Approx time: ${item.color === 'B' ? formatElapsed(item.time.B) : formatElapsed(item.time.W)}\n` + // TODO: only when code version
+                (
+                    // Only when player type is archive or custom, then display time
+                    ((item.color === 'B' && (setupData.black.type === 'archive' || setupData.black.type === 'custom')) ||
+                    (item.color === 'W' && (setupData.white.type === 'archive' || setupData.white.type === 'custom')))
+                    ? `Approx time: ${item.color === 'B' ? formatElapsed(item.time.B) : formatElapsed(item.time.W)}\n`
+                    : ''
+                ) +
                 `${boardToLogText(generateBoardFromHistory(history, item.step, setupData.boardSize))}\n`
             )
             .join('\n') + endings;
