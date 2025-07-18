@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { NavigationMenuItem } from "@/components/ui/navigation-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import RvcDialog from "@/components/dialog/RvcDialog";
+import { useSetupDataContext } from "@/contexts/SetupDataContext";
+import { clearRDB, clearCandidate } from "@/utils/gameLogistics";
 
 interface NewGameProps {
     mobile: boolean;
@@ -23,6 +25,7 @@ const NewGame = ({mobile, url}: NewGameProps) => {
     const needConfirm = confirmUrls.some(path => url.startsWith(path));
     const [showDialog, setShowDialog] = useState(false);
     const router = useRouter();
+    const { setupData } = useSetupDataContext();
     const newGameMsg = "You will lose the current process, and start a new one.";
 
     const handleNewGameClick = () => {
@@ -34,9 +37,17 @@ const NewGame = ({mobile, url}: NewGameProps) => {
         }
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         setShowDialog(false);
         router.push("/setup");
+        if (setupData) {
+            if (url === "/setup") {
+                await clearCandidate(setupData);
+            } else {
+                await clearRDB(setupData.matchId);
+                await clearCandidate(setupData);
+            }
+        }
     };
 
     if (isHidden) return (<></>);

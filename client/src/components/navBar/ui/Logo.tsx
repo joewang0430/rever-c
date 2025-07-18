@@ -8,6 +8,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RvcDialog from "@/components/dialog/RvcDialog";
+import { useSetupDataContext } from "@/contexts/SetupDataContext";
+import { clearRDB, clearCandidate } from "@/utils/gameLogistics";
 
 interface LogoProps {
     mobile: boolean;
@@ -17,6 +19,7 @@ interface LogoProps {
 const Logo = ({mobile, url}: LogoProps) => {
     const [showDialog, setShowDialog] = useState(false);
     const router = useRouter();
+    const { setupData } = useSetupDataContext();
 
     const handleLogoClick = () => {
         if (url !== "/") {
@@ -24,9 +27,17 @@ const Logo = ({mobile, url}: LogoProps) => {
         } /* TODO: later add home page anchor */
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         setShowDialog(false);
         router.push("/");
+        if (setupData) {
+            if (url === "/setup") {
+                await clearCandidate(setupData);
+            } else {
+                await clearRDB(setupData.matchId);
+                await clearCandidate(setupData);
+            }
+        }
     };
 
     return (

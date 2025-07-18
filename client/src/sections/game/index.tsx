@@ -26,13 +26,14 @@ import { fetchCustomMove, fetchArchiveMove, fetchAIMove } from "@/api/playApi";
 import { raiseGameErrorWindow, isFetchAIMoveResult } from "@/utils/gameLogistics";
 import { useRouter } from 'next/navigation';
 import ReportSection from "../report";
+import { useSetupDataContext } from "@/contexts/SetupDataContext";  // added
 
 interface GameProps {
     matchId: string;
 };
 
 export default function Game({ matchId}: GameProps) {
-    const [setupData, setSetupData] = useState<SetupData | null>(null);
+    const [setupData, setSetupDataLocal] = useState<SetupData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const game = useGame(setupData);
@@ -41,6 +42,8 @@ export default function Game({ matchId}: GameProps) {
 
     const [showReport, setShowReport] = useState(false);
     const reportRef = useRef<HTMLDivElement>(null);
+
+    const { setSetupData } = useSetupDataContext();  // added
 
     const handleShowReport = () => {
         setShowReport(true);
@@ -54,8 +57,9 @@ export default function Game({ matchId}: GameProps) {
         setLoading(true);
         getSetupData(matchId)
             .then((data) => {
+                setSetupDataLocal(data.setupData);
                 setSetupData(data.setupData);
-                setLoading(false);
+                setLoading(false);  // added
             })
             .catch((err) => {
                 setError(err.message || "Failed to fetch setup data");
