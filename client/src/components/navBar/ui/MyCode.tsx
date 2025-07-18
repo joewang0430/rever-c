@@ -5,7 +5,13 @@ interface MyCodeProps {
     url: string;
 };
 
+const hideUrls = ["/setup", "/game"];
+
 const MyCode = ({mobile, url}: MyCodeProps) => {
+    const isHidden = hideUrls.some(path => url.startsWith(path));
+
+    if (isHidden) return (<></>);
+
     if (mobile) {
         return (
             <button

@@ -31,7 +31,7 @@ const Logo = ({mobile, url}: LogoProps) => {
 
     return (
         <>
-            <button onClick={handleLogoClick}>
+            <button onClick={handleLogoClick} className="cursor-pointer">
                 <Image src="/rvc_logo.svg" alt="Logo" width={164} height={164} />
             </button>
             {showDialog && (

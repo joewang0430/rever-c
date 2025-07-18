@@ -19,10 +19,11 @@ const hideUrls = ["/setup"];
 const confirmUrls = ["/game"];
 
 const NewGame = ({mobile, url}: NewGameProps) => {
-    const needHide = hideUrls.includes(url);
+    const isHidden = hideUrls.includes(url);
     const needConfirm = confirmUrls.some(path => url.startsWith(path));
     const [showDialog, setShowDialog] = useState(false);
     const router = useRouter();
+    const newGameMsg = "You will lose the current process, and start a new one.";
 
     const handleNewGameClick = () => {
         if (needConfirm) {
@@ -38,7 +39,7 @@ const NewGame = ({mobile, url}: NewGameProps) => {
         router.push("/setup");
     };
 
-    if (needHide) return (<></>);
+    if (isHidden) return (<></>);
 
     if (mobile) {
         return (
@@ -58,7 +59,7 @@ const NewGame = ({mobile, url}: NewGameProps) => {
                     confirm="New Game"
                     cancel="Cancel"
                 >
-                    You will start a new game, and lose the current process.
+                    {newGameMsg}
                 </RvcDialog>
             )}
             </>
@@ -69,7 +70,7 @@ const NewGame = ({mobile, url}: NewGameProps) => {
         <NavigationMenuItem>
             <button
                 onClick={handleNewGameClick}
-                className="hover:text-rvc-primary-green rvct-theme-500 transition"
+                className="hover:text-rvc-primary-green rvct-theme-500 transition cursor-pointer"
             >
                 New Game
             </button>
@@ -83,7 +84,7 @@ const NewGame = ({mobile, url}: NewGameProps) => {
                 confirm="New Game"
                 cancel="Cancel"
             >
-                You will start a new game, and lose the current process.
+                {newGameMsg}
             </RvcDialog>
         )}
         </>

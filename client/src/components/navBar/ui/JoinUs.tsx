@@ -13,12 +13,12 @@ interface JoinUsProps {
 };
 
 // Where we are now, based on it, decide whether to jump in same tab
-const sameTabUrls = ["/questions", "/contact", "/"]; 
+const diffTabUrls = ["/setup", "/game"]; 
 
 const JoinUs = ({mobile, url}: JoinUsProps) => {
     const contactUrl = "/contact";
     const githubUrl = "https://github.com/joewang0430/rever-c";
-    const isSameTab = sameTabUrls.includes(url);
+    const diffTab = diffTabUrls.some(path => url.startsWith(path));
 
     const [open, setOpen] = useState(false);
     const btnRef = useRef<HTMLButtonElement>(null);
@@ -33,9 +33,11 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
     }
 
     if (mobile) {
-        return isSameTab ? (
+        return diffTab ? (
             <Link
                 href={contactUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 Join Us
@@ -43,8 +45,6 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
         ) : (
             <Link
                 href={contactUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 Join Us
@@ -58,7 +58,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 onClick={() => setOpen((v) => !v)}
                 onBlur={handleBlur}
                 tabIndex={0}
-                className="hover:text-rvc-primary-green rvct-theme-500 transition"
+                className="hover:text-rvc-primary-green rvct-theme-500 hover:rvct-theme-700 transition cursor-pointer"
             >
                 Join Us
             </button>
@@ -73,9 +73,11 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                         <FaGithub className="w-5 h-5" />
                         <div className="rvct-theme">GitHub</div>
                     </Link>
-                    {isSameTab ? (
+                    {diffTab ? (
                         <Link
                             href={contactUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="px-4 py-2 hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
                             Contact Us
@@ -83,8 +85,6 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                     ) : (
                         <Link
                             href={contactUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className="px-4 py-2 hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
                             Contact Us

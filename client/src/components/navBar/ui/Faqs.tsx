@@ -6,16 +6,18 @@ interface FaqsProps {
     url: string;
 };
 
-const sameTabUrls = ["/questions", "/contact", "/"]; 
+const diffTabUrls = ["/setup", "/game"]; 
 
 const Faqs = ({mobile, url}: FaqsProps) => {
     const faqUrl = "/questions";
-    const isSameTab = sameTabUrls.includes(url);
+    const diffTab = diffTabUrls.some(path => url.startsWith(path));
 
     if (mobile) {
-        return isSameTab ? (
+        return diffTab ? (
             <Link
                 href={faqUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 FAQs
@@ -23,8 +25,6 @@ const Faqs = ({mobile, url}: FaqsProps) => {
         ) : (
             <Link
                 href={faqUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 FAQs
@@ -34,19 +34,19 @@ const Faqs = ({mobile, url}: FaqsProps) => {
     return (
         <NavigationMenuItem>
             {/* <NavigationMenuLink asChild> */}
-                {isSameTab ? (
+                {diffTab ? (
                     <Link
                         href={faqUrl}
-                        className="hover:text-rvc-primary-green rvct-theme-500 transition"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-rvc-primary-green rvct-theme-500 transition cursor-pointer"
                     >
                         FAQs
                     </Link>
                 ) : (
                     <Link
                         href={faqUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-rvc-primary-green rvct-theme-500 transition"
+                        className="hover:text-rvc-primary-green rvct-theme-500 transition cursor-pointer"
                     >
                         FAQs
                     </Link>
