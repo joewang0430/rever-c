@@ -12,7 +12,8 @@ export const useSetupData = () => {
         matchId: "",
         boardSize: 8,
         black: { type: null }, 
-        white: { type: null }  
+        white: { type: null },  
+        createAt: "",
     });
 
     // // if there is an initial configuration, merge it with the default setup data

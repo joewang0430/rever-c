@@ -20,7 +20,8 @@ const ReportGenerator = ({ setupData, history }: ReportGeneratorProps) => {
         const openings = 
             `${blackName} ● : ○ ${whiteName}\n\n` +
             `Game ID: ${setupData.matchId}\n` + 
-            `Board: ${setupData.boardSize}x${setupData.boardSize}\n\n\n` +
+            `Board: ${setupData.boardSize}x${setupData.boardSize}\n` +
+            `${setupData.createAt}\n\n\n` +
             `-- Game Start --\n\n`;
         // Endings
         const lastStep = history[history.length - 1];

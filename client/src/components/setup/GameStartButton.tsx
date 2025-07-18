@@ -140,7 +140,11 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
 
         // Then, if all good, we get our match ID.
         const matchId = uuid();
-        const setupDataWithId = { ...setupData, matchId};
+        const setupDataWithId = { 
+            ...setupData, 
+            matchId,
+            createAt: new Date().toISOString()
+        };
 
         try {
             await saveSetupDataToGame(matchId, setupDataWithId);

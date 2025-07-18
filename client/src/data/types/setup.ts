@@ -7,6 +7,7 @@ export interface SetupData {
     boardSize: 6 | 8 | 12;
     black: PlayerConfig;
     white: PlayerConfig;
+    createAt: string;
 }
 
 export interface PlayerConfig {
