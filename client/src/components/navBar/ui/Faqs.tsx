@@ -16,7 +16,7 @@ const Faqs = ({mobile, url}: FaqsProps) => {
         return isSameTab ? (
             <Link
                 href={faqUrl}
-                className="text-rvc-text-black block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
+                className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 FAQs
             </Link>
@@ -25,20 +25,19 @@ const Faqs = ({mobile, url}: FaqsProps) => {
                 href={faqUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-rvc-text-black block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
+                className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 FAQs
             </Link>
         );
     }
     return (
-        
         <NavigationMenuItem>
             {/* <NavigationMenuLink asChild> */}
                 {isSameTab ? (
                     <Link
                         href={faqUrl}
-                        className="text-rvc-text-black hover:text-rvc-primary-green rvct-theme-500"
+                        className="hover:text-rvc-primary-green rvct-theme-500"
                     >
                         FAQs
                     </Link>
@@ -47,7 +46,7 @@ const Faqs = ({mobile, url}: FaqsProps) => {
                         href={faqUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-rvc-text-black hover:text-rvc-primary-green rvct-theme-500"
+                        className="hover:text-rvc-primary-green rvct-theme-500"
                     >
                         FAQs
                     </Link>

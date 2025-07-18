@@ -12,6 +12,7 @@ interface JoinUsProps {
     url: string;
 };
 
+// Where we are now, based on it, decide whether to jump in same tab
 const sameTabUrls = ["/questions", "/contact", "/"]; 
 
 const JoinUs = ({mobile, url}: JoinUsProps) => {
@@ -35,7 +36,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
         return isSameTab ? (
             <Link
                 href={contactUrl}
-                className="text-rvc-text-black block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
+                className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 Join Us
             </Link>
@@ -44,7 +45,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 href={contactUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-rvc-text-black block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
+                className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 Join Us
             </Link>
@@ -57,7 +58,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 onClick={() => setOpen((v) => !v)}
                 onBlur={handleBlur}
                 tabIndex={0}
-                className="text-rvc-text-black hover:text-rvc-primary-green rvct-theme-500"
+                className="hover:text-rvc-primary-green rvct-theme-500"
             >
                 Join Us
             </button>
@@ -67,15 +68,15 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                         href={githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2"
+                        className="px-4 py-2 hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2"
                         >
                         <FaGithub className="w-5 h-5" />
-                        GitHub
+                        <div className="rvct-theme">GitHub</div>
                     </Link>
                     {isSameTab ? (
                         <Link
                             href={contactUrl}
-                            className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
+                            className="px-4 py-2 hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
                         >
                             Contact Us
                         </Link>
@@ -84,7 +85,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                             href={contactUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
+                            className="px-4 py-2 hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
                         >
                             Contact Us
                         </Link>
