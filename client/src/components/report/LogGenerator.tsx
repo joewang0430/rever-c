@@ -4,7 +4,7 @@
 
 import { MoveHistoryItem } from "@/data/types/game";
 import { SetupData } from "@/data/types/setup";
-import { getPlayerName, getRowName, getColName, getSetupTurnName, boardToLogText } from '../../utils/nameConverters';
+import { getPlayerName, getRowName, getColName, getSetupTurnName, boardToLogText, formatElapsed} from '../../utils/nameConverters';
 import { generateBoardFromHistory } from "@/utils/gameLogistics";
 
 interface ReportGeneratorProps {
@@ -33,7 +33,7 @@ const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
         } else if (whiteScore > blackScore) {
             winner = whiteName;
         }
-        const endings = 
+        const endings =     // TODO: add total time and decleration
             `\n\n-- Game Over --\n` +
             `${blackName} ● ${blackScore} : ${whiteScore} ○ ${whiteName}\n` +
             `Winner: ${winner}\n\n\n` +
@@ -43,11 +43,12 @@ const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
             .map(item =>    
                 `Step ${item.step}:\n` +
                 `${item.color === 'B' ? blackName : whiteName} placed ${getSetupTurnName(item.color)} at (${getColName(item.position.col)}${getRowName(item.position.row)}).\n` +
+                // --- 
                 // `PieceCount: B=${item.pieceCount.B}, W=${item.pieceCount.W}\n`
+                // `Total pcs: ${item.pieceCount.B + item.pieceCount.W}\n` +
+                // `Mobility: B: ${item.mobility.B}; W: ${item.mobility.W}\n` +
                 // ---
-                `Total pcs: ${item.pieceCount.B + item.pieceCount.W}\n` +
-                `Mobility: B: ${item.mobility.B}; W: ${item.mobility.W}\n` +
-                // ---
+                `Approx time: ${item.color === 'B' ? formatElapsed(item.time.B) : formatElapsed(item.time.W)}\n` + // TODO: only when code version
                 `${boardToLogText(generateBoardFromHistory(history, item.step, setupData.boardSize))}\n`
             )
             .join('\n') + endings;

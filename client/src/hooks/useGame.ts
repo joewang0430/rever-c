@@ -23,7 +23,7 @@ import {
     getPieceCount,
     getMobility,
     createInitialBoard, 
-    clearGame
+    clearCandidate
 } from '@/utils/gameLogistics';
 import { getPlayerName } from '@/utils/nameConverters';
 import { useRouter } from 'next/navigation';
@@ -37,8 +37,8 @@ export const useGame = (setupData: SetupData | null) => {
     const [gameOver, setGameOver] = useState<boolean>(false);
 
     const [playersStats, setPlayersStats] = useState<{ B: PlayerStats; W: PlayerStats }>({
-        B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
-        W: { pieceCount: 2, mobility: 0, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
+        B: { pieceCount: 2, mobility: 4, flips: 0, time:0, totalTime: 0, maxTime: 0, returnValue: null },
+        W: { pieceCount: 2, mobility: 0, flips: 0, time:0, totalTime: 0, maxTime: 0, returnValue: null }
     });
 
     const [flipped, setFlipped] = useState<Move[]>([]);
@@ -66,8 +66,8 @@ export const useGame = (setupData: SetupData | null) => {
             setPlaceCount(0);
             setGameOver(false);
             setPlayersStats({
-                B: { pieceCount: 2, mobility: 4, flips: 0, totalTime: 0, maxTime: 0, returnValue: null },
-                W: { pieceCount: 2, mobility: 0, flips: 0, totalTime: 0, maxTime: 0, returnValue: null }
+                B: { pieceCount: 2, mobility: 4, flips: 0, time:0, totalTime: 0, maxTime: 0, returnValue: null },
+                W: { pieceCount: 2, mobility: 0, flips: 0, time:0, totalTime: 0, maxTime: 0, returnValue: null }
             });
             setWinner(null);
             setErrorState(null);
@@ -76,7 +76,7 @@ export const useGame = (setupData: SetupData | null) => {
         }
     }, [setupData]);
 
-    const handleMove = async(move: Move) => {
+    const handleMove = async(move: Move, elapsedTime?: number) => {
         console.log("handleMove called.")
         if (!setupData) return;
         if (gameOver) return;
@@ -115,9 +115,11 @@ export const useGame = (setupData: SetupData | null) => {
         // PlaceCount
         setPlaceCount(prev => prev + 1);
 
-        // PlayerStats: pieceCount, mobility; available moves
+        // PlayerStats: pieceCount, mobility; available moves, time
         const blackPieceCount = getPieceCount(newBoard, 'B', size);
         const whitePieceCount = getPieceCount(newBoard, 'W', size);
+        const blackTime = playersStats.B.time;
+        const whiteTime = playersStats.W.time;
         
         // Mobility of next turn:
         // echoMobility: this is tricky, this means if the opponent next has 0 move and back to us, how many moves we have then
@@ -178,6 +180,16 @@ export const useGame = (setupData: SetupData | null) => {
                 // Opponent's flips this round is 0, nothing, this is different from the mobility before
                     B: turn === 'B' ? flipsCount : 0,
                     W: turn === 'W' ? flipsCount : 0
+                },
+                // "time" is the time that code took to move this round. It only works for type "archive" and "custom"
+                // otherwise the time data is always 0
+                time: {
+                    B: (turn === 'B' && (setupData.black.type === 'custom' || setupData.black.type === 'archive'))
+                        ? elapsedTime ?? 0
+                        : prev.length > 0 ? prev[prev.length - 1].time.B : 0,
+                    W: (turn === 'W' && (setupData.white.type === 'custom' || setupData.white.type === 'archive'))
+                        ? elapsedTime ?? 0
+                        : prev.length > 0 ? prev[prev.length - 1].time.W : 0,
                 }
             }
         ]);
@@ -213,7 +225,7 @@ export const useGame = (setupData: SetupData | null) => {
             }
 
         // Clear Data
-            clearGame(setupData);
+            clearCandidate(setupData);
         }
 
         // Turn & Available Moves & echo

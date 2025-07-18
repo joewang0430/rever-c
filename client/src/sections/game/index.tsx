@@ -132,8 +132,8 @@ export default function Game({ matchId}: GameProps) {
                 await delayPromise; // Ensure at leas wait 0.5s
 
                 if (computerMove) { 
-                    console.log("Move is:", computerMove.move);
-                    game.handleMove(computerMove.move); 
+                    const elapsed = "elapsed" in computerMove ? computerMove.elapsed : 0;
+                    game.handleMove(computerMove.move, elapsed); 
 
                     // Code .c
                     if (setupData[side].type !== 'ai' && !isFetchAIMoveResult(computerMove)) {
@@ -141,6 +141,8 @@ export default function Game({ matchId}: GameProps) {
                             const newStats = { ...prev };
                             newStats[turn] = {
                                 ...newStats[turn],
+                                // Time consumed this turn
+                                time: computerMove.elapsed,
                                 // Accumulate total thinking time
                                 totalTime: (newStats[turn].totalTime || 0) + (computerMove.elapsed || 0),
                                 // Update max thinking time

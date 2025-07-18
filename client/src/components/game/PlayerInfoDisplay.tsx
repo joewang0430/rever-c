@@ -28,7 +28,8 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
             <div>{playerStats.mobility === 0 ? '-' : playerStats.mobility}</div>
 
             {isCode && (
-            <>
+            <>  <div className="mt-4">Thinking Time:</div>
+                <div>{playerStats.time === 0 ? '-': formatElapsed(playerStats.time) }</div>
                 <div className="mt-4">Total Thinking</div>
                 <div>{playerStats.totalTime === 0 ? '-': formatElapsed(playerStats.totalTime) }</div>
                 <div className="mt-4">Maximum Thinking</div>

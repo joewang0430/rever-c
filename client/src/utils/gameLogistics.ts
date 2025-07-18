@@ -12,11 +12,18 @@ import { cleanupCandidate } from "@/api/uploadApi";
 import { SetupData } from '@/data/types/setup';
 
 // ------------------------------------------------------ Game error quit
-// Handles the general cleanup of all corresponding data, when game over / quit
-export const clearGame = async(setupData: SetupData) => {
+// Clean up Redis data
+export const clearRDB = async (matchId: string) => {
     try {
-        await cleanupSetupDataRDB(setupData.matchId);
+        await cleanupSetupDataRDB(matchId);
+    } catch (error) {
+        console.error("Cleanup Redis data failed when quiting the game: ", error);
+    }
+};
 
+// Handles the general cleanup of updated candidate, when game over / quit
+export const clearCandidate = async(setupData: SetupData) => {
+    try {
         if (setupData.black.config?.customType === 'candidate' && setupData.black.config.customCodeId) {
             await cleanupCandidate(setupData.black.config.customCodeId);
         }
@@ -36,7 +43,8 @@ export const raiseGameErrorWindow = async(
 ) => {
     window.confirm(msg)
 
-    clearGame(setupData);
+    clearCandidate(setupData);
+    clearRDB(setupData.matchId);
 
     if (onQuit) onQuit();
 };
