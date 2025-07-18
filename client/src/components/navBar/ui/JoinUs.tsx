@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { FaGithub } from "react-icons/fa";
+import Link from "next/link";
 import { 
     NavigationMenuItem
 } from "@/components/ui/navigation-menu";
@@ -11,7 +12,13 @@ interface JoinUsProps {
     url: string;
 };
 
+const sameTabUrls = ["/questions", "/contact", "/"]; 
+
 const JoinUs = ({mobile, url}: JoinUsProps) => {
+    const contactUrl = "/contact";
+    const githubUrl = "https://github.com/joewang0430/rever-c";
+    const isSameTab = sameTabUrls.includes(url);
+
     const [open, setOpen] = useState(false);
     const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -25,12 +32,22 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
     }
 
     if (mobile) {
-        return (
-            <button
-                    className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
-                >
-                <>Join Us</>
-            </button>
+        return isSameTab ? (
+            <Link
+                href={contactUrl}
+                className="text-rvc-text-black block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
+            >
+                Join Us
+            </Link>
+        ) : (
+            <Link
+                href={contactUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-rvc-text-black block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
+            >
+                Join Us
+            </Link>
         );
     }
     return (
@@ -40,27 +57,39 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 onClick={() => setOpen((v) => !v)}
                 onBlur={handleBlur}
                 tabIndex={0}
-                className="hover:text-rvc-primary-green rvct-theme-500"
+                className="text-rvc-text-black hover:text-rvc-primary-green rvct-theme-500"
             >
                 Join Us
             </button>
             {open && (
                 <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded flex flex-col z-50">
-                    <a
-                        href="https://github.com/"
+                    <Link
+                        href={githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2"
                         >
                         <FaGithub className="w-5 h-5" />
                         GitHub
-                    </a>
-                    <a
-                        href="mailto:contact@yourdomain.com"
-                        className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
-                    >
-                        Contact Us
-                    </a>
+                    </Link>
+                    {isSameTab ? (
+                        <Link
+                            href={contactUrl}
+                            className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
+                        >
+                            Contact Us
+                        </Link>
+                    ) : (
+                        <Link
+                            href={contactUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 text-rvc-text-black hover:bg-rvc-primary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme"
+                        >
+                            Contact Us
+                        </Link>
+                    )}
+                    
                 </div>
             )}
         </NavigationMenuItem>
