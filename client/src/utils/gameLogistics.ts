@@ -12,14 +12,8 @@ import { cleanupCandidate } from "@/api/uploadApi";
 import { SetupData } from '@/data/types/setup';
 
 // ------------------------------------------------------ Game error quit
-// Issue the window to show the error, and quit the game. This function only used in game stage.
-export const raiseGameErrorWindow = async(
-    setupData: SetupData, 
-    msg: string,
-    onQuit?: () => void
-) => {
-    window.confirm(msg)
-
+// Handles the general cleanup of all corresponding data, when game over / quit
+export const clearGame = async(setupData: SetupData) => {
     try {
         await cleanupSetupDataRDB(setupData.matchId);
 
@@ -32,6 +26,29 @@ export const raiseGameErrorWindow = async(
     } catch (error) {
         console.error("Cleanup failed when quiting the game: ", error);
     }
+};
+
+// Issue the window to show the error, and quit the game. This function only used in game stage.
+export const raiseGameErrorWindow = async(
+    setupData: SetupData, 
+    msg: string,
+    onQuit?: () => void
+) => {
+    window.confirm(msg)
+
+    // try {
+    //     await cleanupSetupDataRDB(setupData.matchId);
+
+    //     if (setupData.black.config?.customType === 'candidate' && setupData.black.config.customCodeId) {
+    //         await cleanupCandidate(setupData.black.config.customCodeId);
+    //     }
+    //     if (setupData.white.config?.customType === 'candidate' && setupData.white.config.customCodeId) {
+    //         await cleanupCandidate(setupData.white.config.customCodeId);
+    //     }
+    // } catch (error) {
+    //     console.error("Cleanup failed when quiting the game: ", error);
+    // }
+    clearGame(setupData);
 
     if (onQuit) onQuit();
 };

@@ -23,6 +23,7 @@ import {
     getPieceCount,
     getMobility,
     createInitialBoard, 
+    clearGame
 } from '@/utils/gameLogistics';
 import { getPlayerName } from '@/utils/nameConverters';
 import { useRouter } from 'next/navigation';
@@ -210,6 +211,9 @@ export const useGame = (setupData: SetupData | null) => {
             } else {
                 setCertificate(null);
             }
+
+        // Clear Data
+            clearGame(setupData);
         }
 
         // Turn & Available Moves & echo
