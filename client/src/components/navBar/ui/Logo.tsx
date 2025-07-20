@@ -21,10 +21,19 @@ const Logo = ({mobile, url}: LogoProps) => {
     const router = useRouter();
     const { setupData } = useSetupDataContext();
 
+    const scrollToHero = () => {
+        const heroSection = document.getElementById("hero");
+        if (heroSection) {
+            heroSection.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     const handleLogoClick = () => {
-        if (url !== "/") {
+        if (url === "/") {
+            scrollToHero();
+        } else {
             setShowDialog(true);
-        } /* TODO: later add home page anchor */
+        }
     };
 
     const handleConfirm = async () => {
@@ -38,6 +47,7 @@ const Logo = ({mobile, url}: LogoProps) => {
                 await clearCandidate(setupData);
             }
         }
+        setTimeout(scrollToHero, 500); 
     };
 
     return (
