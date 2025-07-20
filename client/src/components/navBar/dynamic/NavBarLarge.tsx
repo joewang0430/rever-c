@@ -15,7 +15,7 @@ interface NavBarLargeProps {
 
 const NavBarLarge = ({url}: NavBarLargeProps) => {
     return (
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-8 h-full" style={{minHeight: "52px"}}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-8 h-full w-full" style={{minHeight: "52px"}}>
 
             <Logo mobile={false} url={url}/>
             <NavigationMenu>

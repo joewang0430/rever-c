@@ -17,7 +17,7 @@ interface NavBarSmallProps {
 
 const NavBarSmall = ({url}: NavBarSmallProps) => {
     return (
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 h-full" style={{ minHeight: "52px" }}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 h-full w-full" style={{ minHeight: "52px" }}>
             <Logo mobile={true} url={url} />
             <Sheet>
                 <SheetTrigger asChild>

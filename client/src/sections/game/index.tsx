@@ -79,7 +79,7 @@ export default function Game({ matchId}: GameProps) {
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | FetchAIMoveResult | null = null;
-                const delayPromise = new Promise(resolve => setTimeout(resolve, 100));
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 600));
 
                 // Type: custom
                 if (setupData[side].type === 'custom') {
@@ -185,6 +185,7 @@ export default function Game({ matchId}: GameProps) {
 
     return (
         <section aria-label="Game Page">
+            <div className="h-15"></div>
             <div className="flex flex-row justify-center">
                 <div>
                     <PlayerInfoDisplay 
