@@ -3,6 +3,7 @@
 //
 
 // import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import Logo from "../ui/Logo";
@@ -16,10 +17,12 @@ interface NavBarSmallProps {
 };
 
 const NavBarSmall = ({url}: NavBarSmallProps) => {
+    const [open, setOpen] = useState(false);
+
     return (
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 h-full w-full" style={{ minHeight: "52px" }}>
             <Logo mobile={true} url={url} />
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                     <button aria-label="Open menu">
                         <Menu className="w-7 h-7" />
@@ -33,7 +36,7 @@ const NavBarSmall = ({url}: NavBarSmallProps) => {
                         </div>
                         <nav className="flex-1 flex flex-col gap-2 p-6">
                             <NewGame mobile={true} url={url} />
-                            <MyCode mobile={true} url={url} />
+                           <MyCode mobile={true} url={url} onClose={() => setOpen(false)} />
                             <Faqs mobile={true} url={url} />
                             <JoinUs mobile={true} url={url} />
                         </nav>

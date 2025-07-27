@@ -4,7 +4,6 @@
 
 "use client";
 
-import { useState } from "react";
 import Hero from "@/sections/hero";
 import MyCode from "@/sections/myCode";
 import Statistics from "@/sections/statistics";
@@ -19,6 +18,5 @@ export default function HomePage() {
       <Statistics />
       <Footer />
     </>
-    
   );
 };
