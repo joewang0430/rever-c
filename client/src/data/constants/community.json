@@ -69,22 +69,22 @@
         ]
     },
     {
-        "id": "alex_family",
-        "name": "Alex Family",
+        "id": "alex_tower_1",
+        "name": "Alex Tower I",
         "archives": [
         {
             "id": "hukaiqi1_1",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_1",
             "name": "Baby Alex",
             "shortName": "Baby Alex",
-            "description": "When Alex Hu is a baby",
+            "description": "Alex in baby mode",
             "shortDescription": "When Alex is a baby",
             "rating": "",
             "image": "/images/archives/test_archive.jpg"
         },
         {
             "id": "hukaiqi1_2",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_1",
             "name": "Nano Alex",
             "shortName": "Nano Alex",
             "description": "Extremely low version of Alex Hu in APS105 2024",
@@ -94,7 +94,7 @@
         },
         {
             "id": "hukaiqi1_3",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_1",
             "name": "Mini Alex",
             "shortName": "Mini Alex",
             "description": "Very low version of Alex Hu in APS105 2024",
@@ -104,7 +104,7 @@
         },
         {
             "id": "hukaiqi1_4",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_1",
             "name": "Light Alex",
             "shortName": "Light Alex",
             "description": "Low version of Alex Hu in APS105 2024",
@@ -114,17 +114,24 @@
         },
         {
             "id": "hukaiqi1_5",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_1",
             "name": "Alex",
             "shortName": "Alex",
             "description": "#8 rank APS105 Leaderboard 2024",
             "shortDescription": "H.Alex in APS105 2024",
             "rating": "",
             "image": "/images/archives/test_archive.jpg"
-        },
+        }
+        ]
+    },
+    {
+        "id": "alex_tower_2",
+        "name": "Alex Tower II",
+        "archives": [
+        
         {
             "id": "hukaiqi1_6",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_2",
             "name": "Super Alex",
             "shortName": "Super Alex",
             "description": "Upgraded Alex Hu in APS105 2024",
@@ -134,7 +141,7 @@
         },
         {
             "id": "hukaiqi1_7",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_2",
             "name": "Super Super Alex",
             "shortName": "S.S. Alex",
             "description": "Extremely upgraded Alex Hu in APS105 2024",
@@ -144,7 +151,7 @@
         },
         {
             "id": "hukaiqi1_7x",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_2",
             "name": "Super Super Super Alex",
             "shortName": "S.S.S Alex",
             "description": "Extremely upgraded Alex Hu, and thinks longer",
@@ -154,7 +161,7 @@
         },
         {
             "id": "ajex",
-            "groupId": "alex_family",
+            "groupId": "alex_tower_2",
             "name": "AJEX",
             "shortName": "AJEX",
             "description": "Greately modified Alex Hu in APS105 2024, and professionally tuned by ReverC",

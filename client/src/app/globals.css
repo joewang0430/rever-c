@@ -57,7 +57,9 @@
   --rvc-primary-black: #000000;
   --rvc-primary-white: #f9f9f9;
   --rvc-text-black: #171717;
-  --rvc-secondary-green: rgb(37, 152, 131);
+  /* --rvc-secondary-green: rgb(37, 152, 131); */
+  /* --rvc-secondary-green: #33adb6; */
+  --rvc-secondary-green: #33adb6;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -155,6 +157,21 @@
 .rvct-theme-700 {
   font-family: 'Funnel Sans', sans-serif;
   font-weight: 800;
+}
+
+/* test fn */
+.hero-gradient-bg {
+  background:
+    radial-gradient(ellipse 30% 40% at left bottom, #33adb6 0%, transparent 90%),
+    radial-gradient(ellipse 20% 20% at right bottom, #2D874C 0%, transparent 90%);
+  background-color: #f9f9f9; 
+}
+
+.mc-gradient-bg {
+  background:
+    radial-gradient(ellipse 30% 70% at left top, #33adb6 0%, transparent 90%),
+    radial-gradient(ellipse 20% 40% at right top, #2d874c 0%, transparent 90%);
+  background-color: #f9f9f9; 
 }
 /* 
 
