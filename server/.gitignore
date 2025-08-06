@@ -46,6 +46,9 @@ data/status/caches/*
 !data/status/candidates/.gitkeep
 !data/status/caches/.gitkeep
 
+# Testing part for ai api keys
+app/ai/test_api.py
+
 # If switching to CMake or other build systems later, add their output directories here
 # Examples: build/, cmake-build-debug/, etc.
 # build/
