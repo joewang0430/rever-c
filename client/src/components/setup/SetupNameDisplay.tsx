@@ -30,28 +30,37 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
     const sideLabel = side === 'black' ? 'Black' : 'White';
     const sideColor = side === 'black' ? 'text-gray-800' : 'text-gray-600';
 
+    const typeNotationSpan = playerConfig.type && (
+        <span className={`px-2 py-1 text-xs rounded-full ${
+            playerConfig.type === 'custom' ? 'bg-green-100 text-green-700' :
+            playerConfig.type === 'archive' ? 'bg-blue-100 text-blue-700' :
+            playerConfig.type === 'human' ? 'bg-yellow-100 text-yellow-700' :
+            playerConfig.type === 'ai' ? 'bg-purple-100 text-purple-700' :
+            'bg-gray-100 text-gray-500'
+        }`}>
+            {playerConfig.type}
+        </span>
+    );
+
     return (
-        <div className="flex items-center space-x-2">
-            {/* 侧边标识 */}
-            <span className={`font-medium ${sideColor}`}>
+        <div className="flex items-center space-x-2 lg:flex-col lg:items-center lg:space-x-0 lg:gap-1">
+            {/* side notation (hidden on large screens) */}
+            <span className={`font-medium ${sideColor} lg:hidden`}>
                 {sideLabel}:
             </span>
             
-            {/* 玩家名称 */}
-            <span className="text-gray-900 font-normal">
+            {/* player name. On large screens, it includes the type notation inline. */}
+            <span className="text-gray-900 font-normal lg:text-4xl lg:font-semibold lg:text-center">
                 {displayName}
+                <span className="hidden lg:inline-flex ml-2 items-center justify-center" style={{ verticalAlign: 'middle' }}>
+                    {typeNotationSpan}
+                </span>
             </span>
             
-            {/* 类型标识（小标签） */}
+            {/* player type notation for small screens only */}
             {playerConfig.type && (
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                    playerConfig.type === 'custom' ? 'bg-green-100 text-green-700' :
-                    playerConfig.type === 'archive' ? 'bg-blue-100 text-blue-700' :
-                    playerConfig.type === 'human' ? 'bg-yellow-100 text-yellow-700' :
-                    playerConfig.type === 'ai' ? 'bg-purple-100 text-purple-700' :
-                    'bg-gray-100 text-gray-500'
-                }`}>
-                    {playerConfig.type}
+                <span className="lg:hidden">
+                    {typeNotationSpan}
                 </span>
             )}
         </div>

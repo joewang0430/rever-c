@@ -73,15 +73,14 @@ const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable, b
                 `}>
                     {side === 'black' ? 'B' : 'W'}
                 </div> */}
-                <h3 className="text-lg font-semibold capitalize">
-                    {/* {side} Player Configuration */}
+                {/* <h3 className="text-lg font-semibold capitalize">
                     {side === 'black' ? 'Black Player (First)' : 'White Player (Second)'}
-                </h3>
-                {playerConfig.type && (
+                </h3> */}
+                {/* {playerConfig.type && (
                     <p className="text-sm text-gray-600 mt-1">
                         Type: {playerConfig.type}
                     </p>
-                )}
+                )} */}
             </div>
             
             {renderPlayerSetup()}

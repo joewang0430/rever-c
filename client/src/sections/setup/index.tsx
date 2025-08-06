@@ -76,10 +76,12 @@ export default function Setup() {
                         
                         {/* Left Column (LG) */}
                         <div className="hidden lg:flex lg:flex-col lg:gap-4">
-                            <SetupNameDisplay 
-                                playerConfig={memorizedBlackConfig}
-                                side="black"
-                            />
+                            <div className="flex-grow flex justify-center">
+                                <SetupNameDisplay 
+                                    playerConfig={memorizedBlackConfig}
+                                    side="black"
+                                />
+                            </div>
                             <PlayerSetupBlock 
                                 playerConfig={memorizedBlackConfig}
                                 onConfigChange={updateBlackPlayer}
@@ -111,10 +113,12 @@ export default function Setup() {
 
                         {/* Right Column (LG) */}
                         <div className="hidden lg:flex lg:flex-col lg:gap-4">
-                            <SetupNameDisplay 
-                                playerConfig={memorizedWhiteConfig}
-                                side="white"
-                            />
+                            <div className="flex-grow flex justify-center">
+                                <SetupNameDisplay 
+                                    playerConfig={memorizedWhiteConfig}
+                                    side="white"
+                                />
+                            </div>
                             <PlayerSetupBlock 
                                 playerConfig={memorizedWhiteConfig}
                                 onConfigChange={updateWhitePlayer}
