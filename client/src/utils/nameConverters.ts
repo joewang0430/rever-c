@@ -31,15 +31,16 @@ export const getPlayerName = (playerConfig: PlayerConfig): string => {
         return "Not Selected";
     }
     
+    // TODO: default name further decided
     switch (playerConfig.type) {
         case 'custom':
-            return playerConfig.config.customName || "(Uploaded Code)";
+            return playerConfig.config.customName || "(Select)";
         case 'archive':
-            return playerConfig.config.archiveName || "(Historic Algorithm)";
+            return playerConfig.config.archiveName || "(Select)";
         case 'human':
-            return playerConfig.config.humanName || "(Human Player)";
+            return playerConfig.config.humanName || "(Select)";
         case 'ai':
-            return playerConfig.config.aiName || "(AI Player)";
+            return playerConfig.config.aiName || "(Select)";
         default:
             return "(Not Selected)";
     }

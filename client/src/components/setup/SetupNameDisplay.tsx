@@ -30,6 +30,13 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
     const sideLabel = side === 'black' ? 'Black' : 'White';
     const sideColor = side === 'black' ? 'text-gray-800' : 'text-gray-600';
 
+    const typeDisplayMap: { [key: string]: string } = {
+        custom: 'Upload',
+        archive: 'HOF',
+        human: 'Human',
+        ai: 'AI',
+    };
+
     const typeNotationSpan = playerConfig.type && (
         <span className={`px-2 py-1 text-xs rounded-full ${
             playerConfig.type === 'custom' ? 'bg-green-100 text-green-700' :
@@ -38,7 +45,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             playerConfig.type === 'ai' ? 'bg-purple-100 text-purple-700' :
             'bg-gray-100 text-gray-500'
         }`}>
-            {playerConfig.type}
+            {typeDisplayMap[playerConfig.type]}
         </span>
     );
 

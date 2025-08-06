@@ -92,6 +92,9 @@ const PlayerTypeSelection = ({
                 updateFunction({
                     type: "archive",
                     config: {
+                        // By spreading the previous config, we retain the old name
+                        // until a new archive is selected, preventing the flicker.
+                        ...currentConfig.config,
                         archiveId: "",
                         archiveGroup: "",
                         archiveName: undefined
