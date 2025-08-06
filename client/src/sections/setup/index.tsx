@@ -65,45 +65,17 @@ export default function Setup() {
 
     return (
         <main className="min-h-screen bg-gray-50 p-6">
+            <div className="h-15"></div>
             <CacheProvider>
                 <div className="max-w-6xl mx-auto">
                     
-                    {/* Title */}
-                    <div className="flex justify-center mb-8">
-                        <SetupTitle />
-                    </div>
-                    
-                    {/* Board Size Selection */}
-                    <div className="flex justify-center mb-8">
-                        <BoardSizeSelection 
-                            boardSize={setupData.boardSize}
-                            onBoardSizeChange={updateBoardSize}
-                        />
-                    </div>
-                    
-                    {/* Player Name Display */}
-                    <div className="flex justify-between items-start mb-4 px-4">
-                        <div className="flex-1 flex justify-start">
+                    <div className="grid grid-cols-3 gap-8">
+                        {/* Left Column: Black Player */}
+                        <div className="flex flex-col gap-4">
                             <SetupNameDisplay 
                                 playerConfig={memorizedBlackConfig}
                                 side="black"
                             />
-                        </div>
-                        
-                        <div className="flex-1 flex justify-end">
-                            <SetupNameDisplay 
-                                playerConfig={memorizedWhiteConfig}
-                                side="white"
-                            />
-                        </div>
-                    </div>
-                    
-                    {/* Main Content Layout */}
-                    <div className="grid grid-cols-3 gap-8 mb-8">
-                        
-                        {/* Left - Black (first hand) Settings */}
-                        <div className="flex flex-col">
-                            
                             <PlayerSetupBlock 
                                 playerConfig={memorizedBlackConfig}
                                 onConfigChange={updateBlackPlayer}
@@ -112,9 +84,14 @@ export default function Setup() {
                                 boardSize={setupData.boardSize}
                             />
                         </div>
-                        
-                        {/* Middle - Player Type Selection */}
-                        <div className="flex flex-col items-center">
+
+                        {/* Middle Column: Game Settings */}
+                        <div className="flex flex-col items-center gap-6">
+                            <SetupTitle />
+                            <BoardSizeSelection 
+                                boardSize={setupData.boardSize}
+                                onBoardSizeChange={updateBoardSize}
+                            />
                             <PlayerTypeSelection 
                                 blackPlayerConfig={memorizedBlackConfig}
                                 whitePlayerConfig={memorizedWhiteConfig}
@@ -122,11 +99,18 @@ export default function Setup() {
                                 onWhitePlayerChange={updateWhitePlayer}
                                 isAIAvailable={isAIAvailable()}
                             />
+                            <GameStartButton 
+                                isValid={isValid}
+                                setupData={setupData}
+                            />
                         </div>
-                        
-                        {/* Right - White (back hand) Settings */}
-                        <div className="flex flex-col">
-                            
+
+                        {/* Right Column: White Player */}
+                        <div className="flex flex-col gap-4">
+                            <SetupNameDisplay 
+                                playerConfig={memorizedWhiteConfig}
+                                side="white"
+                            />
                             <PlayerSetupBlock 
                                 playerConfig={memorizedWhiteConfig}
                                 onConfigChange={updateWhitePlayer}
@@ -135,14 +119,6 @@ export default function Setup() {
                                 boardSize={setupData.boardSize}
                             />
                         </div>
-                    </div>
-                    
-                    {/* Button to Start the Game */}
-                    <div className="flex justify-center">
-                        <GameStartButton 
-                            isValid={isValid}
-                            setupData={setupData}
-                        />
                     </div>
                     
                     {/* Test Info - Used in Development */}

@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
     )
     scheduler.start()
 
-    yield  # Application is now running
+    yield
 
     # ——— Shutdown phase ———
     scheduler.shutdown()
