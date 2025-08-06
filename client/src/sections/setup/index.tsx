@@ -69,9 +69,13 @@ export default function Setup() {
             <CacheProvider>
                 <div className="max-w-6xl mx-auto">
                     
-                    <div className="grid grid-cols-3 gap-8">
-                        {/* Left Column: Black Player */}
-                        <div className="flex flex-col gap-4">
+                    {/* Responsive Layout */}
+                    <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+                        
+                        {/* --- Large Screen Layout --- */}
+                        
+                        {/* Left Column (LG) */}
+                        <div className="hidden lg:flex lg:flex-col lg:gap-4">
                             <SetupNameDisplay 
                                 playerConfig={memorizedBlackConfig}
                                 side="black"
@@ -85,8 +89,8 @@ export default function Setup() {
                             />
                         </div>
 
-                        {/* Middle Column: Game Settings */}
-                        <div className="flex flex-col items-center gap-6">
+                        {/* Middle Column (LG) */}
+                        <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-6">
                             <SetupTitle />
                             <BoardSizeSelection 
                                 boardSize={setupData.boardSize}
@@ -105,8 +109,49 @@ export default function Setup() {
                             />
                         </div>
 
-                        {/* Right Column: White Player */}
-                        <div className="flex flex-col gap-4">
+                        {/* Right Column (LG) */}
+                        <div className="hidden lg:flex lg:flex-col lg:gap-4">
+                            <SetupNameDisplay 
+                                playerConfig={memorizedWhiteConfig}
+                                side="white"
+                            />
+                            <PlayerSetupBlock 
+                                playerConfig={memorizedWhiteConfig}
+                                onConfigChange={updateWhitePlayer}
+                                side="white"
+                                isAIAvailable={isAIAvailable()}
+                                boardSize={setupData.boardSize}
+                            />
+                        </div>
+
+                        {/* --- Small Screen Layout (Single Column) --- */}
+                        <div className="flex flex-col gap-6 lg:hidden">
+                            <PlayerSetupBlock 
+                                playerConfig={memorizedBlackConfig}
+                                onConfigChange={updateBlackPlayer}
+                                side="black"
+                                isAIAvailable={isAIAvailable()}
+                                boardSize={setupData.boardSize}
+                            />
+                            <SetupNameDisplay 
+                                playerConfig={memorizedBlackConfig}
+                                side="black"
+                            />
+                            <BoardSizeSelection 
+                                boardSize={setupData.boardSize}
+                                onBoardSizeChange={updateBoardSize}
+                            />
+                            <PlayerTypeSelection 
+                                blackPlayerConfig={memorizedBlackConfig}
+                                whitePlayerConfig={memorizedWhiteConfig}
+                                onBlackPlayerChange={updateBlackPlayer}
+                                onWhitePlayerChange={updateWhitePlayer}
+                                isAIAvailable={isAIAvailable()}
+                            />
+                            <GameStartButton 
+                                isValid={isValid}
+                                setupData={setupData}
+                            />
                             <SetupNameDisplay 
                                 playerConfig={memorizedWhiteConfig}
                                 side="white"
