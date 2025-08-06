@@ -1,4 +1,4 @@
-import { PlayerConfig } from '../../data/types/setup';
+import { PlayerConfig, BoardSize } from '../../data/types/setup';
 import CustomSetupBlock from './ui/CustomSetupBlock';
 import ArchiveSetupBlock from './ui/ArchiveSetupBlock';
 import HumanSetupBlock from './ui/HumanSetupBlock';
@@ -11,9 +11,10 @@ interface PlayerSetupBlockProps {
     onConfigChange: (config: PlayerConfig) => void;
     side: 'black' | 'white';
     isAIAvailable: boolean;
+    boardSize: BoardSize;
 }
 
-const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable }: PlayerSetupBlockProps) => {
+const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable, boardSize }: PlayerSetupBlockProps) => {
 
     const renderPlayerSetup = () => {
     switch (playerConfig.type) {
@@ -32,6 +33,7 @@ const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable }:
                     playerConfig={playerConfig}
                     onConfigChange={onConfigChange}
                     side={side}
+                    boardSize={boardSize}
                 />
             );
             

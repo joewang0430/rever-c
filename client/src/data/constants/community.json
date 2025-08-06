@@ -12,7 +12,8 @@
             "description": "#8 rank APS105 Leaderboard 2024",
             "shortDescription": "#8",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         },
         {
             "id": "wang4577",
@@ -22,7 +23,8 @@
             "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
             "shortDescription": "#21",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         }
         ]
     },
@@ -38,7 +40,8 @@
             "description": "test",
             "shortDescription": "test",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         }
         ]
     },
@@ -54,7 +57,8 @@
             "description": "Naughty child that makes random move",
             "shortDescription": "Move randomly",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         },
         {
             "id": "absolute_greedy",
@@ -64,7 +68,8 @@
             "description": "Only wants to flip as much as possible in one round",
             "shortDescription": "Maximize flipps",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         }
         ]
     },
@@ -80,7 +85,8 @@
             "description": "Alex in baby mode",
             "shortDescription": "When Alex is a baby",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         },
         {
             "id": "hukaiqi1_2",
@@ -90,7 +96,8 @@
             "description": "Extremely low version of Alex Hu in APS105 2024",
             "shortDescription": "Extremely Low version H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         },
         {
             "id": "hukaiqi1_3",
@@ -100,7 +107,8 @@
             "description": "Very low version of Alex Hu in APS105 2024",
             "shortDescription": "Very Low version H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         },
         {
             "id": "hukaiqi1_4",
@@ -110,7 +118,8 @@
             "description": "Low version of Alex Hu in APS105 2024",
             "shortDescription": "Low version H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         },
         {
             "id": "hukaiqi1_5",
@@ -120,7 +129,8 @@
             "description": "#8 rank APS105 Leaderboard 2024",
             "shortDescription": "H.Alex in APS105 2024",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         }
         ]
     },
@@ -137,7 +147,8 @@
             "description": "Upgraded Alex Hu in APS105 2024",
             "shortDescription": "Upgraded H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": true
         },
         {
             "id": "hukaiqi1_7",
@@ -147,7 +158,8 @@
             "description": "Extremely upgraded Alex Hu in APS105 2024",
             "shortDescription": "Extreme H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": true
         },
         {
             "id": "hukaiqi1_7x",
@@ -157,7 +169,8 @@
             "description": "Extremely upgraded Alex Hu, and thinks longer",
             "shortDescription": "More Extreme H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": true
         },
         {
             "id": "ajex",
@@ -167,7 +180,8 @@
             "description": "Greately modified Alex Hu in APS105 2024, and professionally tuned by ReverC",
             "shortDescription": "Trained Extreme H.Alex",
             "rating": "",
-            "image": "/images/archives/test_archive.jpg"
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": true
         }
         ]
     }

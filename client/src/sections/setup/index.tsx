@@ -109,6 +109,7 @@ export default function Setup() {
                                 onConfigChange={updateBlackPlayer}
                                 side="black"
                                 isAIAvailable={isAIAvailable()}
+                                boardSize={setupData.boardSize}
                             />
                         </div>
                         
@@ -131,6 +132,7 @@ export default function Setup() {
                                 onConfigChange={updateWhitePlayer}
                                 side="white"
                                 isAIAvailable={isAIAvailable()}
+                                boardSize={setupData.boardSize}
                             />
                         </div>
                     </div>

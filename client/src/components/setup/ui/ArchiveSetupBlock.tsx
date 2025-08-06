@@ -5,18 +5,19 @@
 "use client";
 
 import { useArchiveData } from '@/hooks/useArchiveData';
-import { PlayerConfig } from '@/data/types/setup';
+import { PlayerConfig, BoardSize } from '@/data/types/setup';
 import Image from 'next/image';
 import { ArchiveEntry } from '@/data/types/archive';
+import { useEffect } from 'react';
 
 interface ArchiveSetupBlockProps {
     playerConfig: PlayerConfig;
     onConfigChange: (config: PlayerConfig) => void;
     side: 'black' | 'white';
+    boardSize: BoardSize;
 }
 
-const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side }: ArchiveSetupBlockProps) => {
-    const { 
+const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: ArchiveSetupBlockProps) => {    const { 
         groups, 
         selectedArchive, 
         selectArchive, 
@@ -24,6 +25,13 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side }: ArchiveSetupB
         openGroups, 
         toggleGroup
     } = useArchiveData(side, playerConfig, onConfigChange);
+
+    // New addition: When boardSize changes, check whether the current selection is valid
+    useEffect(() => {
+        if (boardSize === 12 && selectedArchive?.heavy) {
+            clearSelection();
+        }
+    }, [boardSize, selectedArchive, clearSelection]);
 
     const handleArchiveSelect = (archive: ArchiveEntry) => {
         selectArchive(archive);
@@ -83,31 +91,38 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side }: ArchiveSetupB
                         {/* Archives List */}
                         {openGroups.includes(group.id) && (
                             <div className="p-2 space-y-2 border-t">
-                                {group.archives.map(archive => (
-                                    <div
-                                        key={archive.id}
-                                        onClick={() => handleArchiveSelect(archive)}
-                                        className={`p-3 rounded-lg border-2 cursor-pointer transition-all hover:bg-blue-50 ${
-                                            selectedArchive?.id === archive.id 
-                                                ? 'border-blue-500 bg-blue-50' 
-                                                : 'border-gray-200 hover:border-blue-300'
-                                        }`}
-                                    >
-                                        <div className="flex items-center space-x-3">
-                                            <Image 
-                                                src={archive.image}
-                                                alt={archive.shortName}
-                                                width={48}
-                                                height={48}
-                                                className="rounded-full object-cover border-2 border-gray-200"
-                                            />
-                                            <div className="flex-1">
-                                                <div className="font-medium text-gray-800">{archive.shortName}</div>
-                                                <div className="text-sm text-gray-600">{archive.shortDescription}</div>
+                                {group.archives.map(archive => {
+                                    const isDisabled = boardSize === 12 && archive.heavy;
+                                    return (
+                                        <div
+                                            key={archive.id}
+                                            onClick={() => !isDisabled && handleArchiveSelect(archive)}
+                                            className={`p-3 rounded-lg border-2 transition-all ${
+                                                isDisabled
+                                                    ? 'bg-gray-100 opacity-50 cursor-not-allowed'
+                                                    : `cursor-pointer hover:bg-blue-50 ${
+                                                        selectedArchive?.id === archive.id 
+                                                            ? 'border-blue-500 bg-blue-50' 
+                                                            : 'border-gray-200 hover:border-blue-300'
+                                                    }`
+                                            }`}
+                                        >
+                                            <div className="flex items-center space-x-3">
+                                                <Image 
+                                                    src={archive.image}
+                                                    alt={archive.shortName}
+                                                    width={48}
+                                                    height={48}
+                                                    className="rounded-full object-cover border-2 border-gray-200"
+                                                />
+                                                <div className="flex-1">
+                                                    <div className="font-medium text-gray-800">{archive.shortName}</div>
+                                                    <div className="text-sm text-gray-600">{archive.shortDescription}</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

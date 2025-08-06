@@ -10,6 +10,7 @@ export interface ArchiveEntry {
     description: string;
     shortDescription: string;
     image: string;
+    heavy?: boolean;
 };
 
 export interface ArchiveGroupEntry {

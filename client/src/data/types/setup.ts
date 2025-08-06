@@ -4,7 +4,7 @@
 
 export interface SetupData {
     matchId: string;
-    boardSize: 6 | 8 | 12;
+    boardSize: BoardSize;
     black: PlayerConfig;
     white: PlayerConfig;
     createAt: string;
