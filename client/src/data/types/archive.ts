@@ -9,6 +9,7 @@ export interface ArchiveEntry {
     shortName: string;
     description: string;
     shortDescription: string;
+    rating?: string;
     image: string;
     heavy?: boolean;
 };

@@ -14,6 +14,9 @@
   --color-rvc-primary-white: var(--rvc-primary-white);
   --color-rvc-text-black: var(--rvc-text-black);
   --color-rvc-secondary-green: var(--rvc-secondary-green);
+  --color-rvc-third-green: var(--rvc-third-green);
+  --color-rvc-tsp-green: var(--rvc-tsp-green);
+  --color-rvc-tsphv-green: var(--rvc-tsphv-green);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -60,6 +63,9 @@
   /* --rvc-secondary-green: rgb(37, 152, 131); */
   /* --rvc-secondary-green: #33adb6; */
   --rvc-secondary-green: #33adb6;
+  --rvc-third-green: #d1f7fc;
+  --rvc-tsp-green: #f7feff;
+  --rvc-tsphv-green: #eefdff;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -100,7 +106,10 @@
   --rvc-primary-black: #000000;
   --rvc-primary-white: #f9f9f9;
   --rvc-text-black: #171717;
-  --rvc-secondary-green: rgb(37, 152, 131);
+  --rvc-secondary-green: #33adb6;
+  --rvc-third-green: #d1f7fc;
+  --rvc-tsp-green: #f7feff;
+  --rvc-tsphv-green: #eefdff;
   
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -172,6 +181,19 @@
     radial-gradient(ellipse 30% 70% at left top, #33adb6 0%, transparent 90%),
     radial-gradient(ellipse 20% 40% at right top, #2d874c 0%, transparent 90%);
   background-color: #f9f9f9; 
+}
+
+@keyframes border-color-change {
+  0%, 100% {
+    border-color: var(--rvc-primary-green);
+  }
+  50% {
+    border-color: var(--rvc-secondary-green);/*#b9ce6c*/ /*#a6d5b4;*/ /* Tailwind's green-50 */
+  }
+}
+
+.animate-border-color-change {
+  animation: border-color-change 1.5s infinite;
 }
 /* 
 

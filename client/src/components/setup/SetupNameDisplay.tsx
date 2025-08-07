@@ -32,9 +32,9 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
 
     const typeDisplayMap: { [key: string]: string } = {
         custom: 'Upload',
-        archive: 'HOF',
+        archive: 'Computer',
         human: 'Human',
-        ai: 'AI',
+        ai: 'AI Model',
     };
 
     const typeNotationSpan = playerConfig.type && (

@@ -2,7 +2,7 @@
   "groups": [
     {
         "id": "2024",
-        "name": "2024 Championship",
+        "name": "2024 APS105 Leaders",
         "archives": [
         {
             "id": "hukaiqi1",
@@ -10,8 +10,8 @@
             "name": "Alex K.Q. Hu",
             "shortName": "H.Alex",
             "description": "#8 rank APS105 Leaderboard 2024",
-            "shortDescription": "#8",
-            "rating": "",
+            "shortDescription": "#8 on Leaderboard",
+            "rating": "(1500)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         },
@@ -21,8 +21,8 @@
             "name": "Joe Wang",
             "shortName": "W.Joe",
             "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
-            "shortDescription": "#21",
-            "rating": "",
+            "shortDescription": "#21 on Leaderboard",
+            "rating": "(800)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         }
@@ -30,7 +30,7 @@
     },
     {
         "id": "2025",
-        "name": "2025 Championship",
+        "name": "2025 APS105 Leaders",
         "archives": [
         {
             "id": "test",
@@ -39,35 +39,7 @@
             "shortName": "test",
             "description": "test",
             "shortDescription": "test",
-            "rating": "",
-            "image": "/images/archives/test_archive.jpg",
-            "heavy": false
-        }
-        ]
-    },
-    {
-        "id": "other_bots",
-        "name": "Other Bots",
-        "archives": [
-        {
-            "id": "absolute_random",
-            "groupId": "other_bots",
-            "name": "Absolute Random",
-            "shortName": "Random Move",
-            "description": "Naughty child that makes random move",
-            "shortDescription": "Move randomly",
-            "rating": "",
-            "image": "/images/archives/test_archive.jpg",
-            "heavy": false
-        },
-        {
-            "id": "absolute_greedy",
-            "groupId": "other_bots",
-            "name": "Absolute Greedy",
-            "shortName": "Greedy Move",
-            "description": "Only wants to flip as much as possible in one round",
-            "shortDescription": "Maximize flipps",
-            "rating": "",
+            "rating": "(N/A)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         }
@@ -83,8 +55,8 @@
             "name": "Baby Alex",
             "shortName": "Baby Alex",
             "description": "Alex in baby mode",
-            "shortDescription": "When Alex is a baby",
-            "rating": "",
+            "shortDescription": "Baby mode Alex",
+            "rating": "(600)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         },
@@ -94,8 +66,8 @@
             "name": "Nano Alex",
             "shortName": "Nano Alex",
             "description": "Extremely low version of Alex Hu in APS105 2024",
-            "shortDescription": "Extremely Low version H.Alex",
-            "rating": "",
+            "shortDescription": "Extremely Low Alex",
+            "rating": "(1050)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         },
@@ -105,8 +77,8 @@
             "name": "Mini Alex",
             "shortName": "Mini Alex",
             "description": "Very low version of Alex Hu in APS105 2024",
-            "shortDescription": "Very Low version H.Alex",
-            "rating": "",
+            "shortDescription": "Very Low Alex",
+            "rating": "(1250)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         },
@@ -116,8 +88,8 @@
             "name": "Light Alex",
             "shortName": "Light Alex",
             "description": "Low version of Alex Hu in APS105 2024",
-            "shortDescription": "Low version H.Alex",
-            "rating": "",
+            "shortDescription": "Low version Alex",
+            "rating": "(1375)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         },
@@ -127,8 +99,8 @@
             "name": "Alex",
             "shortName": "Alex",
             "description": "#8 rank APS105 Leaderboard 2024",
-            "shortDescription": "H.Alex in APS105 2024",
-            "rating": "",
+            "shortDescription": "Alex Hu in APS105 2024",
+            "rating": "(1500)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": false
         }
@@ -145,8 +117,8 @@
             "name": "Super Alex",
             "shortName": "Super Alex",
             "description": "Upgraded Alex Hu in APS105 2024",
-            "shortDescription": "Upgraded H.Alex",
-            "rating": "",
+            "shortDescription": "Upgraded Alex",
+            "rating": "(1600)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": true
         },
@@ -156,8 +128,8 @@
             "name": "Super Super Alex",
             "shortName": "S.S. Alex",
             "description": "Extremely upgraded Alex Hu in APS105 2024",
-            "shortDescription": "Extreme H.Alex",
-            "rating": "",
+            "shortDescription": "Further upgraded Alex",
+            "rating": "(1700)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": true
         },
@@ -167,8 +139,8 @@
             "name": "Super Super Super Alex",
             "shortName": "S.S.S Alex",
             "description": "Extremely upgraded Alex Hu, and thinks longer",
-            "shortDescription": "More Extreme H.Alex",
-            "rating": "",
+            "shortDescription": "Extremely upgraded Alex",
+            "rating": "(1880)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": true
         },
@@ -178,10 +150,38 @@
             "name": "AJEX",
             "shortName": "AJEX",
             "description": "Greately modified Alex Hu in APS105 2024, and professionally tuned by ReverC",
-            "shortDescription": "Trained Extreme H.Alex",
-            "rating": "",
+            "shortDescription": "Joe-modified Alex",
+            "rating": "(2000)",
             "image": "/images/archives/test_archive.jpg",
             "heavy": true
+        }
+        ]
+    },
+    {
+        "id": "other_bots",
+        "name": "Other Bots",
+        "archives": [
+        {
+            "id": "absolute_random",
+            "groupId": "other_bots",
+            "name": "Absolute Random",
+            "shortName": "Random Move",
+            "description": "Naughty child that makes random move",
+            "shortDescription": "Randomly put",
+            "rating": "(≈100)",
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
+        },
+        {
+            "id": "absolute_greedy",
+            "groupId": "other_bots",
+            "name": "Absolute Greedy",
+            "shortName": "Greedy Move",
+            "description": "Only wants to flip as much as possible in one round",
+            "shortDescription": "Max flipps only",
+            "rating": "(250)",
+            "image": "/images/archives/test_archive.jpg",
+            "heavy": false
         }
         ]
     }
