@@ -65,9 +65,10 @@ export default function Setup() {
 
     return (
         <main className="h-screen bg-gray-50 p-6">
-            <div className="h-15"></div>
+            
             <CacheProvider>
                 <div className="max-w-6xl mx-auto">
+                    <div className="h-10"></div>
                     
                     {/* Responsive Layout */}
                     <div className="lg:grid lg:grid-cols-3 lg:gap-8">
@@ -75,8 +76,8 @@ export default function Setup() {
                         {/* --- Large Screen Layout --- */}
                         
                         {/* Left Column (LG) */}
-                        <div className="hidden lg:flex lg:flex-col lg:gap-4">
-                            <div className="flex-grow flex justify-center">
+                        <div className="hidden lg:flex lg:flex-col lg:gap-2">
+                            <div className="flex justify-center">
                                 <SetupNameDisplay 
                                     playerConfig={memorizedBlackConfig}
                                     side="black"
@@ -112,8 +113,8 @@ export default function Setup() {
                         </div>
 
                         {/* Right Column (LG) */}
-                        <div className="hidden lg:flex lg:flex-col lg:gap-4">
-                            <div className="flex-grow flex justify-center">
+                        <div className="hidden lg:flex lg:flex-col lg:gap-2">
+                            <div className="flex justify-center">
                                 <SetupNameDisplay 
                                     playerConfig={memorizedWhiteConfig}
                                     side="white"

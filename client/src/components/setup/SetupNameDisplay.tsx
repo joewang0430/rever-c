@@ -50,7 +50,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
     );
 
     return (
-        <div className="flex items-center space-x-2 lg:flex-col lg:items-center lg:space-x-0 lg:gap-1">
+        <div className="flex items-center space-x-2 lg:flex-col lg:items-center lg:space-x-0 lg:gap-1 lg:min-h-[5.5rem] lg:justify-center">
             {/* side notation (hidden on large screens) */}
             <span className={`font-medium ${sideColor} lg:hidden`}>
                 {sideLabel}:
