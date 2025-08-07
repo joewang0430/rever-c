@@ -98,7 +98,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                         <div
                                             key={archive.id}
                                             onClick={() => !isDisabled && handleArchiveSelect(archive)}
-                                            className={`p-3 rounded-lg transition-all border-2 group ${
+                                            className={`p-3 rounded-lg transition-all border-2 ${!isDisabled ? 'group' : ''} ${
                                                 isDisabled
                                                     ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
                                                     : `cursor-pointer ${
