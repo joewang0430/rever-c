@@ -64,7 +64,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
     };
 
     return (
-        <div className="space-y-4">
+        <div className="h-[70vh] flex flex-col">
             {/* Header */}
             {/* <div className="flex items-center justify-between border-b pb-2">
                 <h3 className="text-lg font-semibold text-gray-800">Historic Algorithms</h3>
@@ -72,13 +72,13 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
             </div> */}
 
             {/* Groups */}
-            <div className="space-y-3">
+            <div className="flex-1 overflow-y-auto space-y-3">
                 {groups.map(group => (
                     <div key={group.id} className="rounded-sm">
                         {/* Group Header */}
                         <button
                             onClick={() => toggleGroup(group.id)}
-                            className="w-full p-3 flex items-center justify-between bg-gray-100 hover:bg-gray-200 transition-colors rounded-t-sm"
+                            className="w-full p-3 flex items-center justify-between bg-gray-200 hover:bg-gray-200 transition-colors rounded-t-sm"
                         >
                             <span className="font-medium text-gray-700 rvct-theme-500">{group.name}</span>
                             <span className={`transform transition-transform text-gray-500 ${
@@ -90,7 +90,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
 
                         {/* Archives List */}
                         {openGroups.includes(group.id) && (
-                            <div className="p-2 space-y-2 bg-gray-100">
+                            <div className="p-2 space-y-2 bg-gray-200">
                                 {group.archives.map(archive => {
                                     const isDisabled = boardSize === 12 && archive.heavy;
                                     const isSelected = selectedArchive?.id === archive.id;
@@ -100,11 +100,11 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                             onClick={() => !isDisabled && handleArchiveSelect(archive)}
                                             className={`p-3 rounded-lg transition-all border-2 group ${
                                                 isDisabled
-                                                    ? 'bg-gray-100 opacity-50 cursor-not-allowed border-transparent'
+                                                    ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
                                                     : `cursor-pointer ${
                                                         isSelected
                                                             ? 'bg-green-100 border-rvc-primary-green'
-                                                            : 'bg-rvc-tsp-green hover:bg-rvc-tsphv-green'
+                                                            : 'bg-rvc-tsp-green hover:bg-rvc-tsphv-green border-gray-100'
                                                     }`
                                             }`}
                                         >

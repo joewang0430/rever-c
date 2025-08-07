@@ -65,7 +65,7 @@ const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable, b
 };
 
     return (
-        <div className="bg-white p-4 rounded">
+        <div className="bg-white p-4 rounded h-full flex flex-col">
             {/* <div className="mb-4 text-center">
                 <div className={`
                     w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold
@@ -82,8 +82,7 @@ const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable, b
                     </p>
                 )}
             </div> */}
-            
-            {renderPlayerSetup()}
+                {renderPlayerSetup()}
         </div>
     );
 };

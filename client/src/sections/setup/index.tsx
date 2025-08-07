@@ -64,7 +64,7 @@ export default function Setup() {
     const memorizedWhiteConfig = useMemo(() => setupData.white,[setupData.white]);
 
     return (
-        <main className="min-h-screen bg-gray-50 p-6">
+        <main className="h-screen bg-gray-50 p-6">
             <div className="h-15"></div>
             <CacheProvider>
                 <div className="max-w-6xl mx-auto">
@@ -171,7 +171,16 @@ export default function Setup() {
                     </div>
                     
                     {/* Test Info - Used in Development */}
-                    {process.env.NODE_ENV === 'development' && (
+                    
+                    
+                </div>
+            </CacheProvider>
+        </main>
+    );
+}
+
+/* 
+{process.env.NODE_ENV === 'development' && (
                         <div className="mt-8 p-4 bg-gray-100 rounded-lg">
                             <details>
                                 <summary className="cursor-pointer text-sm font-medium text-gray-600">
@@ -181,7 +190,7 @@ export default function Setup() {
                                     {JSON.stringify(setupData, null, 2)}
                                 </pre>
                             </details>
-                            {/* Debug candidate refs */}
+
                             <div className="mt-4 text-xs text-gray-700">
                                 <div>
                                     <strong>blackCandidateRef:</strong> {String(blackCandidateRef.current)}
@@ -192,9 +201,4 @@ export default function Setup() {
                             </div>
                         </div>
                     )}
-                    
-                </div>
-            </CacheProvider>
-        </main>
-    );
-}
+*/
