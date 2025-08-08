@@ -2,6 +2,7 @@ import { PlayerConfig, PlayerType } from '../../data/types/setup';
 import { cleanupCandidate } from '../../api/uploadApi';
 import { useEffect, useCallback } from 'react';
 import { storage } from '@/utils/storage';
+import Image from 'next/image';
 
 const CUSTOM_NAME = "Upload Code";
 const ARCHIVE_NAME = "Community Bots";
@@ -29,12 +30,14 @@ const PlayerTypeSelection = ({
     isAIAvailable 
 }: PlayerTypeSelectionProps) => {
 
-    const playerTypes = [
-        { type: "custom" as PlayerType, label: "Custom", icon: "⚙️" },
-        { type: "archive" as PlayerType, label: "Archive", icon: "📁" },
-        { type: "human" as PlayerType, label: "Human", icon: "👤" },
-        { type: "ai" as PlayerType, label: "AI", icon: "🤖" }
-    ];
+    const typeDetails = {
+        custom: { type: "custom" as PlayerType, name: CUSTOM_NAME, description: CUSTOM_DESCRIPTION, color: "text-green-600", svg: "/svgs/setup/test_logo.svg" },
+        archive: { type: "archive" as PlayerType, name: ARCHIVE_NAME, description: ARCHIVE_DESCRIPTION, color: "text-blue-600", svg: "/svgs/setup/test_logo.svg" },
+        human: { type: "human" as PlayerType, name: HUMAN_NAME, description: HUMAN_DESCRIPTION, color: "text-yellow-600", svg: "/svgs/setup/test_logo.svg" },
+        ai: { type: "ai" as PlayerType, name: AI_NAME, description: AI_DESCRIPTION, color: "text-purple-600", svg: "/svgs/setup/test_logo.svg" }
+    };
+
+    const playerTypes = Object.values(typeDetails);
 
     const handleTypeSelect = useCallback(async (type: PlayerType, side: 'black' | 'white') => {
         if (type === "ai" && !isAIAvailable) return;
@@ -121,16 +124,16 @@ const PlayerTypeSelection = ({
 
     return (
         <div className="w-full space-y-2">
-            {playerTypes.map(({ type, label, icon }) => {
+            {playerTypes.map(({ type, name, description, color, svg }) => {
                 const isDisabled = type === "ai" && !isAIAvailable;
 
                 return (
                     <div 
                         key={type} 
                         className={`
-                            flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
+                            group flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
                             ${isDisabled 
-                                ? 'bg-gray-100 opacity-50' 
+                                ? 'bg-gray-100 opacity-60' 
                                 : 'bg-gray-50 border border-gray-200/90 hover:border-gray-300 hover:bg-gray-100/50'
                             }
                         `}
@@ -151,16 +154,21 @@ const PlayerTypeSelection = ({
                             {blackPlayerConfig.type === type && '✓'}
                         </button>
                         
-                        {/* Center: Type label and icon */}
-                        <div className="flex-grow flex items-center gap-3">
-                            <span className="text-xl">{icon}</span>
-                            <div className="flex flex-col">
-                                <span className="font-medium text-sm text-gray-800">
-                                    {label}
+                        {/* Center: Content Switcher */}
+                        <div className="flex-grow h-24 relative flex items-center justify-center text-center">
+                            {/* Default Content (SVG + Name) */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 transition-opacity duration-300 group-hover:opacity-0">
+                                <Image src={svg} alt={`${name} icon`} width={28} height={28} />
+                                <span className={`font-semibold text-sm ${color}`}>
+                                    {name}
                                 </span>
-                                {isDisabled && (
-                                    <span className="text-xs text-red-600 -mt-0.5">Not available</span>
-                                )}
+                            </div>
+                            
+                            {/* Hover Content (Description) */}
+                            <div className={`absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-300 opacity-0 group-hover:opacity-100`}>
+                                <p className={`text-sm leading-snug ${color}`}>
+                                    {description}
+                                </p>
                             </div>
                         </div>
                         
