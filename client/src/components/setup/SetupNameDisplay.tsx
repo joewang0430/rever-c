@@ -58,10 +58,17 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             
             {/* player name. On large screens, it includes the type notation inline. */}
             <span className="text-gray-900 font-normal lg:text-4xl lg:font-semibold lg:text-center">
+                {side === 'black' && (
+                    <span className="hidden lg:inline-flex mr-2 items-center justify-center" style={{ verticalAlign: 'middle' }}>
+                        {typeNotationSpan}
+                    </span>
+                )}
                 {displayName}
-                <span className="hidden lg:inline-flex ml-2 items-center justify-center" style={{ verticalAlign: 'middle' }}>
-                    {typeNotationSpan}
-                </span>
+                {side === 'white' && (
+                    <span className="hidden lg:inline-flex ml-2 items-center justify-center" style={{ verticalAlign: 'middle' }}>
+                        {typeNotationSpan}
+                    </span>
+                )}
             </span>
             
             {/* player type notation for small screens only */}
@@ -72,7 +79,6 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             )}
         </div>
     );
-    
 };
 
 export default SetupNameDisplay;

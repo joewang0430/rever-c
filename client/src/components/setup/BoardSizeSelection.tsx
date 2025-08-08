@@ -1,6 +1,5 @@
-// 6.11
-
 import { BoardSize } from '../../data/types/setup';
+import Image from 'next/image';
 
 interface BoardSizeSelectionProps {
     boardSize: BoardSize;
@@ -13,27 +12,37 @@ const BoardSizeSelection = ({ boardSize, onBoardSizeChange }: BoardSizeSelection
         onBoardSizeChange(size);
     };
 
-    
     return (
-        <div className="bg-white p-4 rounded border">
-            <h3 className="text-lg font-medium mb-3">Board Size</h3>
-            
-            <div className="flex gap-3">
+        <div className="flex flex-col items-center gap-4">
+            {/* Button Group */}
+            <div className="flex gap-2">
                 {boardSizes.map((size) => (
                     <button
                         key={size}
                         onClick={() => handleSizeChange(size)}
                         className={`
-                            px-4 py-2 rounded border font-medium
+                            px-3.5 py-1.5 rounded-md font-medium text-sm transition-colors
                             ${boardSize === size 
-                                ? 'bg-blue-500 text-white border-blue-500' 
-                                : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+                                ? 'bg-rvc-primary-green text-white shadow-sm' 
+                                : 'bg-gray-200 text-gray-800 hover:bg-gray-300/70'
                             }
                         `}
                     >
                         {size}×{size}
                     </button>
                 ))}
+            </div>
+
+            {/* Dynamic SVG Image Display */}
+            <div className="flex justify-center">
+                <Image
+                    key={boardSize} // Adding key ensures smooth re-render on change
+                    src={`/svgs/setup/board_${boardSize}.svg`}
+                    alt={`Board size ${boardSize}x${boardSize}`}
+                    width={84}
+                    height={84}
+                    className="transition-opacity duration-300 ease-in-out"
+                />
             </div>
         </div>
     );

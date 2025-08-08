@@ -38,7 +38,7 @@ export const getPlayerName = (playerConfig: PlayerConfig): string => {
         case 'archive':
             return playerConfig.config.archiveName || "(Select)";
         case 'human':
-            return playerConfig.config.humanName || "(Select)";
+            return playerConfig.config.humanName || "(Unknow Challenger)";
         case 'ai':
             return playerConfig.config.aiName || "(Select)";
         default:

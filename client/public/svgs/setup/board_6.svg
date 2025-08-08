@@ -1,0 +1,17 @@
+<svg width="356" height="356" viewBox="0 0 356 356" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="3" y="3" width="350" height="350" rx="7" fill="#3D9754" stroke="black" stroke-width="6"/>
+<line x1="177.523" y1="1.00432" x2="176.5" y2="356.004" stroke="black" stroke-width="3"/>
+<line x1="118.523" y1="0.00432275" x2="117.5" y2="355.004" stroke="black" stroke-width="3"/>
+<line x1="60.5231" y1="1.00432" x2="59.5" y2="356.004" stroke="black" stroke-width="3"/>
+<line x1="293.523" y1="0.00432275" x2="292.5" y2="355.004" stroke="black" stroke-width="3"/>
+<line x1="235.523" y1="1.00432" x2="234.5" y2="356.004" stroke="black" stroke-width="3"/>
+<line x1="0.995714" y1="177.5" x2="350.996" y2="176.5" stroke="black" stroke-width="3"/>
+<line x1="0.995714" y1="235.5" x2="350.996" y2="234.5" stroke="black" stroke-width="3"/>
+<line x1="0.995714" y1="295.5" x2="350.996" y2="294.5" stroke="black" stroke-width="3"/>
+<line x1="0.995714" y1="59.5" x2="350.996" y2="58.5" stroke="black" stroke-width="3"/>
+<line x1="0.995714" y1="119.5" x2="350.996" y2="118.5" stroke="black" stroke-width="3"/>
+<circle cx="147.5" cy="148.5" r="21.5" fill="#F0F0F0"/>
+<circle cx="204.5" cy="205.5" r="21.5" fill="#F0F0F0"/>
+<circle cx="147.5" cy="205.5" r="21.5" fill="black"/>
+<circle cx="204.5" cy="148.5" r="21.5" fill="black"/>
+</svg>

@@ -68,7 +68,6 @@ export default function Setup() {
             
             <CacheProvider>
                 <div className="max-w-6xl mx-auto">
-                    <div className="h-10"></div>
                     
                     {/* Responsive Layout */}
                     <div className="lg:grid lg:grid-cols-3 lg:gap-8">
@@ -77,6 +76,7 @@ export default function Setup() {
                         
                         {/* Left Column (LG) */}
                         <div className="hidden lg:flex lg:flex-col lg:gap-2">
+                            <div className="h-10"></div>
                             <div className="flex justify-center">
                                 <SetupNameDisplay 
                                     playerConfig={memorizedBlackConfig}
@@ -93,7 +93,8 @@ export default function Setup() {
                         </div>
 
                         {/* Middle Column (LG) */}
-                        <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-6">
+                        <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-4">
+                            <div className="h-3"></div>
                             <SetupTitle />
                             <BoardSizeSelection 
                                 boardSize={setupData.boardSize}
@@ -114,6 +115,7 @@ export default function Setup() {
 
                         {/* Right Column (LG) */}
                         <div className="hidden lg:flex lg:flex-col lg:gap-2">
+                            <div className="h-10"></div>
                             <div className="flex justify-center">
                                 <SetupNameDisplay 
                                     playerConfig={memorizedWhiteConfig}
