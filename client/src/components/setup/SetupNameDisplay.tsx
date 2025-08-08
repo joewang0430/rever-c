@@ -34,7 +34,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
         custom: 'Upload',
         archive: 'Computer',
         human: 'Human',
-        ai: 'AI Model',
+        ai: 'LLM',
     };
 
     const typeNotationSpan = playerConfig.type && (

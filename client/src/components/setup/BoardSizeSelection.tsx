@@ -23,8 +23,8 @@ const BoardSizeSelection = ({ boardSize, onBoardSizeChange }: BoardSizeSelection
                         className={`
                             px-3.5 py-1.5 rounded-md font-medium text-sm transition-colors
                             ${boardSize === size 
-                                ? 'bg-rvc-primary-green text-white shadow-sm' 
-                                : 'bg-gray-200 text-gray-800 hover:bg-gray-300/70'
+                                ? 'bg-rvc-primary-green text-white shadow-sm rvct-theme-500' 
+                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300/70 rvct-theme-500'
                             }
                         `}
                     >

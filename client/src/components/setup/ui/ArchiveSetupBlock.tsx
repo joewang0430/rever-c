@@ -80,7 +80,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                             onClick={() => toggleGroup(group.id)}
                             className="w-full p-3 flex items-center justify-between bg-gray-200 hover:bg-gray-200 transition-colors rounded-t-sm"
                         >
-                            <span className="font-medium text-gray-700 rvct-theme-500">{group.name}</span>
+                            <span className="font-medium text-gray-600 rvct-theme-500">{group.name}</span>
                             <span className={`transform transition-transform text-gray-500 ${
                                 openGroups.includes(group.id) ? 'rotate-180' : ''
                             }`}>
@@ -103,8 +103,8 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                                     ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
                                                     : `cursor-pointer ${
                                                         isSelected
-                                                            ? 'bg-green-100 border-rvc-primary-green'
-                                                            : 'bg-rvc-tsp-green hover:bg-rvc-tsphv-green border-gray-100'
+                                                            ? 'bg-rvc-tsp-green border-rvc-primary-green'
+                                                            : 'bg-white hover:bg-rvc-tsphv-green border-gray-300'
                                                     }`
                                             }`}
                                         >
@@ -121,7 +121,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                                     style={{ maskImage: 'linear-gradient(to right, black 80%, transparent 100%)' }}
                                                 >
                                                     <div className="flex items-baseline">
-                                                        <div className="font-medium text-gray-800 shrink-0">{archive.shortName}</div>
+                                                        <div className="font-medium text-gray-700 shrink-0 rvct-theme-500">{archive.shortName}</div>
                                                         <div className="relative ml-2 h-5 flex items-center">
                                                             {/* Default view: show rating if it exists */}
                                                             {archive.rating && (

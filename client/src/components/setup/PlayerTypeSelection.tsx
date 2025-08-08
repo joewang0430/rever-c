@@ -38,9 +38,9 @@ const PlayerTypeSelection = ({
 
     const typeDetails = {
         custom: { type: "custom" as PlayerType, name: CUSTOM_NAME, description: CUSTOM_DESCRIPTION, color: "text-green-600", svg: "/svgs/setup/test_logo.svg" },
-        archive: { type: "archive" as PlayerType, name: ARCHIVE_NAME, description: ARCHIVE_DESCRIPTION, color: "text-blue-600", svg: "/svgs/setup/test_logo.svg" },
-        human: { type: "human" as PlayerType, name: HUMAN_NAME, description: HUMAN_DESCRIPTION, color: "text-yellow-600", svg: "/svgs/setup/test_logo.svg" },
-        ai: { type: "ai" as PlayerType, name: AI_NAME, description: AI_DESCRIPTION, color: "text-purple-600", svg: "/svgs/setup/test_logo.svg" }
+        archive: { type: "archive" as PlayerType, name: ARCHIVE_NAME, description: ARCHIVE_DESCRIPTION, color: "text-rvc-primary-blue", svg: "/svgs/setup/test_logo.svg" },
+        human: { type: "human" as PlayerType, name: HUMAN_NAME, description: HUMAN_DESCRIPTION, color: "text-rvc-primary-yellow", svg: "/svgs/setup/test_logo.svg" },
+        ai: { type: "ai" as PlayerType, name: AI_NAME, description: AI_DESCRIPTION, color: "text-rvc-primary-purple", svg: "/svgs/setup/test_logo.svg" }
     };
 
     const playerTypes = Object.values(typeDetails);
@@ -137,10 +137,10 @@ const PlayerTypeSelection = ({
                     <div 
                         key={type} 
                         className={`
-                            group flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
+                            flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
                             ${isDisabled 
                                 ? 'bg-gray-100 opacity-60' 
-                                : 'bg-white border-2 border-gray-200/90 hover:border-gray-300 hover:bg-gray-100/50'
+                                : 'group bg-white hover:border-gray-300 hover:bg-gray-100/50'
                             }
                         `}
                     >
