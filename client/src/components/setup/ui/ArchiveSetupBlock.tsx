@@ -78,7 +78,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                         {/* Group Header */}
                         <button
                             onClick={() => toggleGroup(group.id)}
-                            className="w-full p-3 flex items-center justify-between bg-gray-200 hover:bg-gray-200 transition-colors rounded-t-sm"
+                            className="w-full p-3 flex items-center justify-between bg-gray-100 hover:cursor-pointer transition-colors rounded-t-sm"
                         >
                             <span className="font-medium text-gray-600 rvct-theme-500">{group.name}</span>
                             <span className={`transform transition-transform text-gray-500 ${
@@ -90,7 +90,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
 
                         {/* Archives List */}
                         {openGroups.includes(group.id) && (
-                            <div className="p-2 space-y-2 bg-gray-200">
+                            <div className="p-2 space-y-2 bg-gray-100 rounded-b-sm">
                                 {group.archives.map(archive => {
                                     const isDisabled = boardSize === 12 && archive.heavy;
                                     const isSelected = selectedArchive?.id === archive.id;
@@ -98,13 +98,13 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                         <div
                                             key={archive.id}
                                             onClick={() => !isDisabled && handleArchiveSelect(archive)}
-                                            className={`p-3 rounded-lg transition-all border-2 ${!isDisabled ? 'group' : ''} ${
+                                            className={`p-3 rounded-lg transition-all border-3 ${!isDisabled ? 'group' : ''} ${
                                                 isDisabled
                                                     ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
                                                     : `cursor-pointer ${
                                                         isSelected
-                                                            ? 'bg-rvc-tsp-green border-rvc-primary-green'
-                                                            : 'bg-white hover:bg-rvc-tsphv-green border-gray-300'
+                                                            ? 'bg-white border-rvc-primary-green'
+                                                            : 'bg-white hover:bg-white border-gray-100'
                                                     }`
                                             }`}
                                         >
@@ -121,7 +121,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                                     style={{ maskImage: 'linear-gradient(to right, black 80%, transparent 100%)' }}
                                                 >
                                                     <div className="flex items-baseline">
-                                                        <div className="font-medium text-gray-700 shrink-0 rvct-theme-500">{archive.shortName}</div>
+                                                        <div className={`font-medium shrink-0 ${isSelected ? 'text-rvc-primary-green rvct-theme-500' : 'text-gray-700 rvct-theme-500'}`}>{archive.shortName}</div>
                                                         <div className="relative ml-2 h-5 flex items-center">
                                                             {/* Default view: show rating if it exists */}
                                                             {archive.rating && (

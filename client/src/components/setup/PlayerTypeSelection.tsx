@@ -2,7 +2,7 @@ import { PlayerConfig, PlayerType } from '../../data/types/setup';
 import { cleanupCandidate } from '../../api/uploadApi';
 import { useEffect, useCallback } from 'react';
 import { storage } from '@/utils/storage';
-import Image from 'next/image';
+import { UploadCloud, Bot, CircleUser, BrainCircuit } from 'lucide-react';
 
 const CUSTOM_NAME = "Upload Code";
 const ARCHIVE_NAME = "Community Bots";
@@ -13,12 +13,6 @@ const CUSTOM_DESCRIPTION = "Play with your own .c file with the makeMove functio
 const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community.";
 const HUMAN_DESCRIPTION = "Real human player like you.";
 const AI_DESCRIPTION = "Play with large language models like Deepseek.";
-
-
-// const CUSTOM_DESCRIPTION = "Upload your own .c file with the required makeMove() function and play with it.";
-// const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community, including algorithms written by previous participants.";
-// const HUMAN_DESCRIPTION = "Real human player like you.";
-// const AI_DESCRIPTION = "Play with mainstream large language models such as Deepseek, and listen to what they think!"
 
 interface PlayerTypeSelectionProps {
     blackPlayerConfig: PlayerConfig;
@@ -37,10 +31,10 @@ const PlayerTypeSelection = ({
 }: PlayerTypeSelectionProps) => {
 
     const typeDetails = {
-        custom: { type: "custom" as PlayerType, name: CUSTOM_NAME, description: CUSTOM_DESCRIPTION, color: "text-green-600", svg: "/svgs/setup/test_logo.svg" },
-        archive: { type: "archive" as PlayerType, name: ARCHIVE_NAME, description: ARCHIVE_DESCRIPTION, color: "text-rvc-primary-blue", svg: "/svgs/setup/test_logo.svg" },
-        human: { type: "human" as PlayerType, name: HUMAN_NAME, description: HUMAN_DESCRIPTION, color: "text-rvc-primary-yellow", svg: "/svgs/setup/test_logo.svg" },
-        ai: { type: "ai" as PlayerType, name: AI_NAME, description: AI_DESCRIPTION, color: "text-rvc-primary-purple", svg: "/svgs/setup/test_logo.svg" }
+        custom: { type: "custom" as PlayerType, name: CUSTOM_NAME, description: CUSTOM_DESCRIPTION, color: "text-rvc-primary-green", Icon: UploadCloud },
+        archive: { type: "archive" as PlayerType, name: ARCHIVE_NAME, description: ARCHIVE_DESCRIPTION, color: "text-rvc-primary-blue", Icon: Bot },
+        human: { type: "human" as PlayerType, name: HUMAN_NAME, description: HUMAN_DESCRIPTION, color: "text-rvc-primary-yellow", Icon: CircleUser },
+        ai: { type: "ai" as PlayerType, name: AI_NAME, description: AI_DESCRIPTION, color: "text-rvc-primary-purple", Icon: BrainCircuit }
     };
 
     const playerTypes = Object.values(typeDetails);
@@ -130,7 +124,7 @@ const PlayerTypeSelection = ({
 
     return (
         <div className="w-full space-y-2">
-            {playerTypes.map(({ type, name, description, color, svg }) => {
+            {playerTypes.map(({ type, name, description, color, Icon }) => {
                 const isDisabled = type === "ai" && !isAIAvailable;
 
                 return (
@@ -140,7 +134,7 @@ const PlayerTypeSelection = ({
                             flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
                             ${isDisabled 
                                 ? 'bg-gray-100 opacity-60' 
-                                : 'group bg-white hover:border-gray-300 hover:bg-gray-100/50'
+                                : `group bg-white hover:border-gray-300 hover:bg-gray-100/50 border-2`
                             }
                         `}
                     >
@@ -162,9 +156,9 @@ const PlayerTypeSelection = ({
                         
                         {/* Center: Content Switcher */}
                         <div className="flex-grow h-12 relative flex items-center justify-center text-center">
-                            {/* Default Content (SVG + Name) */}
+                            {/* Default Content (Icon + Name) */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 transition-opacity duration-300 group-hover:opacity-0">
-                                <Image src={svg} alt={`${name} icon`} width={28} height={28} />
+                                <Icon className={color} size={28} />
                                 <span className={`font-semibold text-sm ${color} rvct-theme-700`}>
                                     {name}
                                 </span>

@@ -22,6 +22,7 @@
 
   --color-rvc-tsp-green: var(--rvc-tsp-green);
   --color-rvc-tsphv-green: var(--rvc-tsphv-green);
+  --color-rvc-tsphv-blue: var(--rvc-tsphv-blue);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -73,6 +74,8 @@
   --rvc-third-green: #d1f7fc;
   --rvc-tsp-green: #80d49c;
   --rvc-tsphv-green: #e1ffeb;
+  /* --rvc-tsphv-blue: #eaf0f9; */
+  --rvc-tsphv-blue: #f0f5fc;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);

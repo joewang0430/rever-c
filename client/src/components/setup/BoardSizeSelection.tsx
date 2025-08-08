@@ -21,10 +21,10 @@ const BoardSizeSelection = ({ boardSize, onBoardSizeChange }: BoardSizeSelection
                         key={size}
                         onClick={() => handleSizeChange(size)}
                         className={`
-                            px-3.5 py-1.5 rounded-md font-medium text-sm transition-colors
+                            px-3.5 py-1.5 rounded-md font-medium text-sm transition-colors cursor-pointer
                             ${boardSize === size 
                                 ? 'bg-rvc-primary-green text-white shadow-sm rvct-theme-500' 
-                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300/70 rvct-theme-500'
+                                : 'bg-white text-gray-600 border-2 border-gray-300 rvct-theme-500 hover:bg-gray-50/70'
                             }
                         `}
                     >
