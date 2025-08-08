@@ -9,10 +9,16 @@ const ARCHIVE_NAME = "Community Bots";
 const HUMAN_NAME = "Human Player";
 const AI_NAME = "AI Language Models"
 
-const CUSTOM_DESCRIPTION = "Upload your own .c file with the required makeMove() function and play with it.";
-const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community, including algorithms written by previous participants.";
+const CUSTOM_DESCRIPTION = "Play with your own .c file with the makeMove function.";
+const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community.";
 const HUMAN_DESCRIPTION = "Real human player like you.";
-const AI_DESCRIPTION = "Play with mainstream large language models such as Deepseek, and listen to what they think!"
+const AI_DESCRIPTION = "Play with large language models like Deepseek.";
+
+
+// const CUSTOM_DESCRIPTION = "Upload your own .c file with the required makeMove() function and play with it.";
+// const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community, including algorithms written by previous participants.";
+// const HUMAN_DESCRIPTION = "Real human player like you.";
+// const AI_DESCRIPTION = "Play with mainstream large language models such as Deepseek, and listen to what they think!"
 
 interface PlayerTypeSelectionProps {
     blackPlayerConfig: PlayerConfig;
@@ -134,7 +140,7 @@ const PlayerTypeSelection = ({
                             group flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
                             ${isDisabled 
                                 ? 'bg-gray-100 opacity-60' 
-                                : 'bg-gray-50 border border-gray-200/90 hover:border-gray-300 hover:bg-gray-100/50'
+                                : 'bg-white border-2 border-gray-200/90 hover:border-gray-300 hover:bg-gray-100/50'
                             }
                         `}
                     >
@@ -155,18 +161,18 @@ const PlayerTypeSelection = ({
                         </button>
                         
                         {/* Center: Content Switcher */}
-                        <div className="flex-grow h-24 relative flex items-center justify-center text-center">
+                        <div className="flex-grow h-12 relative flex items-center justify-center text-center">
                             {/* Default Content (SVG + Name) */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 transition-opacity duration-300 group-hover:opacity-0">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 transition-opacity duration-300 group-hover:opacity-0">
                                 <Image src={svg} alt={`${name} icon`} width={28} height={28} />
-                                <span className={`font-semibold text-sm ${color}`}>
+                                <span className={`font-semibold text-sm ${color} rvct-theme-700`}>
                                     {name}
                                 </span>
                             </div>
                             
                             {/* Hover Content (Description) */}
                             <div className={`absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-300 opacity-0 group-hover:opacity-100`}>
-                                <p className={`text-sm leading-snug ${color}`}>
+                                <p className={`text-sm leading-snug ${color} rvct-theme-500`}>
                                     {description}
                                 </p>
                             </div>
