@@ -1,12 +1,17 @@
-//
-// Selection component for player types in the setup stage
-//
-
 import { PlayerConfig, PlayerType } from '../../data/types/setup';
 import { cleanupCandidate } from '../../api/uploadApi';
 import { useEffect, useCallback } from 'react';
 import { storage } from '@/utils/storage';
-import { aiList } from '@/data/constants/ai';
+
+const CUSTOM_NAME = "Upload Code";
+const ARCHIVE_NAME = "Community Bots";
+const HUMAN_NAME = "Human Player";
+const AI_NAME = "AI Language Models"
+
+const CUSTOM_DESCRIPTION = "Upload your own .c file with the required makeMove() function and play with it.";
+const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community, including algorithms written by previous participants.";
+const HUMAN_DESCRIPTION = "Real human player like you.";
+const AI_DESCRIPTION = "Play with mainstream large language models such as Deepseek, and listen to what they think!"
 
 interface PlayerTypeSelectionProps {
     blackPlayerConfig: PlayerConfig;
@@ -14,7 +19,7 @@ interface PlayerTypeSelectionProps {
     onBlackPlayerChange: (config: PlayerConfig) => void;
     onWhitePlayerChange: (config: PlayerConfig) => void;
     isAIAvailable: boolean;
-}
+};
 
 const PlayerTypeSelection = ({ 
     blackPlayerConfig, 
@@ -37,13 +42,10 @@ const PlayerTypeSelection = ({
         const currentConfig = side === 'black' ? blackPlayerConfig : whitePlayerConfig;
         const updateFunction = side === 'black' ? onBlackPlayerChange : onWhitePlayerChange;
 
-        // If the selected type is already set, do nothing to preserve existing config
         if (currentConfig.type === type) {
             return;
         }
 
-        // If current player is custom candidate with uploaded file and switching to another type,
-        // confirm with user and clean up the temporary file from backend
         if (currentConfig.type === 'custom' && 
             currentConfig.config?.customType === 'candidate' &&
             currentConfig.config?.customName &&
@@ -55,18 +57,15 @@ const PlayerTypeSelection = ({
             
             if (!confirmed) return;
             
-            // Clean up backend file
             try {
                 if (currentConfig.config?.customCodeId) {
                     await cleanupCandidate(currentConfig.config.customCodeId);
                 }
             } catch (error) {
                 console.error('Cleanup failed:', error);
-                // In this case, continue with type switch even if cleanup fails
             }
         }
 
-        // Save the new type to localStorage
         if (type) {
             try {
                 storage.setItem(`playerType_${side}`, type);
@@ -75,62 +74,34 @@ const PlayerTypeSelection = ({
             }
         }
 
-        // Initialize config based on the new type
         switch (type) {
             case "custom":
                 updateFunction({
                     type: "custom",
-                    config: {
-                        customType: "cache",
-                        customCodeId: undefined,
-                        customName: undefined
-                    }
+                    config: { customType: "cache", customCodeId: undefined, customName: undefined }
                 });
                 break;
-                
             case "archive":
                 updateFunction({
                     type: "archive",
-                    config: {
-                        // By spreading the previous config, we retain the old name
-                        // until a new archive is selected, preventing the flicker.
-                        ...currentConfig.config,
-                        archiveId: "",
-                        archiveGroup: "",
-                        archiveName: undefined
-                    }
+                    config: { ...currentConfig.config, archiveId: "", archiveGroup: "", archiveName: undefined }
                 });
                 break;
-                
             case "human":
                 updateFunction({
                     type: "human",
-                    config: {
-                        humanName: side === "black" ? "Player B" : "Player W"
-                    }
+                    config: { humanName: side === "black" ? "Player B" : "Player W" }
                 });
                 break;
-                
             case "ai":
-                // updateFunction({
-                //     type: "ai",
-                //     config: {
-                //         aiId: "",
-                //         aiName: "",
-                //     }
-                // });
-                updateFunction({    // TODO: change back later
+                updateFunction({
                     type: "ai",
-                    config: {
-                        aiId: "gemma3n:e4b",
-                        aiName: "AI Gemma",
-                    }
+                    config: { aiId: "gemma3n:e4b", aiName: "AI Gemma" }
                 });
                 break;
         }
     }, [blackPlayerConfig, whitePlayerConfig, onBlackPlayerChange, onWhitePlayerChange, isAIAvailable]);
 
-    // Restore player types from localStorage on mount
     useEffect(() => {
         try {
             const savedBlackType = storage.getItem('playerType_black');
@@ -149,62 +120,68 @@ const PlayerTypeSelection = ({
     }, [handleTypeSelect, blackPlayerConfig.type, whitePlayerConfig.type]); 
 
     return (
-        <div className="bg-white p-4 rounded border">
-            <h3 className="text-lg font-medium mb-4 text-center">
-                Player Types
-            </h3>
-            <div className="space-y-3">
-                {playerTypes.map(({ type, label, icon }) => (
-                    <div key={type} className="flex items-center justify-between gap-4">
-                        
+        <div className="w-full space-y-2">
+            {playerTypes.map(({ type, label, icon }) => {
+                const isDisabled = type === "ai" && !isAIAvailable;
+
+                return (
+                    <div 
+                        key={type} 
+                        className={`
+                            flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
+                            ${isDisabled 
+                                ? 'bg-gray-100 opacity-50' 
+                                : 'bg-gray-50 border border-gray-200/90 hover:border-gray-300 hover:bg-gray-100/50'
+                            }
+                        `}
+                    >
                         {/* Left side: Black player selection */}
                         <button
                             onClick={() => handleTypeSelect(type, 'black')}
-                            disabled={type === "ai" && !isAIAvailable}
+                            disabled={isDisabled}
                             className={`
-                                w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold transition-colors
+                                w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center text-sm font-bold transition-colors
                                 ${blackPlayerConfig.type === type
-                                    ? 'bg-black border-black text-white' 
-                                    : 'border-gray-300 hover:border-gray-400'
+                                    ? 'bg-gray-800 border-gray-800 text-white' 
+                                    : 'bg-white border-gray-400 hover:border-gray-600'
                                 }
-                                ${type === "ai" && !isAIAvailable ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                                ${isDisabled ? 'cursor-not-allowed' : ''}
                             `}
                         >
                             {blackPlayerConfig.type === type && '✓'}
                         </button>
                         
-                        {/* Center: Type label */}
-                        <div className="flex-1 text-center">
-                            <div className="text-xl mb-1">{icon}</div>
-                            <div className={`
-                                text-sm font-medium
-                                ${type === "ai" && !isAIAvailable ? 'text-gray-400' : 'text-gray-700'}
-                            `}>
-                                {label}
+                        {/* Center: Type label and icon */}
+                        <div className="flex-grow flex items-center gap-3">
+                            <span className="text-xl">{icon}</span>
+                            <div className="flex flex-col">
+                                <span className="font-medium text-sm text-gray-800">
+                                    {label}
+                                </span>
+                                {isDisabled && (
+                                    <span className="text-xs text-red-600 -mt-0.5">Not available</span>
+                                )}
                             </div>
-                            {type === "ai" && !isAIAvailable && (
-                                <div className="text-xs text-red-500">Not available</div>
-                            )}
                         </div>
                         
                         {/* Right side: White player selection */}
                         <button
                             onClick={() => handleTypeSelect(type, 'white')}
-                            disabled={type === "ai" && !isAIAvailable}
+                            disabled={isDisabled}
                             className={`
-                                w-6 h-6 rounded border-2 flex items-center justify-center text-sm font-bold transition-colors
+                                w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center text-sm font-bold transition-colors
                                 ${whitePlayerConfig.type === type
-                                    ? 'bg-gray-700 border-gray-700 text-white' 
-                                    : 'border-gray-300 hover:border-gray-400'
+                                    ? 'bg-gray-800 border-gray-800 text-white' 
+                                    : 'bg-white border-gray-400 hover:border-gray-600'
                                 }
-                                ${type === "ai" && !isAIAvailable ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                                ${isDisabled ? 'cursor-not-allowed' : ''}
                             `}
                         >
                             {whitePlayerConfig.type === type && '✓'}
                         </button>
                     </div>
-                ))}
-            </div>
+                );
+            })}
         </div>
     );
 };
