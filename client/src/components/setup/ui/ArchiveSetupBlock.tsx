@@ -64,7 +64,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
     };
 
     return (
-        <div className="h-[70vh] flex flex-col">
+        <div className="h-[65vh] flex flex-col">
             {/* Header */}
             {/* <div className="flex items-center justify-between border-b pb-2">
                 <h3 className="text-lg font-semibold text-gray-800">Historic Algorithms</h3>
@@ -90,7 +90,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
 
                         {/* Archives List */}
                         {openGroups.includes(group.id) && (
-                            <div className="p-2 space-y-2 bg-gray-100 rounded-b-sm">
+                            <div className="p-2 space-y-1 bg-gray-100 rounded-b-sm">
                                 {group.archives.map(archive => {
                                     const isDisabled = boardSize === 12 && archive.heavy;
                                     const isSelected = selectedArchive?.id === archive.id;
@@ -114,7 +114,6 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                                                     alt={archive.shortName}
                                                     width={28}
                                                     height={28}
-                                                    className="rounded-full object-cover border-2 border-gray-200"
                                                 />
                                                 <div 
                                                     className="flex-1 overflow-hidden" 

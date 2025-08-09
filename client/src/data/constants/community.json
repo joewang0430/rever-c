@@ -12,7 +12,7 @@
             "description": "#8 rank APS105 Leaderboard 2024",
             "shortDescription": "#8 on Leaderboard",
             "rating": "(1500)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_origin.svg",
             "heavy": false
         },
         {
@@ -23,7 +23,7 @@
             "description": "Founder of ReverC, #21 rank APS105 Leaderboard 2024",
             "shortDescription": "#21 on Leaderboard",
             "rating": "(800)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/test_player.svg",
             "heavy": false
         }
         ]
@@ -40,7 +40,7 @@
             "description": "test",
             "shortDescription": "test",
             "rating": "(N/A)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/test_player.svg",
             "heavy": false
         }
         ]
@@ -57,7 +57,7 @@
             "description": "Alex in baby mode",
             "shortDescription": "Baby mode Alex",
             "rating": "(600)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_1.svg",
             "heavy": false
         },
         {
@@ -68,7 +68,7 @@
             "description": "Extremely low version of Alex Hu in APS105 2024",
             "shortDescription": "Extremely Low Alex",
             "rating": "(1050)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_2.svg",
             "heavy": false
         },
         {
@@ -79,7 +79,7 @@
             "description": "Very low version of Alex Hu in APS105 2024",
             "shortDescription": "Very Low Alex",
             "rating": "(1250)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_3.svg",
             "heavy": false
         },
         {
@@ -90,7 +90,7 @@
             "description": "Low version of Alex Hu in APS105 2024",
             "shortDescription": "Low version Alex",
             "rating": "(1375)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_4.svg",
             "heavy": false
         },
         {
@@ -101,7 +101,7 @@
             "description": "#8 rank APS105 Leaderboard 2024",
             "shortDescription": "Alex Hu in APS105 2024",
             "rating": "(1500)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_origin.svg",
             "heavy": false
         }
         ]
@@ -119,7 +119,7 @@
             "description": "Upgraded Alex Hu in APS105 2024",
             "shortDescription": "Upgraded Alex",
             "rating": "(1600)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_6.svg",
             "heavy": true
         },
         {
@@ -130,7 +130,7 @@
             "description": "Extremely upgraded Alex Hu in APS105 2024",
             "shortDescription": "Further upgraded Alex",
             "rating": "(1700)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_7.svg",
             "heavy": true
         },
         {
@@ -141,7 +141,7 @@
             "description": "Extremely upgraded Alex Hu, and thinks longer",
             "shortDescription": "Extremely upgraded Alex",
             "rating": "(1820)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/hukaiqi_7x.svg",
             "heavy": true
         },
         {
@@ -152,7 +152,7 @@
             "description": "Greately modified Alex Hu in APS105 2024, and professionally tuned by ReverC",
             "shortDescription": "Remodified Alex",
             "rating": "(2000)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/test_player.svg",
             "heavy": true
         }
         ]
@@ -169,7 +169,7 @@
             "description": "Naughty child that makes random move",
             "shortDescription": "Randomly put",
             "rating": "(≈100)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/test_player.svg",
             "heavy": false
         },
         {
@@ -180,7 +180,7 @@
             "description": "Only wants to flip as much as possible in one round",
             "shortDescription": "Max flipps only",
             "rating": "(250)",
-            "image": "/images/archives/test_archive.jpg",
+            "image": "/svgs/archives/test_player.svg",
             "heavy": false
         }
         ]

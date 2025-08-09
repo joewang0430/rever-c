@@ -64,25 +64,27 @@ const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable, b
     }
 };
 
+    let title = "Player Setup";
+    switch (playerConfig.type) {
+        case "custom":
+            title = "Upload Code";
+            break;
+        case "archive":
+            title = "Select Bot";
+            break;
+        case "human":
+            title = "Human Player";
+            break;
+        case "ai":
+            title = "Select Model";
+            break;
+        default:
+            title = "Player Setup";
+    }
     return (
         <div className="bg-gray-200 p-4 h-full flex flex-col rounded rounded-lg">
-            {/* <div className="mb-4 text-center">
-                <div className={`
-                    w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold
-                    ${side === 'black' ? 'bg-black' : 'bg-gray-600'}
-                `}>
-                    {side === 'black' ? 'B' : 'W'}
-                </div>
-                <h3 className="text-lg font-semibold capitalize">
-                    {side === 'black' ? 'Black Player (First)' : 'White Player (Second)'}
-                </h3>
-                {playerConfig.type && (
-                    <p className="text-sm text-gray-600 mt-1">
-                        Type: {playerConfig.type}
-                    </p>
-                )}
-            </div> */}
-                {renderPlayerSetup()}
+            <div className="mb-2 text-base font-semibold text-gray-600 text-center">{title}</div>
+            {renderPlayerSetup()}
         </div>
     );
 };
