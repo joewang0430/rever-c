@@ -76,6 +76,23 @@ export const getPlayerDescription = (playerConfig: PlayerConfig) => {
     }
 };
 
+// Gets the path of svg in setup stage
+export const getSvgPathSetup = (playerConfig: PlayerConfig) => {
+    if (!playerConfig.config) {
+        return null;
+    }
+    switch (playerConfig.type) {
+        case 'custom':
+            return `/svgs/custom/file.svg`;
+        case 'archive':
+            return `/svgs/archives/${playerConfig.config.archiveId}.svg`;
+        case 'human':
+            return `/svgs/human/human`;
+        case 'ai':
+            return `/svgs/ai/${playerConfig.config.aiId}.svg`
+    }
+}
+
 // International standard naming of reversi position:
 export const getRowName = (rowIdx: number): string => {
     // 0-7 -> 1-8

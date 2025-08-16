@@ -1,5 +1,5 @@
 import { PlayerConfig } from '../../data/types/setup';
-import { getPlayerName } from '../../utils/nameConverters';
+import { getPlayerName, getPlayerDescription, getSvgPathSetup } from '../../utils/nameConverters';
 
 interface SetupNameDisplayProps {
     playerConfig: PlayerConfig;
@@ -49,8 +49,18 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
         </span>
     );
 
+    const svgPath = getSvgPathSetup(playerConfig);
+    const playerDescription = getPlayerDescription(playerConfig);
+
     return (
         <div className="flex items-center space-x-2 lg:flex-col lg:items-center lg:space-x-0 lg:gap-1 lg:min-h-[5.5rem] lg:justify-center">
+            {/* SVG */}
+            <div className="hidden lg:flex justify-center items-center mb-1">
+                {svgPath ? (
+                    <img src={svgPath} alt="player icon" width={60} height={60} style={{ display: 'block' }} />
+                ) : null}
+            </div>
+
             {/* side notation (hidden on large screens) */}
             <span className={`font-medium ${sideColor} lg:hidden`}>
                 {sideLabel}:
@@ -58,18 +68,23 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             
             {/* player name. On large screens, it includes the type notation inline. */}
             <span className="text-gray-900 font-normal lg:text-4xl lg:font-semibold lg:text-center">
-                {side === 'black' && (
-                    <span className="hidden lg:inline-flex mr-2 items-center justify-center" style={{ verticalAlign: 'middle' }}>
-                        {typeNotationSpan}
-                    </span>
-                )}
                 {displayName}
-                {side === 'white' && (
-                    <span className="hidden lg:inline-flex ml-2 items-center justify-center" style={{ verticalAlign: 'middle' }}>
-                        {typeNotationSpan}
-                    </span>
-                )}
             </span>
+            {/* player description, smaller and grayer */}
+            {playerDescription && (
+                <span
+                    className="text-sm text-gray-400 lg:text-base lg:text-center block max-w-full"
+                    style={{
+                        display: 'block',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        maxWidth: '100%',
+                    }}
+                >
+                    {playerDescription}
+                </span>
+            )}
             
             {/* player type notation for small screens only */}
             {playerConfig.type && (
@@ -77,6 +92,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
                     {typeNotationSpan}
                 </span>
             )}
+
         </div>
     );
 };
