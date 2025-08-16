@@ -82,7 +82,7 @@ const PlayerSetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable, b
             title = "Player Setup";
     }
     return (
-        <div className="bg-gray-200 p-4 h-[30rem] flex flex-col rounded rounded-lg">
+        <div className="bg-gray-200 p-4 h-[30.5rem] flex flex-col rounded rounded-lg">
             <div className="mb-2 text-base font-semibold text-gray-600 text-center">{title}</div>
             {renderPlayerSetup()}
         </div>

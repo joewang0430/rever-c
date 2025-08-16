@@ -64,7 +64,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
     };
 
     return (
-        <div className="h-[26rem] flex flex-col">
+        <div className="h-[26.5rem] flex flex-col">
             {/* Header */}
             {/* <div className="flex items-center justify-between border-b pb-2">
                 <h3 className="text-lg font-semibold text-gray-800">Historic Algorithms</h3>

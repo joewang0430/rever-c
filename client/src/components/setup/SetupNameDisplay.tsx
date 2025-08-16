@@ -57,7 +57,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             {/* SVG */}
             <div className="hidden lg:flex justify-center items-center mb-1">
                 {svgPath ? (
-                    <img src={svgPath} alt="player icon" width={60} height={60} style={{ display: 'block' }} />
+                    <img src={svgPath} alt="player icon" width={48} height={48} style={{ display: 'block' }} />
                 ) : null}
             </div>
 
