@@ -28,38 +28,26 @@ const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlock
     };
 
     return (
-        <div className="space-y-4">
-            {/* Title */}
-            <div className="flex items-center space-x-2">
-                <span className="text-2xl">👤</span>
-                <h3 className="text-lg font-semibold text-gray-800">
-                    Human Player Setup
-                </h3>
-            </div>
-            
+        <div className="space-y-4 h-[26.5rem] bg-gray-100 rounded-sm flex flex-col justify-center items-center">
             {/* Name Input */}
-            <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                    Player Name
+            <div className="space-y-2 w-full flex flex-col items-center">
+                <label className="block text-sm font-medium text-gray-700 text-center">
+                    Enter Your Name:
                 </label>
                 <input
                     type="text"
                     value={currentName}
                     onChange={handleNameChange}
                     placeholder={defaultName}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                             placeholder-gray-400 text-gray-900"
+                    className="w-3/5 max-w-xs px-3 py-2 rounded-md 
+                             focus:outline-none focus:ring-2 focus:ring-rvc-primary-green focus:border-rvc-primary-green
+                             placeholder-gray-400 text-gray-900 bg-white mx-auto"
                 />
-                {(playerConfig.config?.humanName ?? "").trim() === "" && (
-                    <p className="text-xs text-red-500">
-                        Name cannot be empty
-                    </p>
-                )}
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 text-center">
                     This name will be displayed during the game
                 </p>
             </div>
+            <div className='h-24'></div>
         </div>
     );
 }
