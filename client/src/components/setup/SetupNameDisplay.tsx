@@ -1,5 +1,6 @@
 import { PlayerConfig } from '../../data/types/setup';
 import { getPlayerName, getPlayerDescription, getSvgPathSetup } from '../../utils/nameConverters';
+import Image from 'next/image';
 
 interface SetupNameDisplayProps {
     playerConfig: PlayerConfig;
@@ -50,15 +51,20 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
     );
 
     const svgPath = getSvgPathSetup(playerConfig);
+    const notSelectedPath = `/svgs/setup/not-selected.svg`;
     const playerDescription = getPlayerDescription(playerConfig);
 
     return (
         <div className="flex items-center space-x-2 lg:flex-col lg:items-center lg:space-x-0 lg:gap-1 lg:min-h-[5.5rem] lg:justify-center">
             {/* SVG */}
             <div className="hidden lg:flex justify-center items-center mb-1">
-                {svgPath ? (
-                    <img src={svgPath} alt="player icon" width={48} height={48} style={{ display: 'block' }} />
-                ) : null}
+                <Image
+                    src={svgPath || notSelectedPath}
+                    alt="player icon"
+                    width={48}
+                    height={48}
+                    style={{ display: 'block' }}
+                />
             </div>
 
             {/* side notation (hidden on large screens) */}
@@ -67,9 +73,29 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
             </span>
             
             {/* player name. On large screens, it includes the type notation inline. */}
-            <span className="text-gray-900 font-normal lg:text-4xl lg:font-semibold lg:text-center">
+            <span
+                className={
+                    svgPath
+                        ? "text-gray-900 font-normal lg:text-4xl lg:font-semibold lg:text-center"
+                        : "font-normal lg:text-4xl lg:font-semibold lg:text-center animate-flash"
+                }
+                style={
+                    svgPath
+                        ? undefined
+                        : {
+                            animation: 'flashText 1.2s infinite',
+                        }
+                }
+            >
                 {displayName}
             </span>
+            <style jsx>{`
+                @keyframes flashText {
+                    0% { color: #111827; }
+                    50% { color: #d1d5db; }
+                    100% { color: #111827; }
+                }
+            `}</style>
             {/* player description, smaller and grayer */}
             {playerDescription && (
                 <span

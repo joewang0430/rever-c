@@ -34,7 +34,7 @@ export const getPlayerName = (playerConfig: PlayerConfig): string => {
     // TODO: default name further decided
     switch (playerConfig.type) {
         case 'custom':
-            return playerConfig.config.customName || "(Select)";
+            return playerConfig.config.customName || "(Upload)";
         case 'archive':
             return playerConfig.config.archiveName || "(Select)";
         case 'human':
@@ -47,8 +47,8 @@ export const getPlayerName = (playerConfig: PlayerConfig): string => {
 };
 
 export const getPlayerDescription = (playerConfig: PlayerConfig) => {
-    if (!playerConfig.config) {
-        return "";
+    if (!playerConfig.config || Object.keys(playerConfig.config).length === 0) {
+        return "Please select";
     }
 
     switch (playerConfig.type) {
@@ -62,7 +62,7 @@ export const getPlayerDescription = (playerConfig: PlayerConfig) => {
                     return found.description || "";
                 }
             }
-            return "";
+            return "Please select";
         case 'human':
             return "Human Player";
         case 'ai':
@@ -83,13 +83,24 @@ export const getSvgPathSetup = (playerConfig: PlayerConfig) => {
     }
     switch (playerConfig.type) {
         case 'custom':
-            return `/svgs/custom/file.svg`;
+            if (!playerConfig.config.customCodeId || playerConfig.config.customCodeId === "") {
+                return null;
+            }
+            return `/svgs/custom/file-c.svg`;
         case 'archive':
+            if (!playerConfig.config.archiveId || playerConfig.config.archiveId === "") {
+                return null;
+            }
             return `/svgs/archives/${playerConfig.config.archiveId}.svg`;
         case 'human':
-            return `/svgs/human/human`;
+            return `/svgs/human/human.svg`;
         case 'ai':
-            return `/svgs/ai/${playerConfig.config.aiId}.svg`
+            if (!playerConfig.config.aiId || playerConfig.config.aiId === "") {
+                return null;
+            }
+            return `/svgs/ai/${playerConfig.config.aiId}.svg`;
+        default:
+            return null;
     }
 }
 

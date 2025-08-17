@@ -64,7 +64,7 @@ const Logo = ({mobile, url}: LogoProps) => {
                     confirm="Back Home"
                     cancel="cancel"
                 >
-                    Your current game settings will not be saved.
+                    You will quit this setup page.
                 </RvcDialog>
             )}
         </>
