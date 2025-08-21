@@ -17,7 +17,8 @@ interface ArchiveSetupBlockProps {
     boardSize: BoardSize;
 };
 
-const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: ArchiveSetupBlockProps) => {    const { 
+const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: ArchiveSetupBlockProps) => {    
+    const { 
         groups, 
         selectedArchive, 
         selectArchive, 

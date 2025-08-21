@@ -99,7 +99,7 @@ const PlayerTypeSelection = ({
             case "ai":
                 updateFunction({
                     type: "ai",
-                    config: { aiId: "gemma3n:e4b", aiName: "AI Gemma" }
+                    config: {}
                 });
                 break;
         }

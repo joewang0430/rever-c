@@ -38,7 +38,6 @@ export async function cleanupSetupDataRDB (matchId: string) {
     });
     if (!res.ok) {
         throw new Error ("Failed to cleanup setup data");
-
     }
     return await res.json();
 }
