@@ -3,7 +3,7 @@ Routers for handling file uploads before the game starts.
 '''
 
 from fastapi import APIRouter, UploadFile, File, HTTPException, Request
-from pydantic import BaseModel
+from app.routers.schemas import ProcessResponse, StatusResponse
 import uuid
 import os
 import aiofiles
@@ -21,17 +21,6 @@ upload_router = APIRouter()
 
 # Thread pool executor for running tasks in parallel
 executor = ThreadPoolExecutor(max_workers=4)
-
-
-# Response model, corresponds to the interface at front-end
-class ProcessResponse(BaseModel):
-    code_id: str
-
-class StatusResponse(BaseModel):
-    status: Literal['uploading', 'compiling', 'testing', 'success', 'failed']
-    error_message: Optional[str] = None
-    failed_stage: Optional[Literal['compiling', 'testing']] = None
-    test_return_value: Optional[int] = None
 
 
 # Tool functions

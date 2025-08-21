@@ -3,7 +3,7 @@ Single game start/delete management routers.
 '''
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from app.routers.schemas import SetupDataRequest
 import json
 from app.core.redis import redis_client
 
@@ -11,9 +11,6 @@ from app.core.redis import redis_client
 game_router = APIRouter()
 
 
-class SetupDataRequest(BaseModel):
-    matchId: str
-    setupData: dict
 
 
 @game_router.post("/setup")

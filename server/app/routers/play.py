@@ -3,8 +3,7 @@ Routers handling computer move sending.
 '''
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import Any, Dict
+from app.routers.schemas import Move, FetchCodeMoveParams, FetchAIMoveParams, AIMoveResult, CodeMoveResult
 import time
 import os
 import requests
@@ -15,33 +14,6 @@ import re
 from app.services.call_c import CMoveCaller
 
 play_router = APIRouter()
-
-class Move(BaseModel):
-    row: int
-    col: int
-
-class FetchCodeMoveParams(BaseModel):
-    board: list[list[str]]
-    turn: str   # 'B' or 'W'
-    size: int
-
-class FetchAIMoveParams(BaseModel):
-    board: list[list[str]]
-    turn: str   # 'B' or 'W'
-    size: int
-    availableMoves: list[Move]
-    lastMove: Move | None
-
-class AIMoveResult(BaseModel):
-    row: int
-    col: int
-    explanation: str
-
-class CodeMoveResult(BaseModel):
-    row: int
-    col: int
-    elapsed: int
-    returnValue: Any
 
 
 @play_router.post("/move/custom/{custom_type}/{custom_code_id}", response_model=CodeMoveResult)
@@ -99,13 +71,28 @@ async def fetch_ai_move(
     params: FetchAIMoveParams,
 ): 
     """
+    Call corresponding APIs, input game info (board, turn, size ...), 
+    return AI move and explanation.
+    """
+
+    # If no available moves, normally ReverC won't let it happen
+    if not params.availableMoves:
+        raise HTTPException(status_code=400, detail="There is no choice for a move")
+
+
+@play_router.post("/move/ai/mock/{aiId}", response_model=AIMoveResult)
+async def fetch_ai_move(
+    aiId: str,
+    params: FetchAIMoveParams,
+): 
+    """
     Call Ollama native models, input game info (board, turn, size ...), 
     return AI move and explanation.
     """
 
     # If no available moves, but ReverC won't let it happen
     if not params.availableMoves:
-        raise HTTPException(status_code=400, detail="无可选落子")
+        raise HTTPException(status_code=400, detail="There is no choice for a move")
     
     # Get Ollama base url
     ollama_base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434") # TODO: change back 
