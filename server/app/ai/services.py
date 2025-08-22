@@ -28,12 +28,13 @@ class PlayAgent:
             return {"error": "JSON Decode Error", "raw_content": ai_return}
         
     @staticmethod
-    def get_put_deepseek_r1(params: FetchAIMoveParams, prompt: str):
+    # def get_put_deepseek_r1(params: FetchAIMoveParams, prompt: str):
+    def get_put_deepseek_r1(prompt: str):
         key = os.environ.get("DEEPSEEK_KEY")
-        base_url = os.environ.get("DEEPSEEK_BASE_URL")
+        url = os.environ.get("DEEPSEEK_BASE_URL")
         model_name = os.environ.get("DEEPSEEK_R1_MODEL")
 
-        client = OpenAI(api_key=key, base_url=base_url)
+        client = OpenAI(api_key=key, base_url=url)
 
         try:
             response = client.chat.completions.create(
@@ -49,6 +50,7 @@ class PlayAgent:
             return {"error (get_put_deepseek_r1): ": str(e)}
 
     @staticmethod
+    # def get_put_gemini_2pt5(params: FetchAIMoveParams, prompt: str):
     def get_put_gemini_2pt5(prompt: str):
         model_name = os.environ.get("GEMINI_2PT5_MODEL")
         key = os.environ.get("GEMINI_KEY")
@@ -63,15 +65,34 @@ class PlayAgent:
             return {"error (get_put_gemini_2pt5): ": str(e)}
 
     @staticmethod
-    def get_put_qwen_3(params: FetchAIMoveParams, prompt: str):
-        pass
+    # def get_put_qwen_3(params: FetchAIMoveParams, prompt: str):
+    def get_put_qwen_3(prompt: str):
+        model_name = os.environ.get("QWEN_3_MODEL")
+        url = os.environ.get("QWEN_BASE_URL")
+        key = os.environ.get("QWEN_KEY")
 
+        client = OpenAI(
+            api_key=key,
+            base_url=url,
+        )
+        try:
+            completion = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
+                extra_body={"enable_thinking": False},
+            )
+            return completion.choices[0].message.content
+        except Exception as e:
+            return {"error (get_put_qwen_3): ": str(e)}
 
 # Test only
 if __name__ == "__main__":
     test_prompt = "Hello, who are you"
 
-    print("Testing get_put_gemini_2pt5...")
-    result = PlayAgent.get_put_gemini_2pt5(prompt=test_prompt)
+    print("Testing...")
+    result = PlayAgent.get_put_qwen_3(prompt=test_prompt)
     print("AI Response:")
     print(result)
