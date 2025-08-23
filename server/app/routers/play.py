@@ -4,6 +4,7 @@ Routers handling computer move sending.
 
 from fastapi import APIRouter, HTTPException
 from app.routers.schemas import Move, FetchCodeMoveParams, FetchAIMoveParams, AIMoveResult, CodeMoveResult
+from app.ai.services import PlayAgent
 import time
 import os
 import requests
@@ -74,14 +75,54 @@ async def fetch_ai_move(
     Call corresponding APIs, input game info (board, turn, size ...), 
     return AI move and explanation.
     """
-
     # If no available moves, normally ReverC won't let it happen
     if not params.availableMoves:
         raise HTTPException(status_code=400, detail="There is no choice for a move")
+    
+    try:
+        ai_response = PlayAgent.get_put(aiId, params)
+        
+        # Log the AI response for debugging
+        print(f"AI {aiId} response: {ai_response}", flush=True)
+        
+        # Enhanced validation of AI response
+        if not isinstance(ai_response, dict):
+            raise ValueError(f"AI response is not a dict: {type(ai_response)}")
+        
+        if "error" in ai_response:
+            raise ValueError(f"AI returned error: {ai_response['error']}")
+            
+        if not all(k in ai_response for k in ("row", "col")):
+            raise ValueError(f"AI response missing row/col: {ai_response}")
+        
+        # Validate move is within board bounds
+        if not (0 <= ai_response["row"] < params.size and 0 <= ai_response["col"] < params.size):
+            raise ValueError(f"AI move out of bounds: ({ai_response['row']}, {ai_response['col']})")
+        
+        # Validate move is in available moves
+        proposed_move = Move(row=ai_response["row"], col=ai_response["col"])
+        if not any(move.row == proposed_move.row and move.col == proposed_move.col for move in params.availableMoves):
+            raise ValueError(f"AI move not in available moves: ({proposed_move.row}, {proposed_move.col})")
+        
+        explanation = ai_response.get("speak", "")
+        return AIMoveResult(row=proposed_move.row, col=proposed_move.col, explanation=explanation)
+    except Exception as e:
+        # Log error for debugging
+        print(f"AI move error: {e}", flush=True)
+        
+        # Fallback: return a random valid move
+        try:
+            random_move = random.choice(params.availableMoves)
+            explanation = f"Failed to get decision from {aiId}, ReverC returned a random move. Error: {str(e)}"
+            return AIMoveResult(row=random_move.row, col=random_move.col, explanation=explanation)
+        except Exception as fallback_error:
+            print(f"Fallback also failed: {fallback_error}", flush=True)
+            raise HTTPException(status_code=500, detail=f"AI call failed and fallback failed: {str(e)}")
 
 
-@play_router.post("/move/ai/mock/{aiId}", response_model=AIMoveResult)
-async def fetch_ai_move(
+# This is not used for now
+@play_router.post("/move/mock/ai/{aiId}", response_model=AIMoveResult)
+async def fetch_mock_ai_move(  # 修改函数名避免冲突
     aiId: str,
     params: FetchAIMoveParams,
 ): 

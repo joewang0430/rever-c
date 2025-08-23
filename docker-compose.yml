@@ -12,6 +12,8 @@ services:
     #   - redis
     # environment:
       # - REDIS_URL=redis://redis:6379 # PROD: added it
+    env_file:
+      - ./server/.env
     environment:
       REDIS_URL: redis://host.docker.internal:6379  # PROD: change / delete this
       OLLAMA_BASE_URL: http://host.docker.internal:11434

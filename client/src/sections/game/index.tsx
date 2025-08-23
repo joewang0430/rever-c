@@ -72,10 +72,18 @@ export default function Game({ matchId}: GameProps) {
     useEffect(() => {
         if (!setupData || !game.turn || game.gameOver) return;
         if (isRequestingComputer.current) return;   // Is requesting, return imdtl
+        
         const side = getSetupTurnName(game.turn);
         const turn = game.turn;
+        
+        // Only process computer players
+        if (setupData[side].type === 'human') return;
 
         const fetchComputerMove = async() => {
+            // Double-check before starting request
+            if (isRequestingComputer.current) return;
+            if (game.gameOver) return;
+            
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | FetchAIMoveResult | null = null;
@@ -133,10 +141,16 @@ export default function Game({ matchId}: GameProps) {
                 // TODO: clean up data & exit window if not valid (related to network / basic form)
                 // sice handleMove process some other basic error
 
-                await delayPromise; // Ensure at leas wait 0.5s
+                await delayPromise; // Ensure at least wait 0.5s
 
                 if (computerMove) { 
                     const elapsed = "elapsed" in computerMove ? computerMove.elapsed : 0;
+                    
+                    // Validate move before applying
+                    if (!computerMove.move || typeof computerMove.move.row !== 'number' || typeof computerMove.move.col !== 'number') {
+                        throw new Error("Invalid move data from AI");
+                    }
+                    
                     game.handleMove(computerMove.move, elapsed); 
 
                     // Code .c

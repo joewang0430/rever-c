@@ -11,13 +11,13 @@ class Move(BaseModel):
     col: int
 
 class FetchCodeMoveParams(BaseModel):
-    board: List[List[str]]
-    turn: str
+    board: List[List[str]]  # Should be 'B', 'W', or 'U' only
+    turn: str  # Should be 'B' or 'W' only
     size: int
 
 class FetchAIMoveParams(BaseModel):
-    board: List[List[str]]
-    turn: str
+    board: List[List[str]]  # Should be 'B', 'W', or 'U' only
+    turn: str  # Should be 'B' or 'W' only
     size: int
     availableMoves: List[Move]
     lastMove: Optional[Move]

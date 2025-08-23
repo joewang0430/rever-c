@@ -18,13 +18,13 @@ export const aiList: Record<string, AIInfo> = {
   //   image: ``,
   //   available: false,
   // },
-  "deepseek-r1": {
-    id: "deepseek-r1",
-    name: "DeepSeek R1",
+  "deepseek-v3": {
+    id: "deepseek-v3",
+    name: "DeepSeek V3",
     shortDescription: "Deepseek's model",
-    description: "Open source, reasoning language model from DeepSeek",
+    description: "Mixture-of-Experts language model from DeepSeek",
     rating: "(200)",
-    image: `svgs/ai/deepseek-r1.svg`,
+    image: `svgs/ai/deepseek-v3.svg`,
     available: true,
   },
   "gemini-2pt5": {
