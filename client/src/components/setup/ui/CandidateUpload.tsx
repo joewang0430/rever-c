@@ -239,7 +239,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const clearButtonState = getClearButtonState();
 
     return (
-        <div className="space-y-4 p-4 border rounded">
+        <div className="space-y-4 p-4 rounded-b bg-white flex-1 h-full flex flex-col min-h-0">
             <h3 className="text-lg font-semibold">
                 Upload Temporary Code ({side === 'black' ? 'Black' : 'White'} Player)
             </h3>
@@ -274,7 +274,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                         </button>
                     )}
                     
-                    {/* Clear button 保持不变 */}
+                    {/* Clear button */}
                     {clearButtonState.show && (
                         <button
                             onClick={handleClear}
@@ -400,7 +400,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                 </div>
             )}
 
-            {/* TODO: Test Info - Used in Development */}
+            {/* <div>
             {process.env.NODE_ENV === 'development' && (
                 <div className="mt-4 p-4 bg-gray-100 rounded-lg">
                     <details>
@@ -408,7 +408,6 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                             Debug: Upload Status & State
                         </summary>
                         <div className="mt-2 space-y-3">
-                            {/* Upload Status */}
                             <div>
                                 <h5 className="text-xs font-semibold text-gray-700 mb-1">Upload Status:</h5>
                                 <pre className="text-xs text-gray-800 overflow-x-auto bg-white p-2 rounded border">
@@ -416,7 +415,6 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                                 </pre>
                             </div>
                             
-                            {/* Local State */}
                             <div>
                                 <h5 className="text-xs font-semibold text-gray-700 mb-1">Local State:</h5>
                                 <pre className="text-xs text-gray-800 overflow-x-auto bg-white p-2 rounded border">
@@ -435,7 +433,6 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                                 </pre>
                             </div>
                             
-                            {/* Player Config */}
                             <div>
                                 <h5 className="text-xs font-semibold text-gray-700 mb-1">Player Config:</h5>
                                 <pre className="text-xs text-gray-800 overflow-x-auto bg-white p-2 rounded border">
@@ -448,7 +445,6 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                                 </pre>
                             </div>
                             
-                            {/* Timestamps */}
                             <div>
                                 <h5 className="text-xs font-semibold text-gray-700 mb-1">Timestamps:</h5>
                                 <div className="text-xs text-gray-800 bg-white p-2 rounded border">
@@ -460,6 +456,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
                     </details>
                 </div>
             )}
+            </div> */}
 
         </div>
     );

@@ -133,6 +133,7 @@ export default function Setup() {
 
                         {/* --- Small Screen Layout (Single Column) --- */}
                         <div className="flex flex-col gap-6 lg:hidden">
+                            <div className="h-10"></div>
                             <PlayerSetupBlock 
                                 playerConfig={memorizedBlackConfig}
                                 onConfigChange={updateBlackPlayer}

@@ -31,7 +31,7 @@ const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlock
         <div className="space-y-4 h-[26.5rem] bg-gray-100 rounded-sm flex flex-col justify-center items-center">
             {/* Name Input */}
             <div className="space-y-2 w-full flex flex-col items-center">
-                <label className="block text-sm font-medium text-gray-700 text-center">
+                <label className="block text-md font-medium text-gray-700 text-center rvct-theme-500">
                     Enter Your Name:
                 </label>
                 <input
@@ -40,10 +40,10 @@ const HumanSetupBlock = ({ playerConfig, onConfigChange, side }: HumanSetupBlock
                     onChange={handleNameChange}
                     placeholder={defaultName}
                     className="w-3/5 max-w-xs px-3 py-2 rounded-md 
-                             focus:outline-none focus:ring-2 focus:ring-rvc-primary-green focus:border-rvc-primary-green
+                             focus:outline-none border-2 border-rvc-primary-green focus:ring-1 focus:ring-rvc-primary-green focus:border-rvc-primary-green
                              placeholder-gray-400 text-gray-900 bg-white mx-auto"
                 />
-                <p className="text-xs text-gray-500 text-center">
+                <p className="text-xs text-gray-500 text-center rvct-theme">
                     This name will be displayed during the game
                 </p>
             </div>

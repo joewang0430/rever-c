@@ -15,6 +15,7 @@
   --color-rvc-primary-blue: var(--rvc-primary-blue);
   --color-rvc-primary-yellow: var(--rvc-primary-yellow);
   --color-rvc-primary-purple: var(--rvc-primary-purple);
+  --color-rvc-primary-red: var(--rvc-primary-red);
   --color-rvc-text-black: var(--rvc-text-black);
 
   --color-rvc-secondary-green: var(--rvc-secondary-green);
@@ -68,6 +69,8 @@
   --rvc-primary-blue: #3e7ad3;
   --rvc-primary-yellow: #b09a1e;
   --rvc-primary-purple: #9f1eb0;
+  /* --rvc-primary-red: #872d2d; */
+  --rvc-primary-red: #ad5050;
   --rvc-text-black: #171717;
 
   --rvc-secondary-green: #33adb6;
@@ -118,6 +121,7 @@
   --rvc-primary-blue: #3e7ad3;
   --rvc-primary-yellow: #b09a1e;
   --rvc-primary-purple: #9f1eb0;
+  --rvc-primary-red: #872d2d;
 
   --rvc-text-black: #171717;
   --rvc-secondary-green: #33adb6;
@@ -183,6 +187,18 @@
 }
 
 /* test fn */
+@keyframes border-color-change {
+  0%, 100% {
+    border-color: #2D874C; /* rvc-primary-green */
+  }
+  50% {
+    border-color: #bcdbc7;
+  }
+}
+
+.animate-border-color-change {
+  animation: border-color-change 1.5s infinite;
+}
 .hero-gradient-bg {
   background:
     radial-gradient(ellipse 30% 40% at left bottom, #33adb6 0%, transparent 90%),
@@ -197,18 +213,6 @@
   background-color: #f9f9f9; 
 }
 
-@keyframes border-color-change {
-  0%, 100% {
-    border-color: var(--rvc-primary-green);
-  }
-  50% {
-    border-color: var(--rvc-secondary-green);/*#b9ce6c*/ /*#a6d5b4;*/ /* Tailwind's green-50 */
-  }
-}
-
-.animate-border-color-change {
-  animation: border-color-change 1.5s infinite;
-}
 /* 
 
 @import "tailwindcss";

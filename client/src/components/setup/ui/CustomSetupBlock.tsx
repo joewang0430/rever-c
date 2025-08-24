@@ -76,16 +76,16 @@ const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlo
     };
 
     return (
-        <div>
+        <div className="h-[26.5rem] bg-gray-100 rounded-sm flex flex-col items-center overflow-auto p-0">
             {/* Top Option Switch */}
-            <div className="mb-4">
-                <div className="flex border rounded">
+            <div className="w-full flex justify-center">
+                {/* <div className="flex rounded w-[20rem]"> */}
                     <button
                         onClick={() => handleTypeChange('candidate')}
                         className={`flex-1 px-4 py-2 ${
                             selectedType === 'candidate' 
-                                ? 'bg-blue-500 text-white' 
-                                : 'bg-gray-100 text-gray-700'
+                                ? 'bg-white text-rvc-primary-green rvct-theme-500' 
+                                : 'bg-gray-100 text-gray-700 rvct-theme'
                         }`}
                     >
                         Temporary Code
@@ -94,29 +94,33 @@ const CustomSetupBlock = ({ playerConfig, onConfigChange, side }: CustomSetupBlo
                         onClick={() => handleTypeChange('cache')}
                         className={`flex-1 px-4 py-2 ${
                             selectedType === 'cache' 
-                                ? 'bg-blue-500 text-white' 
-                                : 'bg-gray-100 text-gray-700'
+                                ? 'bg-white text-rvc-primary-green rvct-theme-500' 
+                                : 'bg-gray-100 text-gray-700 rvct-theme'
                         }`}
                     >
                         Stored Code
                     </button>
-                </div>
+                {/* </div> */}
             </div>
 
-            {/* Corresponding Components */}
-            <div>
+            {/* Corresponding Components - 占满剩余空间 */}
+            <div className="w-full flex-1 flex justify-center items-stretch min-h-0">
                 {selectedType === 'candidate' ? (
-                    <CandidateUpload 
-                        playerConfig={playerConfig}
-                        onConfigChange={onConfigChange}
-                        side={side}
-                    />
+                    <div className="w-full max-w-[28rem] h-full flex flex-col">
+                        <CandidateUpload 
+                            playerConfig={playerConfig}
+                            onConfigChange={onConfigChange}
+                            side={side}
+                        />
+                    </div>
                 ) : (
-                    <CacheUpload 
-                        playerConfig={playerConfig}
-                        onConfigChange={onConfigChange}
-                        side={side}
-                    />
+                    <div className="w-full max-w-[28rem] h-full flex flex-col">
+                        <CacheUpload 
+                            playerConfig={playerConfig}
+                            onConfigChange={onConfigChange}
+                            side={side}
+                        />
+                    </div>
                 )}
             </div>
         </div>

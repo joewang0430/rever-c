@@ -149,17 +149,17 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         switch (status) {
             case 'success': return 'bg-green-100 text-green-800';
             case 'failed': return 'bg-red-100 text-red-800';
-            case 'uploading': return 'bg-blue-100 text-blue-800';
+            case 'uploading': return 'bg-yellow-100 text-yellow-800';
             case 'compiling': return 'bg-yellow-100 text-yellow-800';
-            case 'testing': return 'bg-purple-100 text-purple-800';
+            case 'testing': return 'bg-yellow-100 text-yellow-800';
             default: return 'bg-gray-100 text-gray-800';
         }
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 p-4 rounded-b bg-white flex-1 h-full flex flex-col min-h-0">
             {/* Debug info display in development */}
-            {process.env.NODE_ENV === 'development' && (
+            {/* {process.env.NODE_ENV === 'development' && (
                 <div className="p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
                     <div className="font-bold text-yellow-800 mb-2">🐛 Debug Info:</div>
                     <div className="space-y-1 text-yellow-700">
@@ -170,29 +170,25 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         <div>hasSuccessfulCache: {hasSuccessfulCache ? 'Yes' : 'No'}</div>
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* Header */}
-            <div className="flex items-center justify-between border-b pb-2">
-                <h3 className="text-lg font-semibold text-gray-800">Stored Code</h3>
-                <div className="text-right">
-                    <div className="text-xs text-gray-500">Valid for 36 hours</div>
-                    <div className="text-xs text-gray-400 capitalize">{side} Player</div>
-                </div>
+            <div className="pb-1">
+                <h3 className="text-md font-semibold text-gray-700 rvct-theme-500">Store your code to repeatedly use it.</h3>
             </div>
 
             {/* Current Cache Display */}
             {cacheState && (
-                <div className="p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
+                <div className={`p-4 bg-white rounded-lg border-2 ${cacheState.status === "success" ? "border-rvc-primary-green" : "border-rvc-primary-yellow"}`}>
                     <div className="flex items-start justify-between">
                         <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-2">
-                                <span className="text-sm font-medium text-gray-800">{cacheState.filename}</span>
+                                <span className="text-md font-medium text-black font-bold">{cacheState.filename}</span>
                                 <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(cacheState.status)}`}>
                                     {cacheState.status.toUpperCase()}
                                 </span>
                             </div>
-                            <div className="text-xs text-gray-600 space-y-1">
+                            <div className="text-xs text-gray-600 space-y-1 rvct-theme">
                                 <div>Uploaded {getTimeAgo(cacheState.upload_time)}</div>
                                 {cacheState.return_value !== undefined && (
                                     <div className="flex items-center space-x-1">
@@ -206,41 +202,35 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         </div>
                         {isCacheAvailable() && (
                             <div className="flex items-center space-x-1 text-green-600">
-                                <span className="text-sm">✅</span>
-                                <span className="text-xs font-medium">Ready</span>
+                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-rvc-primary-green align-middle mr-1"></span>
+                                <span className="text-xs font-medium rvct-theme-500 text-rvc-primary-green">Ready</span>
                             </div>
                         )}
                     </div>
                 </div>
             )}
 
-            {/* File Upload Section - 只有在没有成功缓存时才显示 */}
+            {/* File Upload Section - only displayed when the cache is not successful */}
             {!hasSuccessfulCache && (
                 <div className="space-y-3">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2 rvct-theme">
                             Select C File to Store:
                         </label>
                         <input
                             type="file"
                             accept=".c"
                             onChange={handleFileSelect}
-                            className="block w-full text-sm text-gray-500 
-                                     file:mr-4 file:py-2 file:px-4 
-                                     file:rounded-full file:border-0 
-                                     file:text-sm file:font-semibold 
-                                     file:bg-blue-50 file:text-blue-700 
-                                     hover:file:bg-blue-100
-                                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="block w-full text-sm text-gray-600 border-2 border-gray-300 rounded-md font-medium file:px-3.5 file:py-1.5 file:rounded-md file:border-2 file:border-gray-300 file:bg-white file:text-gray-600 file:font-medium file:text-sm transition-colors file:cursor-pointer hover:file:bg-gray-50/70 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         />
                     </div>
                     
                     {selectedFile && (
-                        <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg border">
+                        <div className="flex items-center space-x-2 p-3 rounded-lg border-2 border-rvc-primary-green">
                             <span className="text-blue-600">📄</span>
                             <div className="flex-1">
-                                <div className="text-sm font-medium text-blue-800">{selectedFile.name}</div>
-                                <div className="text-xs text-blue-600">
+                                <div className="text-md font-medium text-rvc-primary-green rvct-theme-500">{selectedFile.name}</div>
+                                <div className="text-xs text-grey-400 rvct-theme-500">
                                     {(selectedFile.size / 1024).toFixed(1)} KB
                                 </div>
                             </div>
@@ -251,7 +241,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
 
             {/* Action buttons */}
             <div className="flex flex-wrap gap-2">
-                {/* Upload button - 只有在没有成功缓存时才显示 */}
+                {/* Upload button - only displayed when the cache is not successful*/}
                 {!hasSuccessfulCache && (
                     <>
                         {isButtonCooldown ? (
@@ -285,7 +275,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         ) : uploadStatus.currentStep === 'failed' ? (
                             <button
                                 onClick={handleUpload}
-                                className="px-4 py-2 rounded-lg font-medium bg-red-500 text-white hover:bg-red-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
+                                className="px-4 py-2 rounded-lg font-medium bg-rvc-primary-red text-white hover:bg-rvc-primary-red/90 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
                             >
                                 Retry Upload
                             </button>
@@ -305,7 +295,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                             uploadStatus.currentStep === 'compiling' || 
                             uploadStatus.currentStep === 'testing'
                                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer shadow-sm hover:shadow-md'
+                                : 'bg-rvc-primary-red text-white hover:bg-rvc-primary-red/90 cursor-pointer shadow-sm hover:shadow-md'
                         }`}
                     >
                         {hasSuccessfulCache ? 'Clear and Reload' : 'Clear'}
@@ -433,7 +423,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
             )}
 
             {/* Current Player Config Display */}
-            {playerConfig.config?.customCodeId && (
+            {/* {playerConfig.config?.customCodeId && (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-center space-x-2 text-blue-800">
                         <span className="text-sm">🔧</span>
@@ -442,7 +432,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         </span>
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
