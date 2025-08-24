@@ -179,7 +179,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
 
             {/* Current Cache Display */}
             {cacheState && (
-                <div className={`p-4 bg-white rounded-lg border-2 ${cacheState.status === "success" ? "border-rvc-primary-green" : "border-rvc-primary-yellow"}`}>
+                <div className={`p-6 bg-white rounded-lg border-2 ${cacheState.status === "success" ? "border-rvc-primary-green" : "border-rvc-primary-yellow"}`}>
                     <div className="flex items-start justify-between">
                         <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-2">
@@ -200,7 +200,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                                 )}
                             </div>
                         </div>
-                        {isCacheAvailable() && (
+                        {isCacheAvailable() && cacheState.status === "success" && (
                             <div className="flex items-center space-x-1 text-green-600">
                                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-rvc-primary-green align-middle mr-1"></span>
                                 <span className="text-xs font-medium rvct-theme-500 text-rvc-primary-green">Ready</span>
@@ -221,7 +221,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                             type="file"
                             accept=".c"
                             onChange={handleFileSelect}
-                            className="block w-full text-sm text-gray-600 border-2 border-gray-300 rounded-md font-medium file:px-3.5 file:py-1.5 file:rounded-md file:border-2 file:border-gray-300 file:bg-white file:text-gray-600 file:font-medium file:text-sm transition-colors file:cursor-pointer hover:file:bg-gray-50/70 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
                         />
                     </div>
                     

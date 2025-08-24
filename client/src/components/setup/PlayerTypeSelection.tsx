@@ -133,7 +133,7 @@ const PlayerTypeSelection = ({
                         className={`
                             flex items-center justify-between gap-4 px-3 py-2 rounded-lg transition-all duration-200
                             ${isDisabled 
-                                ? 'bg-gray-100 opacity-60' 
+                                ? 'bg-gray-100 opacity-60 border-2 border-gray-100' 
                                 : `group bg-white hover:border-gray-300 hover:bg-gray-100/50 border-2`
                             }
                         `}
