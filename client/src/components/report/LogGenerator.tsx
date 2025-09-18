@@ -66,6 +66,8 @@ const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
                     ? `Approx time: ${item.color === 'B' ? formatElapsed(item.time.B) : formatElapsed(item.time.W)}\n`
                     : ''
                 ) +
+                // mobility info added here
+                `Mobility: ${blackName} ● ${item.mobility.B} : ${item.mobility.W} ○ ${whiteName}\n` +
                 `${boardToLogText(generateBoardFromHistory(history, item.step, setupData.boardSize))}\n`
             )
             .join('\n') + endings;
