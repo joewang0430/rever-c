@@ -5,6 +5,17 @@
         "name": "2024 APS105 Leaders",
         "archives": [
         {
+            "id": "mateo_tomeho",
+            "groupId": "2024",
+            "name": "Mateo Tomeho",
+            "shortName": "T.Mateo",
+            "description": "#11 rank APS105 Leaderboard 2024",
+            "shortDescription": "#11 on Leaderboard",
+            "rating": "(1175)",
+            "image": "/svgs/archives/mateo_tomeho.svg",
+            "heavy": false
+        },
+        {
             "id": "hukaiqi1",
             "groupId": "2024",
             "name": "Alex K.Q. Hu",
@@ -91,17 +102,6 @@
             "shortDescription": "Low version Alex",
             "rating": "(1375)",
             "image": "/svgs/archives/hukaiqi1_4.svg",
-            "heavy": false
-        },
-        {
-            "id": "hukaiqi1_5",
-            "groupId": "alex_tower_1",
-            "name": "Alex K.Q. Hu",
-            "shortName": "H.Alex",
-            "description": "#8 rank APS105 Leaderboard 2024",
-            "shortDescription": "#8 in APS105 2024",
-            "rating": "(1500)",
-            "image": "/svgs/archives/hukaiqi1_5.svg",
             "heavy": false
         },
         {
@@ -247,7 +247,7 @@
             "groupId": "reverc_family",
             "name": "Oone",
             "shortName": "Oone",
-            "description": "Defeat my owner first before beating me",
+            "description": "Joe's pet, good at reversi",
             "shortDescription": "Joe's pet",
             "rating": "(???)",
             "image": "/svgs/archives/test_player.svg",
