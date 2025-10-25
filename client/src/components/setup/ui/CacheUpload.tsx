@@ -19,6 +19,8 @@ interface CacheUploadProps {
 const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isButtonCooldown, setIsButtonCooldown] = useState<boolean>(false);
+    // UI-only: hide file input after user clicks Upload
+    const [hasProcessedFile, setHasProcessedFile] = useState(false);
     const { 
         cacheState, 
         uploadCache, 
@@ -73,6 +75,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                 await cleanup();
 
                 setSelectedFile(null);
+                setHasProcessedFile(false);
                 const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
                 if (fileInput) fileInput.value = '';
 
@@ -97,8 +100,10 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const handleUpload = async () => {
         if (!selectedFile || isButtonCooldown) return;
 
-        setIsButtonCooldown(true);
+    setIsButtonCooldown(true);
         setTimeout(() => setIsButtonCooldown(false), 1000); // 1s cooldown
+    // Hide file input until cleared, matching Candidate behavior
+    setHasProcessedFile(true);
 
         if (uploadStatus.currentStep === 'failed') await cleanup();
 
@@ -210,20 +215,22 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                 </div>
             )}
 
-            {/* File Upload Section - only displayed when the cache is not successful */}
-            {!hasSuccessfulCache && (
+            {/* File Upload Section - only displayed when the cache is not successful and not yet processed */}
+            {!hasSuccessfulCache && !hasProcessedFile && (
                 <div className="space-y-3">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2 rvct-theme">
-                            Select C File to Upload:
-                        </label>
-                        <input
-                            type="file"
-                            accept=".c"
-                            onChange={handleFileSelect}
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-                        />
-                    </div>
+                    {!hasProcessedFile && (
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2 rvct-theme">
+                                Select C File to Upload:
+                            </label>
+                            <input
+                                type="file"
+                                accept=".c"
+                                onChange={handleFileSelect}
+                                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                            />
+                        </div>
+                    )}
                     
                     {selectedFile && (
                         <div className="flex items-center space-x-2 p-3 rounded-lg border-2 border-rvc-primary-green">
@@ -273,12 +280,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                                 Processing...
                             </button>
                         ) : uploadStatus.currentStep === 'failed' ? (
-                            <button
-                                onClick={handleUpload}
-                                className="px-4 py-2 rounded-lg font-medium bg-rvc-primary-red text-white hover:bg-rvc-primary-red/90 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
-                            >
-                                Retry Upload
-                            </button>
+                            null
                         ) : null}
                     </>
                 )}
@@ -298,7 +300,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                                 : 'bg-rvc-primary-red text-white hover:bg-rvc-primary-red/90 cursor-pointer shadow-sm hover:shadow-md'
                         }`}
                     >
-                        {hasSuccessfulCache ? 'Clear and Reload' : 'Clear'}
+                        Clear
                     </button>
                 )}
             </div>
