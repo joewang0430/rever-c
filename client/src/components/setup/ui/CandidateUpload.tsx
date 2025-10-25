@@ -166,7 +166,7 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
             show: true,  
             text: 'Upload', 
             disabled: true, 
-            className: 'bg-gray-300 text-gray-500' 
+            className: "px-4 py-2 rounded-lg font-medium bg-gray-300 text-gray-500 cursor-not-allowed"
         };
     }
 
@@ -238,161 +238,241 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const buttonState = getButtonState();
     const clearButtonState = getClearButtonState();
 
+    // UI helpers for selected-file card status indicator
+    const isSuccess = uploadStatus.currentStep === 'success';
+    const isFailed = uploadStatus.currentStep === 'failed';
+
     return (
-        <div className="space-y-4 p-4 rounded-b bg-white flex-1 h-full flex flex-col min-h-0">
-            <h3 className="text-lg font-semibold">
-                Upload Temporary Code ({side === 'black' ? 'Black' : 'White'} Player)
+        <div className="space-y-4 p-4 rounded-b bg-white flex-1 h-full flex flex-col min-h-0 overflow-y-auto">
+            <h3 className="text-md font-semibold text-gray-700 rvct-theme-500">
+                Upload one-time code for this match.
             </h3>
 
             {/* File selection */}
             <div className="space-y-3">
-                <input
-                    type="file"
-                    accept=".c"
-                    onChange={handleFileSelect}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
+                {!hasProcessedFile && (
+                    <>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 rvct-theme">
+                            Select C File to Upload:
+                        </label>
+                        <input
+                            type="file"
+                            accept=".c"
+                            onChange={handleFileSelect}
+                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                        />
+                    </>
+                )}
                 
                 {/* Selected file display */}
                 {selectedFile && (
-                    <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
-                        Selected: {selectedFile.name}
+                    <div
+                        className={`relative flex items-center space-x-2 p-3 rounded-lg border-2 transition-colors duration-200 ${
+                            isFailed
+                                ? 'border-yellow-400 bg-yellow-50'
+                                : 'border-rvc-primary-green'
+                        }`}
+                    >
+                        {/* top-right status pill for success/failure */}
+                        <div
+                            className={`absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full border ${
+                                isFailed
+                                    ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                                    : isSuccess
+                                    ? 'bg-green-100 text-green-700 border-green-200'
+                                    : 'hidden'
+                            }`}
+                        >
+                            {isFailed ? '⚠️ Failed' : '🌟 Success'}
+                        </div>
+
+                        {/* nicer file icon */}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            className="h-5 w-5 text-rvc-primary-green"
+                            aria-hidden="true"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6l5 5v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 3v5h5" />
+                        </svg>
+                        <div className="flex-1">
+                            <div className={`text-md font-medium rvct-theme-500 ${isFailed ? 'text-yellow-700' : 'text-rvc-primary-green'}`}>{selectedFile.name}</div>
+                            <div className="text-xs text-grey-400 rvct-theme-500">
+                                {(selectedFile.size / 1024).toFixed(1)} KB
+                            </div>
+                            {isFailed && (
+                                <div className="text-xs text-yellow-700 mt-1">Upload failed. See details below.</div>
+                            )}
+                        </div>
                     </div>
                 )}
-
-                {/* Action buttons */}
-                <div className="flex space-x-2">
-                    {buttonState.show && (
-                        <button
-                            onClick={handleButtonClick}
-                            disabled={buttonState.disabled}
-                            className={`px-6 py-2 rounded font-medium transition-colors ${buttonState.className} ${
-                                buttonState.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-                            }`}
-                        >
-                            {buttonState.text}
-                        </button>
-                    )}
-                    
-                    {/* Clear button */}
-                    {clearButtonState.show && (
-                        <button
-                            onClick={handleClear}
-                            disabled={clearButtonState.disabled}
-                            className={`px-4 py-2 rounded font-medium transition-colors ${
-                                clearButtonState.disabled
-                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer'
-                            }`}
-                        >
-                            Clear
-                        </button>
-                    )}
-                </div>
             </div>
 
-            {/* Processing status */}
+            {/* Action buttons */}
+            <div className="flex flex-wrap gap-2">
+                {/* Upload button - hide on success */}
+                {uploadStatus.currentStep !== 'success' && (
+                    <>
+                        {isButtonCooldown ? (
+                            <button
+                                disabled
+                                className="px-4 py-2 rounded-lg font-medium bg-gray-400 text-gray-600 cursor-not-allowed"
+                            >
+                                Please wait...
+                            </button>
+                        ) : !selectedFile ? (
+                            <button
+                                disabled
+                                className="px-4 py-2 rounded-lg font-medium bg-gray-300 text-gray-500 cursor-not-allowed"
+                            >
+                                Upload
+                            </button>
+                        ) : uploadStatus.currentStep === 'idle' ? (
+                            <button
+                                onClick={handleButtonClick}
+                                className="px-4 py-2 rounded-lg font-medium bg-rvc-primary-green text-white hover:bg-rvc-primary-green/90 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
+                            >
+                                Upload
+                            </button>
+                        ) : uploadStatus.currentStep === 'uploading' || uploadStatus.currentStep === 'compiling' || uploadStatus.currentStep === 'testing' ? (
+                            <button
+                                disabled
+                                className="px-4 py-2 rounded-lg font-medium bg-rvc-primary-blue text-white cursor-not-allowed"
+                            >
+                                Processing...
+                            </button>
+                        ) : null}
+                    </>
+                )}
+
+                {/* Clear button */}
+                {(selectedFile || playerConfig.config?.customName) && (
+                    <button
+                        onClick={handleClear}
+                        disabled={uploadStatus.currentStep === 'uploading' || 
+                                 uploadStatus.currentStep === 'compiling' || 
+                                 uploadStatus.currentStep === 'testing'}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                            uploadStatus.currentStep === 'uploading' || 
+                            uploadStatus.currentStep === 'compiling' || 
+                            uploadStatus.currentStep === 'testing'
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'bg-rvc-primary-red text-white hover:bg-rvc-primary-red/90 cursor-pointer shadow-sm hover:shadow-md'
+                        }`}
+                    >
+                        Clear
+                    </button>
+                )}
+            </div>
+
+            {/* Processing Status Display */}
             {uploadStatus.currentStep !== 'idle' && (
-                <div className="space-y-2">
-                    <h4 className="font-medium text-gray-700">Processing Status:</h4>
+                <div className="space-y-2 p-4 bg-white rounded-lg border border-gray-200">
+                    <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
+                        <span>Processing Status</span>
+                        {(uploadStatus.currentStep === 'uploading' || uploadStatus.currentStep === 'compiling' || uploadStatus.currentStep === 'testing') && (
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                        )}
+                    </h4>
                     
-                    {/* Upload status */}
-                    <div className={`flex items-center space-x-2 p-2 rounded ${
+                    <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
                         uploadStatus.uploading || uploadStatus.currentStep === 'success'
-                            ? 'bg-green-100 text-green-700'
+                            ? 'bg-green-100 text-green-800'
                             : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-100 text-red-700'
+                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'uploading'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-700'
                     }`}>
-                        <span className="text-lg">
+                        <span className="text-xl">
                             {uploadStatus.uploading || uploadStatus.currentStep === 'success' ? '✅' : 
                              uploadStatus.currentStep === 'failed' ? '❌' : 
                              uploadStatus.currentStep === 'uploading' ? '⏳' : '⭕'}
                         </span>
-                        <span className="font-medium">File Upload</span>
-                        {uploadStatus.currentStep === 'uploading' && (
-                            <span className="text-sm animate-pulse">Uploading...</span>
-                        )}
+                        <div className="flex-1">
+                            <span className="font-medium">File Upload</span>
+                            {uploadStatus.currentStep === 'uploading' && (
+                                <span className="ml-2 text-sm animate-pulse">Uploading file...</span>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Compilation status */}
-                    <div className={`flex items-center space-x-2 p-2 rounded ${
+                    <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
                         uploadStatus.compiling || uploadStatus.currentStep === 'success'
-                            ? 'bg-green-100 text-green-700'
+                            ? 'bg-green-100 text-green-800'
                             : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-100 text-red-700'
+                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'compiling'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-700'
                     }`}>
-                        <span className="text-lg">
+                        <span className="text-xl">
                             {uploadStatus.compiling || uploadStatus.currentStep === 'success' ? '✅' : 
                              uploadStatus.currentStep === 'failed' ? '❌' : 
                              uploadStatus.currentStep === 'compiling' ? '⏳' : '⭕'}
                         </span>
-                        <span className="font-medium">Code Compilation</span>
-                        {uploadStatus.currentStep === 'compiling' && (
-                            <span className="text-sm animate-pulse">Compiling...</span>
-                        )}
+                        <div className="flex-1">
+                            <span className="font-medium">Code Compilation</span>
+                            {uploadStatus.currentStep === 'compiling' && (
+                                <span className="ml-2 text-sm animate-pulse">Compiling C code...</span>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Testing status */}
-                    <div className={`flex items-center space-x-2 p-2 rounded ${
+                    <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
                         uploadStatus.testing || uploadStatus.currentStep === 'success'
-                            ? 'bg-green-100 text-green-700'
+                            ? 'bg-green-100 text-green-800'
                             : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-100 text-red-700'
+                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'testing'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-700'
                     }`}>
-                        <span className="text-lg">
+                        <span className="text-xl">
                             {uploadStatus.testing || uploadStatus.currentStep === 'success' ? '✅' : 
                              uploadStatus.currentStep === 'failed' ? '❌' : 
                              uploadStatus.currentStep === 'testing' ? '⏳' : '⭕'}
                         </span>
-                        <span className="font-medium">Code Testing</span>
-                        {uploadStatus.currentStep === 'testing' && (
-                            <span className="text-sm animate-pulse">Testing...</span>
-                        )}
-                        {/* Show return value on success */}
-                        {uploadStatus.currentStep === 'success' && uploadStatus.testReturnValue !== undefined && (
-                            <span className="text-sm font-mono bg-blue-100 px-2 py-1 rounded">
-                                Return: {uploadStatus.testReturnValue}
-                            </span>
-                        )}
+                        <div className="flex-1">
+                            <span className="font-medium">Function Testing</span>
+                            {uploadStatus.currentStep === 'testing' && (
+                                <span className="ml-2 text-sm animate-pulse">Testing makeMove function...</span>
+                            )}
+                            {uploadStatus.currentStep === 'success' && uploadStatus.testReturnValue !== undefined && (
+                                <div className="mt-1">
+                                    <span className="text-sm bg-white text-green-800 px-2 py-1 rounded">
+                                        Return Value: {uploadStatus.testReturnValue}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Error message */}
                     {uploadStatus.error && (
-                        <div className="p-3 bg-red-50 border border-red-200 rounded">
-                            <div className="flex items-start">
-                                <span className="text-red-500 mr-2">⚠️</span>
-                                <div>
-                                    <p className="font-medium text-red-800">Error occurred:</p>
-                                    <p className="text-red-700 text-sm mt-1">{uploadStatus.error}</p>
+                        <div className="p-3 bg-red-100 rounded-md">
+                            <div className="flex items-start space-x-3 text-red-800">
+                                <span className="text-red-600 text-xl">⚠️</span>
+                                <div className="flex-1">
+                                    <h5 className="font-medium mb-1">Error Occurred</h5>
+                                    <p className="text-sm text-red-700">{uploadStatus.error}</p>
                                 </div>
                             </div>
                         </div>
                     )}
                     
-                    {/* Success message */}
                     {uploadStatus.currentStep === 'success' && (
-                        <div className="p-3 bg-green-50 border border-green-200 rounded">
-                            <div className="flex items-start">
-                                <span className="text-green-500 mr-2">🎉</span>
-                                <div>
-                                    <p className="font-medium text-green-800">Success!</p>
-                                    <p className="text-green-700 text-sm mt-1">
+                        <div className="p-3 bg-green-100 rounded-md">
+                            <div className="flex items-start space-x-3 text-green-800">
+                                <span className="text-green-600 text-xl">🎉</span>
+                                <div className="flex-1">
+                                    <h5 className="font-medium mb-1">Code Uploaded Successfully!</h5>
+                                    <p className="text-sm">
                                         Your code has been uploaded, compiled, and passed the basic test.
                                     </p>
-                                    {uploadStatus.testReturnValue !== undefined && (
-                                        <p className="text-green-700 text-sm mt-1">
-                                            Function returned: <code className="bg-white px-1 rounded">{uploadStatus.testReturnValue}</code>
-                                        </p>
-                                    )}
                                 </div>
                             </div>
                         </div>

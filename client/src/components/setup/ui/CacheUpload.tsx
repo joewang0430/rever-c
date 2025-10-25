@@ -215,7 +215,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                 <div className="space-y-3">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2 rvct-theme">
-                            Select C File to Store:
+                            Select C File to Upload:
                         </label>
                         <input
                             type="file"
@@ -305,7 +305,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
 
             {/* Processing Status Display */}
             {uploadStatus.currentStep !== 'idle' && (
-                <div className="space-y-3 p-4 bg-white rounded-lg border border-gray-200">
+                <div className="space-y-2 p-4 bg-white rounded-lg border border-gray-200">
                     <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
                         <span>Processing Status</span>
                         {(uploadStatus.currentStep === 'uploading' || uploadStatus.currentStep === 'compiling' || uploadStatus.currentStep === 'testing') && (
@@ -313,14 +313,14 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         )}
                     </h4>
                     
-                    <div className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
+                    <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
                         uploadStatus.uploading || uploadStatus.currentStep === 'success'
-                            ? 'bg-green-50 text-green-800 border border-green-200'
+                            ? 'bg-green-100 text-green-800'
                             : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-50 text-red-800 border border-red-200'
+                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'uploading'
-                            ? 'bg-yellow-50 text-yellow-800 border border-yellow-200'
-                            : 'bg-gray-50 text-gray-600 border border-gray-200'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-700'
                     }`}>
                         <span className="text-xl">
                             {uploadStatus.uploading || uploadStatus.currentStep === 'success' ? '✅' : 
@@ -335,14 +335,14 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         </div>
                     </div>
 
-                    <div className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
+                    <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
                         uploadStatus.compiling || uploadStatus.currentStep === 'success'
-                            ? 'bg-green-50 text-green-800 border border-green-200'
+                            ? 'bg-green-100 text-green-800'
                             : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-50 text-red-800 border border-red-200'
+                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'compiling'
-                            ? 'bg-yellow-50 text-yellow-800 border border-yellow-200'
-                            : 'bg-gray-50 text-gray-600 border border-gray-200'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-700'
                     }`}>
                         <span className="text-xl">
                             {uploadStatus.compiling || uploadStatus.currentStep === 'success' ? '✅' : 
@@ -357,14 +357,14 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         </div>
                     </div>
 
-                    <div className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
+                    <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
                         uploadStatus.testing || uploadStatus.currentStep === 'success'
-                            ? 'bg-green-50 text-green-800 border border-green-200'
+                            ? 'bg-green-100 text-green-800'
                             : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-50 text-red-800 border border-red-200'
+                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'testing'
-                            ? 'bg-yellow-50 text-yellow-800 border border-yellow-200'
-                            : 'bg-gray-50 text-gray-600 border border-gray-200'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-gray-100 text-gray-700'
                     }`}>
                         <span className="text-xl">
                             {uploadStatus.testing || uploadStatus.currentStep === 'success' ? '✅' : 
@@ -378,7 +378,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                             )}
                             {uploadStatus.currentStep === 'success' && uploadStatus.testReturnValue !== undefined && (
                                 <div className="mt-1">
-                                    <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                    <span className="text-sm bg-white text-green-800 px-2 py-1 rounded">
                                         Return Value: {uploadStatus.testReturnValue}
                                     </span>
                                 </div>
@@ -387,29 +387,29 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     </div>
 
                     {uploadStatus.error && (
-                        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                            <div className="flex items-start space-x-3">
-                                <span className="text-red-500 text-xl">⚠️</span>
+                        <div className="p-3 bg-red-100 rounded-md">
+                            <div className="flex items-start space-x-3 text-red-800">
+                                <span className="text-red-600 text-xl">⚠️</span>
                                 <div className="flex-1">
-                                    <h5 className="font-medium text-red-800 mb-1">Error Occurred</h5>
-                                    <p className="text-red-700 text-sm">{uploadStatus.error}</p>
+                                    <h5 className="font-medium mb-1">Error Occurred</h5>
+                                    <p className="text-sm text-red-700">{uploadStatus.error}</p>
                                 </div>
                             </div>
                         </div>
                     )}
                     
                     {uploadStatus.currentStep === 'success' && (
-                        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <div className="flex items-start space-x-3">
-                                <span className="text-green-500 text-xl">🎉</span>
+                        <div className="p-3 bg-green-100 rounded-md">
+                            <div className="flex items-start space-x-3 text-green-800">
+                                <span className="text-green-600 text-xl">🎉</span>
                                 <div className="flex-1">
-                                    <h5 className="font-medium text-green-800 mb-1">Code Stored Successfully!</h5>
-                                    <p className="text-green-700 text-sm mb-2">
+                                    <h5 className="font-medium mb-1">Code Stored Successfully!</h5>
+                                    <p className="text-sm mb-2">
                                         Your code has been stored and is ready for use in games for the next 36 hours.
                                     </p>
                                     {uploadStatus.testReturnValue !== undefined && (
                                         <div className="flex items-center space-x-2">
-                                            <span className="text-green-700 text-sm">Function returned:</span>
+                                            <span className="text-sm">Function returned:</span>
                                             <code className="bg-white text-green-800 px-2 py-1 rounded text-sm font-mono">
                                                 {uploadStatus.testReturnValue}
                                             </code>
