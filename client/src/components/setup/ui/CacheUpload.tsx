@@ -157,7 +157,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     };
 
     return (
-        <div className="space-y-4 p-4 rounded-b bg-white flex-1 h-full flex flex-col min-h-0">
+        <div className="space-y-4 p-4 rounded-b bg-white flex-1 h-full flex flex-col min-h-0 overflow-y-auto">
             {/* Debug info display in development */}
             {/* {process.env.NODE_ENV === 'development' && (
                 <div className="p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
@@ -261,7 +261,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         ) : uploadStatus.currentStep === 'idle' ? (
                             <button
                                 onClick={handleUpload}
-                                className="px-4 py-2 rounded-lg font-medium bg-blue-500 text-white hover:bg-blue-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
+                                className="px-4 py-2 rounded-lg font-medium bg-rvc-primary-green text-white hover:bg-rvc-primary-green/90 cursor-pointer shadow-sm hover:shadow-md transition-all duration-200"
                             >
                                 Upload
                             </button>
