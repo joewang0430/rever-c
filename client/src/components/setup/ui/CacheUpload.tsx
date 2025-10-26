@@ -3,6 +3,10 @@
 // in the setup process.
 //
 
+/**
+ * This is literally the first SHIT MOUNTAIN code in my life.
+ */
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -125,10 +129,43 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     status: 'success',
                     testReturnValue: uploadStatus.testReturnValue
                 });
+            } else {
+                // Any failure in the chain: reset context and local/UI state to "no upload" state
+                try { await clearCache(); } catch { /* ignore clear errors */ }
+                await cleanup();
+                setHasProcessedFile(false);
+                setSelectedFile(null);
+                const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+                if (fileInput) fileInput.value = '';
+                const resetConfig: PlayerConfig = {
+                    ...playerConfig,
+                    config: {
+                        ...playerConfig.config,
+                        customCodeId: undefined,
+                        customName: undefined
+                    }
+                };
+                onConfigChange(resetConfig);
             }
 
         } catch (error) {
             console.error('Cache upload failed:', error);
+            // Also treat thrown errors as failure: reset everything to initial state
+            try { await clearCache(); } catch { /* ignore clear errors */ }
+            await cleanup();
+            setHasProcessedFile(false);
+            setSelectedFile(null);
+            const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+            if (fileInput) fileInput.value = '';
+            const resetConfig: PlayerConfig = {
+                ...playerConfig,
+                config: {
+                    ...playerConfig.config,
+                    customCodeId: undefined,
+                    customName: undefined
+                }
+            };
+            onConfigChange(resetConfig);
         }
     };
 
