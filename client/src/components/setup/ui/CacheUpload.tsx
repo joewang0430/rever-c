@@ -41,20 +41,49 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const hasSuccessfulCache = (cacheState && cacheState.status === 'success')
         || uploadStatus.currentStep === 'success';
     
-    // Automatically load the cache config
+    // Sync PlayerConfig with global cache success (bind or update when out-of-sync)
     useEffect(() => {
-        if (cacheState && isCacheAvailable() && !playerConfig.config?.customCodeId) {
-            const updatedConfig: PlayerConfig = {
+        if (
+            cacheState?.status === 'success' &&
+            playerConfig.config?.customType === 'cache'
+        ) {
+            const desiredId = cacheState.code_id;
+            const desiredName = cacheState.filename.replace('.c', '');
+            const currentId = playerConfig.config?.customCodeId;
+            const currentName = playerConfig.config?.customName;
+            if (currentId !== desiredId || currentName !== desiredName) {
+                const updatedConfig: PlayerConfig = {
+                    ...playerConfig,
+                    config: {
+                        ...playerConfig.config,
+                        customCodeId: desiredId,
+                        customName: desiredName
+                    }
+                };
+                onConfigChange(updatedConfig);
+            }
+        }
+    }, [cacheState?.status, cacheState?.code_id, cacheState?.filename, playerConfig.config?.customType, playerConfig.config?.customCodeId, playerConfig.config?.customName, onConfigChange]);
+
+    // When global cache is cleared or not successful, clear PlayerConfig for cache mode
+    useEffect(() => {
+        const isClearedOrNotSuccess = !cacheState || cacheState.status !== 'success';
+        if (
+            isClearedOrNotSuccess &&
+            playerConfig.config?.customType === 'cache' &&
+            (playerConfig.config?.customCodeId !== undefined || playerConfig.config?.customName !== undefined)
+        ) {
+            const clearedConfig: PlayerConfig = {
                 ...playerConfig,
                 config: {
                     ...playerConfig.config,
-                    customCodeId: cacheState.code_id,
-                    customName: cacheState.filename.replace('.c', '')
+                    customCodeId: undefined,
+                    customName: undefined
                 }
             };
-            onConfigChange(updatedConfig);
+            onConfigChange(clearedConfig);
         }
-    }, [cacheState, isCacheAvailable, onConfigChange]);
+    }, [cacheState?.status, playerConfig.config?.customType, playerConfig.config?.customCodeId, playerConfig.config?.customName, onConfigChange]);
 
     // When global cache becomes successful elsewhere, clear local failure UI/state here
     useEffect(() => {
