@@ -453,17 +453,17 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     </h4>
                     
                     <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
-                        uploadStatus.uploading || uploadStatus.currentStep === 'success'
+                        uploadStatus.currentStep === 'failed'
+                            ? (uploadStatus.failedStage === 'uploading' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800')
+                            : uploadStatus.uploading || uploadStatus.currentStep === 'success'
                             ? 'bg-green-100 text-green-800'
-                            : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'uploading'
                             ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-gray-100 text-gray-700'
                     }`}>
                         <span className="text-xl">
-                            {uploadStatus.uploading || uploadStatus.currentStep === 'success' ? '✅' : 
-                             uploadStatus.currentStep === 'failed' ? '❌' : 
+                            {uploadStatus.currentStep === 'failed' ? (uploadStatus.failedStage === 'uploading' ? '❌' : '✅') :
+                             uploadStatus.uploading || uploadStatus.currentStep === 'success' ? '✅' : 
                              uploadStatus.currentStep === 'uploading' ? '⏳' : '⭕'}
                         </span>
                         <div className="flex-1">
@@ -475,17 +475,17 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     </div>
 
                     <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
-                        uploadStatus.compiling || uploadStatus.currentStep === 'success'
+                        uploadStatus.currentStep === 'failed'
+                            ? (uploadStatus.failedStage === 'compiling' ? 'bg-red-100 text-red-800' : uploadStatus.failedStage === 'testing' || uploadStatus.failedStage === 'uploading' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700')
+                            : uploadStatus.compiling || uploadStatus.currentStep === 'success'
                             ? 'bg-green-100 text-green-800'
-                            : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'compiling'
                             ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-gray-100 text-gray-700'
                     }`}>
                         <span className="text-xl">
-                            {uploadStatus.compiling || uploadStatus.currentStep === 'success' ? '✅' : 
-                             uploadStatus.currentStep === 'failed' ? '❌' : 
+                            {uploadStatus.currentStep === 'failed' ? (uploadStatus.failedStage === 'compiling' ? '❌' : (uploadStatus.failedStage === 'testing' || uploadStatus.failedStage === 'uploading') ? '✅' : '⭕') :
+                             uploadStatus.compiling || uploadStatus.currentStep === 'success' ? '✅' : 
                              uploadStatus.currentStep === 'compiling' ? '⏳' : '⭕'}
                         </span>
                         <div className="flex-1">
@@ -497,17 +497,17 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     </div>
 
                     <div className={`flex items-center space-x-3 p-2.5 rounded-md transition-all duration-300 ${
-                        uploadStatus.testing || uploadStatus.currentStep === 'success'
+                        uploadStatus.currentStep === 'failed'
+                            ? (uploadStatus.failedStage === 'testing' ? 'bg-red-100 text-red-800' : (uploadStatus.failedStage === 'uploading' || uploadStatus.failedStage === 'compiling') ? 'bg-gray-100 text-gray-700' : 'bg-gray-100 text-gray-700')
+                            : uploadStatus.testing || uploadStatus.currentStep === 'success'
                             ? 'bg-green-100 text-green-800'
-                            : uploadStatus.currentStep === 'failed'
-                            ? 'bg-red-100 text-red-800'
                             : uploadStatus.currentStep === 'testing'
                             ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-gray-100 text-gray-700'
                     }`}>
                         <span className="text-xl">
-                            {uploadStatus.testing || uploadStatus.currentStep === 'success' ? '✅' : 
-                             uploadStatus.currentStep === 'failed' ? '❌' : 
+                            {uploadStatus.currentStep === 'failed' ? (uploadStatus.failedStage === 'testing' ? '❌' : '⭕') :
+                             uploadStatus.testing || uploadStatus.currentStep === 'success' ? '✅' : 
                              uploadStatus.currentStep === 'testing' ? '⏳' : '⭕'}
                         </span>
                         <div className="flex-1">

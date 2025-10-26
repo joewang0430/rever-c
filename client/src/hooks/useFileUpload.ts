@@ -17,7 +17,8 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
         success: false,             // if entire process is successful
         error: null,                // error message if any step fails
         currentStep: 'idle',        // current step in the process
-        testReturnValue: undefined  // return value from C function
+        testReturnValue: undefined, // return value from C function
+        failedStage: undefined
     });
 
     const [codeId, setCodeId] = useState<string | null>(null);
@@ -34,7 +35,8 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                 success: false,
                 error: null,
                 currentStep: 'uploading',
-                testReturnValue: undefined
+                testReturnValue: undefined,
+                failedStage: undefined
             });
 
             // Choose the correct API function based on upload type
@@ -125,7 +127,8 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                             setUploadStatus(prev => ({
                                 ...prev,
                                 error: status.error_message || 'Process failed',
-                                currentStep: 'failed'
+                                currentStep: 'failed',
+                                failedStage: (status as any).failed_stage as ('uploading'|'compiling'|'testing'|undefined)
                             }));
                             setIsProcessing(false);
                             resolve(false);
@@ -142,7 +145,11 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
                     setUploadStatus(prev => ({
                         ...prev,
                         error: error instanceof Error ? error.message : 'Status check failed',
-                        currentStep: 'failed'
+                        currentStep: 'failed',
+                        // fallback to the last known step as failed stage
+                        failedStage: prev.currentStep === 'testing' || prev.currentStep === 'compiling' || prev.currentStep === 'uploading'
+                            ? prev.currentStep
+                            : 'uploading'
                     }));
                     setIsProcessing(false);
                     resolve(false);  // return failure as well if network error
@@ -174,7 +181,8 @@ export const useFileUpload = (uploadType: 'candidate' | 'cache' = 'candidate') =
             success: false,
             error: null,
             currentStep: 'idle',
-            testReturnValue: undefined
+            testReturnValue: undefined,
+            failedStage: undefined
         });
         setCodeId(null);
         setIsProcessing(false);

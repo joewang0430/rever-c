@@ -10,6 +10,7 @@ export interface UploadStatus {
     error: string | null;
     currentStep: 'idle' | 'uploading' | 'compiling' | 'testing' | 'success' | 'failed';
     testReturnValue?: number;
+    failedStage?: 'uploading' | 'compiling' | 'testing';
 }
 
 export interface ProcessResponse {
