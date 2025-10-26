@@ -25,6 +25,9 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const [isButtonCooldown, setIsButtonCooldown] = useState<boolean>(false);
     // UI-only: hide file input after user clicks Upload
     const [hasProcessedFile, setHasProcessedFile] = useState(false);
+    // New: track failed upload to show an error card identical to CandidateUpload
+    const [showErrorCard, setShowErrorCard] = useState(false);
+    const [errorFileInfo, setErrorFileInfo] = useState<{ name: string; size: number } | null>(null);
     const { 
         cacheState, 
         uploadCache, 
@@ -53,11 +56,33 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         }
     }, [cacheState, isCacheAvailable, onConfigChange]);
 
+    // When global cache becomes successful elsewhere, clear local failure UI/state here
+    useEffect(() => {
+        const syncOnGlobalSuccess = async () => {
+            if (cacheState?.status === 'success' && (uploadStatus.currentStep === 'failed' || showErrorCard)) {
+                try { await cleanup(); } catch { /* ignore */ }
+                setShowErrorCard(false);
+                setErrorFileInfo(null);
+            }
+        };
+        syncOnGlobalSuccess();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cacheState?.status, uploadStatus.currentStep, showErrorCard]);
+
     // Handle file selection
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.name.endsWith('.c')) {
+            // If previous attempt failed, reset upload status to idle so user can upload again
+            if (uploadStatus.currentStep === 'failed') {
+                await cleanup();
+            }
             setSelectedFile(file);
+            // Selecting a new file should clear any previous error card
+            if (showErrorCard) {
+                setShowErrorCard(false);
+                setErrorFileInfo(null);
+            }
         } else if (file) {
             alert('Please select a .c file');
             e.target.value = '';
@@ -92,6 +117,9 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     }
                 };
                 onConfigChange(clearedConfig);
+                // Clear any previous error card on explicit clear
+                setShowErrorCard(false);
+                setErrorFileInfo(null);
 
             } catch (error) {
                 console.error('Clear cache failed:', error);
@@ -129,10 +157,17 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     status: 'success',
                     testReturnValue: uploadStatus.testReturnValue
                 });
+                // Success: ensure error card is cleared
+                setShowErrorCard(false);
+                setErrorFileInfo(null);
             } else {
                 // Any failure in the chain: reset context and local/UI state to "no upload" state
+                // Preserve failed file info for error card before clearing selection
+                if (selectedFile) {
+                    setErrorFileInfo({ name: selectedFile.name, size: selectedFile.size });
+                    setShowErrorCard(true);
+                }
                 try { await clearCache(); } catch { /* ignore clear errors */ }
-                await cleanup();
                 setHasProcessedFile(false);
                 setSelectedFile(null);
                 const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
@@ -151,8 +186,11 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
         } catch (error) {
             console.error('Cache upload failed:', error);
             // Also treat thrown errors as failure: reset everything to initial state
+            if (selectedFile) {
+                setErrorFileInfo({ name: selectedFile.name, size: selectedFile.size });
+                setShowErrorCard(true);
+            }
             try { await clearCache(); } catch { /* ignore clear errors */ }
-            await cleanup();
             setHasProcessedFile(false);
             setSelectedFile(null);
             const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
@@ -218,6 +256,39 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
             <div className="pb-1">
                 <h3 className="text-md font-semibold text-gray-700 rvct-theme-500">Store your code to repeatedly use it.</h3>
             </div>
+
+            {/* Error card (matches CandidateUpload failed selected-file card) */}
+            {showErrorCard && errorFileInfo && (
+                <div
+                    className="relative flex items-center space-x-2 p-3 rounded-lg border-2 transition-colors duration-200 border-yellow-400 bg-yellow-50"
+                >
+                    {/* top-right status pill */}
+                    <div className="absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full border bg-yellow-100 text-yellow-700 border-yellow-200">
+                        ⚠️ Failed
+                    </div>
+
+                    {/* inline file icon */}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        className="h-5 w-5 text-rvc-primary-green"
+                        aria-hidden="true"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6l5 5v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 3v5h5" />
+                    </svg>
+                    <div className="flex-1">
+                        <div className="text-md font-medium rvct-theme-500 text-yellow-700">{errorFileInfo.name}</div>
+                        <div className="text-xs text-grey-400 rvct-theme-500">
+                            {(errorFileInfo.size / 1024).toFixed(1)} KB
+                        </div>
+                        <div className="text-xs text-yellow-700 mt-1">Upload failed. See details below.</div>
+                    </div>
+                </div>
+            )}
 
             {/* Current Cache Display */}
             {cacheState && (
