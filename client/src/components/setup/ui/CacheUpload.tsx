@@ -321,35 +321,98 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
 
             {/* Current Cache Display */}
             {cacheState && (
-                <div className={`p-6 bg-white rounded-lg border-2 ${cacheState.status === "success" ? "border-rvc-primary-green" : "border-rvc-primary-yellow"}`}>
-                    <div className="flex items-start justify-between">
+                cacheState.status === 'success' ? (
+                    <div
+                        className="relative flex items-center space-x-2 p-3 rounded-lg border-2 transition-colors duration-200 border-rvc-primary-green"
+                    >
+                        {/* top-right success pill */}
+                        <div className="absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full border bg-green-100 text-green-700 border-green-200">
+                            🌟 Success
+                        </div>
+
+                        {/* inline file icon */}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            className="h-5 w-5 text-rvc-primary-green"
+                            aria-hidden="true"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6l5 5v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 3v5h5" />
+                        </svg>
+
                         <div className="flex-1">
-                            <div className="flex items-center space-x-2 mb-2">
-                                <span className="text-md font-medium text-black font-bold">{cacheState.filename}</span>
-                                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(cacheState.status)}`}>
-                                    {cacheState.status.toUpperCase()}
-                                </span>
+                            <div className="text-md font-medium rvct-theme-500 text-rvc-primary-green">{cacheState.filename}</div>
+                            <div className="text-xs text-grey-400 rvct-theme-500">
+                                Uploaded {getTimeAgo(cacheState.upload_time)}
                             </div>
-                            <div className="text-xs text-gray-600 space-y-1 rvct-theme">
-                                <div>Uploaded {getTimeAgo(cacheState.upload_time)}</div>
-                                {cacheState.return_value !== undefined && (
-                                    <div className="flex items-center space-x-1">
-                                        <span>Function return value:</span>
-                                        <code className="bg-blue-100 text-blue-800 px-1 rounded text-xs">
-                                            {cacheState.return_value}
-                                        </code>
-                                    </div>
-                                )}
+                            {cacheState.return_value !== undefined && (
+                                <div className="mt-1">
+                                    <span className="text-xs bg-white text-green-800 px-2 py-1 rounded">
+                                        Return Value: {cacheState.return_value}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <div
+                        className={`relative flex items-center space-x-2 p-3 rounded-lg border-2 transition-colors duration-200 ${
+                            cacheState.status === 'failed'
+                                ? 'border-yellow-400 bg-yellow-50'
+                                : 'border-rvc-primary-yellow bg-white'
+                        }`}
+                    >
+                        {/* top-right status pill */}
+                        <div
+                            className={`absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full border ${
+                                cacheState.status === 'failed'
+                                    ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                                    : 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                            }`}
+                        >
+                            {cacheState.status === 'failed'
+                                ? '⚠️ Failed'
+                                : cacheState.status === 'uploading'
+                                ? '⏳ Uploading'
+                                : cacheState.status === 'compiling'
+                                ? '⏳ Compiling'
+                                : cacheState.status === 'testing'
+                                ? '⏳ Testing'
+                                : '⏳ Processing'}
+                        </div>
+
+                        {/* inline file icon */}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            className="h-5 w-5 text-rvc-primary-green"
+                            aria-hidden="true"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6l5 5v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 3v5h5" />
+                        </svg>
+
+                        <div className="flex-1">
+                            <div
+                                className={`text-md font-medium rvct-theme-500 ${
+                                    cacheState.status === 'failed' ? 'text-yellow-700' : 'text-gray-800'
+                                }`}
+                            >
+                                {cacheState.filename}
+                            </div>
+                            <div className="text-xs text-grey-400 rvct-theme-500">
+                                Uploaded {getTimeAgo(cacheState.upload_time)}
                             </div>
                         </div>
-                        {isCacheAvailable() && cacheState.status === "success" && (
-                            <div className="flex items-center space-x-1 text-green-600">
-                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-rvc-primary-green align-middle mr-1"></span>
-                                <span className="text-xs font-medium rvct-theme-500 text-rvc-primary-green">Ready</span>
-                            </div>
-                        )}
                     </div>
-                </div>
+                )
             )}
 
             {/* File Upload Section - only displayed when the cache is not successful and not yet processed */}
@@ -546,14 +609,6 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                                     <p className="text-sm mb-2">
                                         Your code has been stored and is ready for use in games for the next 36 hours.
                                     </p>
-                                    {uploadStatus.testReturnValue !== undefined && (
-                                        <div className="flex items-center space-x-2">
-                                            <span className="text-sm">Function returned:</span>
-                                            <code className="bg-white text-green-800 px-2 py-1 rounded text-sm font-mono">
-                                                {uploadStatus.testReturnValue}
-                                            </code>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         </div>
