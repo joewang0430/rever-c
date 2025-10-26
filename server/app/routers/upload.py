@@ -10,11 +10,13 @@ import aiofiles
 from datetime import datetime
 from typing import Optional, Literal
 import json
+import sys
 import subprocess
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import resource
-from app.services import test_c
+import signal
+# from app.services import test_c
 
 
 upload_router = APIRouter()
@@ -65,6 +67,24 @@ def cleanup_status(code_id: str, file_type: str = 'candidate'):
 def set_memory_limits():
     """ Set memory limits for the process to prevent excessive memory usage """
     resource.setrlimit(resource.RLIMIT_AS, (100*1024*1024, 100*1024*1024))
+
+def set_test_runtime_limits():
+    """Set strict runtime limits for testing subprocesses (CPU/memory/stack)."""
+    try:
+        # CPU time 3s, prevent busy loop
+        resource.setrlimit(resource.RLIMIT_CPU, (3, 3))
+    except Exception:
+        pass
+    try:
+        # address space 256MB, prevent mem boomb
+        resource.setrlimit(resource.RLIMIT_AS, (256*1024*1024, 256*1024*1024))
+    except Exception:
+        pass
+    try:
+        # stack 8MB
+        resource.setrlimit(resource.RLIMIT_STACK, (8*1024*1024, 8*1024*1024))
+    except Exception:
+        pass
 
 def validate_c_code(file_path: str) -> bool:
     """
@@ -179,29 +199,69 @@ async def process_candidate_async(code_id: str):
         if compile_result["success"]:
             save_status(code_id, "testing", "candidate")
 
-            # Compile succeeded, now run the test_code function in the thread pool
-            test_result = await loop.run_in_executor(
-                executor,
-                test_c.test_code,
-                code_id,
-                "candidate"
-            )
-
-            if test_result["success"]:
-                # if test passed, save the success result
-                save_status(
-                    code_id, 
-                    "success", 
-                    "candidate", 
-                    test_return_value=test_result["return_value"]
+            try:
+                result = subprocess.run(
+                    [sys.executable, "-m", "app.services.test_runner", code_id, "candidate"],
+                    capture_output=True,
+                    text=True,
+                    timeout=3,
+                    preexec_fn=set_test_runtime_limits
                 )
-            else:
-                # if failed, save the error
+
+                if result.returncode == 0:
+                    try:
+                        payload = json.loads(result.stdout or "{}")
+                        test_return_value = payload.get("return_value")
+                    except Exception:
+                        test_return_value = None
+                    save_status(
+                        code_id,
+                        "success",
+                        "candidate",
+                        test_return_value=test_return_value
+                    )
+                else:
+                    err_msg = None
+                    try:
+                        payload = json.loads(result.stdout or "{}")
+                        err_msg = payload.get("error")
+                    except Exception:
+                        pass
+                    # If process was killed by a signal (e.g., SIGXCPU), normalize to timeout message
+                    if not err_msg and result.returncode < 0:
+                        sig = -result.returncode
+                        if sig in (getattr(signal, 'SIGXCPU', None), signal.SIGKILL, signal.SIGTERM):
+                            err_msg = "Testing timeout (exceeded 3 seconds)"
+                    if not err_msg and result.returncode < 0:
+                        # Non-timeout signal: provide a clearer crash reason
+                        sig = -result.returncode
+                        try:
+                            sig_name = signal.Signals(sig).name
+                        except Exception:
+                            sig_name = f"SIG{sig}"
+                        err_msg = (
+                            f"Test process crashed (signal {sig_name} {sig}). "
+                            "This usually indicates invalid memory access, abort, illegal instruction, or divide-by-zero. "
+                            "Please check pointer usage, array bounds, and makeMove signature."
+                        )
+                    if not err_msg:
+                        err_msg = (
+                            (result.stderr.strip() if result.stderr else "")
+                            or "Testing failed; reason unclear. This might be: empty/invalid output from test process, runtime crash without diagnostics, or environment limitation. Please check memory safety, out-of-bounds access, and function signature, then try again."
+                        )
+                    save_status(
+                        code_id,
+                        "failed",
+                        "candidate",
+                        err_msg,
+                        "testing"
+                    )
+            except subprocess.TimeoutExpired:
                 save_status(
-                    code_id, 
-                    "failed", 
-                    "candidate", 
-                    test_result["error"], 
+                    code_id,
+                    "failed",
+                    "candidate",
+                    "Testing timeout (exceeded 3 seconds)",
                     "testing"
                 )
         else:
@@ -340,29 +400,70 @@ async def process_cache_async(code_id: str):
             # Compilation succeeded, begin testing
             save_status(code_id, "testing", "cache")
             
-            # Run the test_code function in the thread pool
-            test_result = await loop.run_in_executor(
-                executor,
-                test_c.test_code,
-                code_id,
-                "cache"
-            )
-            
-            if test_result["success"]:
-                # Test passed, save the success result
-                save_status(
-                    code_id, 
-                    "success", 
-                    "cache", 
-                    test_return_value=test_result["return_value"]
+            # 在沙箱子进程里跑测试，带 3s 墙钟超时
+            try:
+                result = subprocess.run(
+                    [sys.executable, "-m", "app.services.test_runner", code_id, "cache"],
+                    capture_output=True,
+                    text=True,
+                    timeout=3,
+                    preexec_fn=set_test_runtime_limits
                 )
-            else:
-                # Test failed, save the error
+
+                if result.returncode == 0:
+                    try:
+                        payload = json.loads(result.stdout or "{}")
+                        test_return_value = payload.get("return_value")
+                    except Exception:
+                        test_return_value = None
+                    save_status(
+                        code_id,
+                        "success",
+                        "cache",
+                        test_return_value=test_return_value
+                    )
+                else:
+                    err_msg = None
+                    try:
+                        payload = json.loads(result.stdout or "{}")
+                        err_msg = payload.get("error")
+                    except Exception:
+                        pass
+                    # If process was killed by a signal (e.g., SIGXCPU), normalize to timeout message
+                    if not err_msg and result.returncode < 0:
+                        sig = -result.returncode
+                        if sig in (getattr(signal, 'SIGXCPU', None), signal.SIGKILL, signal.SIGTERM):
+                            err_msg = "Testing timeout (exceeded 3 seconds)"
+                    if not err_msg and result.returncode < 0:
+                        # Non-timeout signal: provide a clearer crash reason
+                        sig = -result.returncode
+                        try:
+                            sig_name = signal.Signals(sig).name
+                        except Exception:
+                            sig_name = f"SIG{sig}"
+                        err_msg = (
+                            f"Test process crashed (signal {sig_name} {sig}). "
+                            "This usually indicates invalid memory access, abort, illegal instruction, or divide-by-zero. "
+                            "Please check pointer usage, array bounds, and makeMove signature."
+                        )
+                    if not err_msg:
+                        err_msg = (
+                            (result.stderr.strip() if result.stderr else "")
+                            or "Testing failed; reason unclear. This might be empty/invalid output, runtime crash, or environment limitation. Please check memory safety, out-of-bounds access, and function signature, then try again."
+                        )
+                    save_status(
+                        code_id,
+                        "failed",
+                        "cache",
+                        err_msg,
+                        "testing"
+                    )
+            except subprocess.TimeoutExpired:
                 save_status(
-                    code_id, 
-                    "failed", 
-                    "cache", 
-                    test_result["error"], 
+                    code_id,
+                    "failed",
+                    "cache",
+                    "Testing timeout (exceeded 3 seconds)",
                     "testing"
                 )
         else:

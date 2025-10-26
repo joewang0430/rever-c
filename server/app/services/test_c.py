@@ -2,6 +2,8 @@
 Test C code and shared libraries, in setup stage.
 '''
 
+# Sept 26, 2025: currently this file is idle as test operations are moved into subprocess.
+
 import ctypes
 import os
 import threading
