@@ -264,10 +264,10 @@
             "groupId": "other_bots",
             "name": "Absolute Random",
             "shortName": "Random Move",
-            "description": "Naughty child that makes random move",
+            "description": "Randomly choose one from available moves",
             "shortDescription": "Randomly put",
             "rating": "(≈100)",
-            "image": "/svgs/archives/test_player.svg",
+            "image": "/svgs/archives/absolute_random.svg",
             "heavy": false
         },
         {
@@ -275,10 +275,10 @@
             "groupId": "other_bots",
             "name": "Absolute Greedy",
             "shortName": "Greedy Move",
-            "description": "Only wants to flip as much as possible in one round",
+            "description": "Flip maximum pieces in current turn",
             "shortDescription": "Max flipps only",
             "rating": "(250)",
-            "image": "/svgs/archives/test_player.svg",
+            "image": "/svgs/archives/absolute_greedy.svg",
             "heavy": false
         }
         ]
