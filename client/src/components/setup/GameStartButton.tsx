@@ -159,7 +159,7 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
     return (
         <button
             className={`px-6 py-3 rounded-lg font-semibold text-white transition
-                ${isValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}
+                ${isValid ? "bg-rvc-primary-green hover:bg-rvc-primary-green/90" : "bg-gray-400 cursor-not-allowed"}
             `}
             disabled={!isValid}
             onClick={handleStartGame}
