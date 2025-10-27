@@ -363,7 +363,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                         className={`relative flex items-center space-x-2 p-3 rounded-lg border-2 transition-colors duration-200 ${
                             cacheState.status === 'failed'
                                 ? 'border-yellow-400 bg-yellow-50'
-                                : 'border-rvc-primary-yellow bg-white'
+                                : 'border-rvc-primary-green bg-white'
                         }`}
                     >
                         {/* top-right status pill */}
@@ -371,7 +371,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                             className={`absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full border ${
                                 cacheState.status === 'failed'
                                     ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
-                                    : 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                                    : 'bg-green-100 text-green-700 border-green-200'
                             }`}
                         >
                             {cacheState.status === 'failed'
