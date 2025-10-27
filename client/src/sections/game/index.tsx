@@ -3,6 +3,7 @@
 //
 
 "use client";
+import { parseSetupFromHash } from "@/utils/setupTransport";
 
 import { useState, useEffect, useRef } from "react";
 import { getSetupData } from "@/api/gameApi";
@@ -52,19 +53,28 @@ export default function Game({ matchId}: GameProps) {
         }, 100);    
     };
 
+    // Prefer reading setup from URL hash token (pure frontend). If missing/invalid, redirect back to setup with an error message.
     useEffect(() => {
         if (!matchId) return;
         setLoading(true);
-        getSetupData(matchId)
-            .then((data) => {
-                setSetupDataLocal(data.setupData);
-                setSetupData(data.setupData);
-                setLoading(false);  // added
-            })
-            .catch((err) => {
-                setError(err.message || "Failed to fetch setup data");
+        try {
+            const hash = typeof window !== "undefined" ? window.location.hash : "";
+            const dataFromHash = parseSetupFromHash(hash);
+            if (dataFromHash && dataFromHash.matchId === matchId) {
+                setSetupDataLocal(dataFromHash);
+                setSetupData(dataFromHash);
                 setLoading(false);
-            })
+                return;
+            }
+        } catch (e) {
+            // will redirect
+        }
+        // No backend fallback: show browser alert, then redirect to setup
+        if (typeof window !== "undefined") {
+            const msg = "Invalid or missing game setup in URL. Please reconfigure your game from the setup page.";
+            window.alert(msg);
+        }
+        router.push("/setup");
     }, [matchId]);
 
     // Process the move from computer ("custom" | "archive" | "ai")
@@ -194,8 +204,8 @@ export default function Game({ matchId}: GameProps) {
     }, [game.turn, game.gameOver, game.board]);
 
     if (loading) return <div>Loading game data...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!setupData) return <div>No setup data found.</div>;
+    if (error) return null; // In pure-frontend flow we redirect on error
+    if (!setupData) return null; // while redirecting or before parsing, render nothing
 
     return (
         <section aria-label="Game Page">

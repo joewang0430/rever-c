@@ -60,6 +60,8 @@ export default function Setup() {
         return () => window.removeEventListener("beforeunload", handleUnload);
     }, []);
 
+    // No cross-page UI banner; errors are alerted by the game page before redirect.
+
     const memorizedBlackConfig = useMemo(() => setupData.black,[setupData.black]);
     const memorizedWhiteConfig = useMemo(() => setupData.white,[setupData.white]);
 

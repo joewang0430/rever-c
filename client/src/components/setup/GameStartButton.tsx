@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { SetupData, PlayerConfig } from '../../data/types/setup';
 import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/uploadApi";
-import { saveSetupDataToGame } from "@/api/gameApi";
+import { buildSetupToken, isTokenLengthReasonable } from "@/utils/setupTransport";
 import { v4 as uuid } from "uuid";
 
 interface GameStartButtonProps {
@@ -146,14 +146,15 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
             createAt: new Date().toISOString()
         };
 
-        try {
-            await saveSetupDataToGame(matchId, setupDataWithId);
-        } catch (e) {
-            alert("Failed to save game setup. Please try again.");
+        // Build URL hash payload (pure frontend path)
+        const token = buildSetupToken(setupDataWithId);
+        // const token = "999" //test
+        if (!isTokenLengthReasonable(token)) {
+            alert("Setup data is too large to embed in URL. Please simplify your configuration and try again.");
             return;
         }
 
-        router.push(`/game/${matchId}`);
+        router.push(`/game/${matchId}#s=${token}`);
     };
 
     return (
