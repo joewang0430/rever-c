@@ -76,6 +76,36 @@ export const getPlayerDescription = (playerConfig: PlayerConfig) => {
     }
 };
 
+export const getPlayerRating = (playerConfig: PlayerConfig) => {
+    if (!playerConfig.config || Object.keys(playerConfig.config).length === 0) {
+        return "(???)";
+    }
+
+    switch (playerConfig.type) {
+        case 'custom':
+            return "(???)";
+        case 'archive':
+            const archiveId = playerConfig.config.archiveId;
+            for (const group of communityData.groups) {
+                const found = group.archives.find((a: any) => a.id === archiveId);
+                if (found) {
+                    return found.rating || "(???)";
+                }
+            }
+            return "(???)";
+        case 'human':
+            return "(???)";
+        case 'ai':
+            const aiId = playerConfig.config.aiId;
+            if (aiId && aiList[aiId]) {
+                return aiList[aiId].rating || "(???)";
+            }
+    return "(???)";
+        default:
+            return "(???)";
+    }
+}
+
 // Gets the path of svg in setup stage
 export const getSvgPathSetup = (playerConfig: PlayerConfig) => {
     if (!playerConfig.config) {

@@ -1,5 +1,9 @@
 import { PlayerConfig } from '../../data/types/setup';
-import { getPlayerName, getPlayerDescription, getSvgPathSetup } from '../../utils/nameConverters';
+import { getPlayerName, 
+    getPlayerDescription, 
+    getSvgPathSetup, 
+    getPlayerRating
+} from '../../utils/nameConverters';
 import Image from 'next/image';
 
 interface SetupNameDisplayProps {
@@ -53,6 +57,7 @@ const SetupNameDisplay = ({ playerConfig, side }: SetupNameDisplayProps) => {
     const svgPath = getSvgPathSetup(playerConfig);
     const notSelectedPath = `/svgs/setup/not-selected.svg`;
     const playerDescription = getPlayerDescription(playerConfig);
+    const playerRating = getPlayerRating(playerConfig);
 
     return (
         <div className="flex items-center space-x-2 lg:flex-col lg:items-center lg:space-x-0 lg:gap-1 lg:min-h-[5.5rem] lg:justify-center">

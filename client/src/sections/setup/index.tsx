@@ -97,7 +97,7 @@ export default function Setup() {
                         {/* Middle Column (LG) */}
                         <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-4">
                             <div className="h-3"></div>
-                            <SetupTitle />
+                            <SetupTitle context="setup"/>
                             <BoardSizeSelection 
                                 boardSize={setupData.boardSize}
                                 onBoardSizeChange={updateBoardSize}

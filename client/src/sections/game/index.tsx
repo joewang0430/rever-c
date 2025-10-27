@@ -27,6 +27,7 @@ import { raiseGameErrorWindow, isFetchAIMoveResult } from "@/utils/gameLogistics
 import { useRouter } from 'next/navigation';
 import ReportSection from "../report";
 import { useSetupDataContext } from "@/contexts/SetupDataContext";  // added
+import SetupTitle from "@/components/setup/SetupTitle";
 
 interface GameProps {
     matchId: string;
@@ -209,63 +210,119 @@ export default function Game({ matchId}: GameProps) {
     return (
         <section aria-label="Game Page" className="bg-gray-50 h-screen">
             <div className="h-15"></div>
-            <div className="flex flex-row justify-center">
-                <div>
-                    <PlayerInfoDisplay 
-                        playerConfig={setupData.black}
-                        playerStats={game.playersStats.B || defaultPlayerStats}/>
-                </div>
-                <div className="flex flex-col justify-center items-center h-full">
-                    <GameStatusDisplay gameOver={game.gameOver} />
-                    <PieceCountDisplay 
-                        blackCount={game.playersStats.B.pieceCount}
-                        whiteCount={game.playersStats.W.pieceCount}
-                    />
-                    <RoundDisplay placeCount={game.placeCount} />
-                    
-                    <GameBoard 
-                        board={game.board}
-                        size={setupData.boardSize}
-                        turn={game.turn}
-                        lastMove={game.lastMove}   
-                        flipped={game.flipped}
-                        legalMoves={game.availableMoves}
-                        setupData={setupData}
-                        isEcho={game.isEcho}
-                        onCellClick={game.handleMove}
-                    />
+            <div className="max-w-6xl mx-auto">
+                {/* --- Large Screen Layout: 3 fixed columns (Left / Middle / Right) --- */}
+                <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8">
+                    {/* Left Column (Black Player) */}
+                    <div className="lg:flex lg:flex-col lg:gap-2">
+                        <PlayerInfoDisplay 
+                            playerConfig={setupData.black}
+                            playerStats={game.playersStats.B || defaultPlayerStats}
+                        />
+                    </div>
 
-                    {/* <div className="text-gray-300">
-                        <h1>Game Page for Match ID: {matchId}</h1>
-                        <pre>{JSON.stringify(setupData, null, 2)}</pre>
-                    </div> */}
-                    {/* Button Generates Report */}
-                    {game.gameOver && (
-                        <button onClick={handleShowReport}>Game Report</button>
-                    )}
-                    {showReport && (
-                        <div ref={reportRef}>
-                            <ReportSection 
-                                setupData={setupData}
-                                history={game.moveHistory}
-                            />
-                        </div>
-                    )}
-                    
-                    {/* Debug: show all useGame data */}
-                    {/* <div>
-                        <pre>{JSON.stringify(game, null, 2)}</pre>
-                    </div> */}
+                    {/* Middle Column (Game core UI) */}
+                    <div className="lg:flex lg:flex-col lg:items-center lg:gap-4">
+                        {/* <GameStatusDisplay gameOver={game.gameOver} /> */}
+                        {/* <PieceCountDisplay 
+                            blackCount={game.playersStats.B.pieceCount}
+                            whiteCount={game.playersStats.W.pieceCount}
+                        /> */}
+                        <SetupTitle 
+                            context="game" 
+                            score={{ 
+                                black: game.playersStats.B.pieceCount, 
+                                white: game.playersStats.W.pieceCount 
+                            }} 
+                            gameOver={game.gameOver}
+                        /> 
+                        
+
+                        <GameBoard 
+                            board={game.board}
+                            size={setupData.boardSize}
+                            turn={game.turn}
+                            lastMove={game.lastMove}
+                            flipped={game.flipped}
+                            legalMoves={game.availableMoves}
+                            setupData={setupData}
+                            isEcho={game.isEcho}
+                            onCellClick={game.handleMove}
+                        />
+
+                        <RoundDisplay placeCount={game.placeCount} />
+
+                        {game.gameOver && (
+                            <button onClick={handleShowReport}>Game Report</button>
+                        )}
+                        {showReport && (
+                            <div ref={reportRef}>
+                                <ReportSection 
+                                    setupData={setupData}
+                                    history={game.moveHistory}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Right Column (White Player) */}
+                    <div className="lg:flex lg:flex-col lg:gap-2">
+                        <PlayerInfoDisplay 
+                            playerConfig={setupData.white}
+                            playerStats={game.playersStats.W || defaultPlayerStats}
+                        />
+                    </div>
                 </div>
-                <div>
+
+                {/* --- Small Screen Layout: stack in order 3 (top) -> 2 (middle) -> 1 (bottom) --- */}
+                <div className="flex flex-col gap-6 lg:hidden">
+                    {/* Top: Second PlayerInfoDisplay (White) */}
                     <PlayerInfoDisplay 
                         playerConfig={setupData.white}
                         playerStats={game.playersStats.W || defaultPlayerStats}
                     />
+
+                    {/* Middle: Game core UI */}
+                    <div className="flex flex-col items-center">
+                        <GameStatusDisplay gameOver={game.gameOver} />
+                        <PieceCountDisplay 
+                            blackCount={game.playersStats.B.pieceCount}
+                            whiteCount={game.playersStats.W.pieceCount}
+                        />
+                        <RoundDisplay placeCount={game.placeCount} />
+
+                        <GameBoard 
+                            board={game.board}
+                            size={setupData.boardSize}
+                            turn={game.turn}
+                            lastMove={game.lastMove}
+                            flipped={game.flipped}
+                            legalMoves={game.availableMoves}
+                            setupData={setupData}
+                            isEcho={game.isEcho}
+                            onCellClick={game.handleMove}
+                        />
+
+                        {game.gameOver && (
+                            <button onClick={handleShowReport}>Game Report</button>
+                        )}
+                        {showReport && (
+                            <div ref={reportRef}>
+                                <ReportSection 
+                                    setupData={setupData}
+                                    history={game.moveHistory}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Bottom: First PlayerInfoDisplay (Black) */}
+                    <PlayerInfoDisplay 
+                        playerConfig={setupData.black}
+                        playerStats={game.playersStats.B || defaultPlayerStats}
+                    />
                 </div>
             </div>
-
-
         </section>
     );
 };
