@@ -16,7 +16,15 @@ interface SetupTitleProps {
 
 const SetupTitle = ({ context, score, gameOver = false }: SetupTitleProps) => {
     const renderCenter = () => {
+        // Fixed width wrapper only for game context to avoid layout shift when score length changes
+        const CenterWrap = ({ children }: { children: React.ReactNode }) => (
+            <div className="flex flex-col items-center w-[108px] flex-shrink-0 text-center">
+                {children}
+            </div>
+        );
+
         if (context === 'setup') {
+            // No fixed width in setup; keep original compact spacing
             return (
                 <span className="text-2xl text-gray-500 rvct-theme-500">VS</span>
             );
@@ -25,15 +33,18 @@ const SetupTitle = ({ context, score, gameOver = false }: SetupTitleProps) => {
         // context === 'game'
         const left = score?.black ?? 0;
         const right = score?.white ?? 0;
+        const scoreStr = `${left} : ${right}`;
+        // If longer than "100 : 10" (length 8), reduce font from 2xl to xl
+        const fontSizeClass = scoreStr.length >= 8 ? 'text-xl' : 'text-2xl';
         return (
-            <div className="flex flex-col items-center">
+            <CenterWrap>
                 {gameOver && (
                     <span className="text-xs text-gray-500 mb-1">Game Over</span>
                 )}
-                <span className="text-2xl text-gray-700">
+                <span className={`${fontSizeClass} text-gray-700 tabular-nums font-mono`}>
                     {left} : {right}
                 </span>
-            </div>
+            </CenterWrap>
         );
     };
 
