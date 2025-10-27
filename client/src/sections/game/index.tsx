@@ -207,7 +207,7 @@ export default function Game({ matchId}: GameProps) {
     if (!setupData) return null; // while redirecting or before parsing, render nothing
 
     return (
-        <section aria-label="Game Page">
+        <section aria-label="Game Page" className="bg-gray-50 h-screen">
             <div className="h-15"></div>
             <div className="flex flex-row justify-center">
                 <div>
