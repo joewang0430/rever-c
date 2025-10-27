@@ -7,19 +7,11 @@
 import { useRouter } from "next/navigation"
 import { Turn, Move, Board, PlayerStats, DIRECTIONS, MoveHistoryItem, FetchAIMoveResult } from "@/data/types/game";
 import { getRowName, getColName } from "./nameConverters";
-import { cleanupSetupDataRDB } from "@/api/gameApi";
 import { cleanupCandidate } from "@/api/uploadApi";
 import { SetupData } from '@/data/types/setup';
 
 // ------------------------------------------------------ Game error quit
-// Clean up Redis data
-export const clearRDB = async (matchId: string) => {
-    try {
-        await cleanupSetupDataRDB(matchId);
-    } catch (error) {
-        console.error("Cleanup Redis data failed when quiting the game: ", error);
-    }
-};
+// No Redis cleanup needed in pure-frontend flow
 
 // Handles the general cleanup of updated candidate, when game over / quit
 export const clearCandidate = async(setupData: SetupData) => {
@@ -44,7 +36,6 @@ export const raiseGameErrorWindow = async(
     window.confirm(msg)
 
     clearCandidate(setupData);
-    clearRDB(setupData.matchId);
 
     if (onQuit) onQuit();
 };

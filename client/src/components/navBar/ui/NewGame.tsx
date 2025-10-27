@@ -10,7 +10,7 @@ import { NavigationMenuItem } from "@/components/ui/navigation-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import RvcDialog from "@/components/dialog/RvcDialog";
 import { useSetupDataContext } from "@/contexts/SetupDataContext";
-import { clearRDB, clearCandidate } from "@/utils/gameLogistics";
+import { clearCandidate } from "@/utils/gameLogistics";
 
 interface NewGameProps {
     mobile: boolean;
@@ -44,7 +44,6 @@ const NewGame = ({mobile, url}: NewGameProps) => {
             if (url === "/setup") {
                 await clearCandidate(setupData);
             } else {
-                await clearRDB(setupData.matchId);
                 await clearCandidate(setupData);
             }
         }

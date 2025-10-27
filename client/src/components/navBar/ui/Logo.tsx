@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RvcDialog from "@/components/dialog/RvcDialog";
 import { useSetupDataContext } from "@/contexts/SetupDataContext";
-import { clearRDB, clearCandidate } from "@/utils/gameLogistics";
+import { clearCandidate } from "@/utils/gameLogistics";
 
 interface LogoProps {
     mobile: boolean;
@@ -43,7 +43,6 @@ const Logo = ({mobile, url}: LogoProps) => {
             if (url === "/setup") {
                 await clearCandidate(setupData);
             } else {
-                await clearRDB(setupData.matchId);
                 await clearCandidate(setupData);
             }
         }
