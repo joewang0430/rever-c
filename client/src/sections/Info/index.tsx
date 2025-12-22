@@ -95,7 +95,7 @@ export default function Info() {
                         <p className="text-white mb-5">Relax, it’s simple! Have a quick look at:</p>
                         <Link
                             href="/questions"
-                            className="font-semibold inline-flex items-center gap-2 bg-white text-rvc-primary-black px-5 py-3 rounded-lg hover:bg-white/95 transition hover:underline"
+                            className="rvct-theme-700 font-semibold inline-flex items-center gap-2 bg-white text-rvc-primary-black px-5 py-3 rounded-lg hover:bg-white/95 transition hover:underline"
                         >
                             Instructions (FAQs)
                             <span aria-hidden>→</span>
