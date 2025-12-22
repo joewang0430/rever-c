@@ -323,3 +323,38 @@ export function createInitialBoard(n: number): Board {
 export function isFetchAIMoveResult(obj: any): obj is FetchAIMoveResult {
     return obj && typeof obj === 'object' && 'explanation' in obj;
 };
+
+// ------------------------------------------------------ Generate randomized mid-game board
+// Produce a plausible mid-game board by applying a number of random legal moves.
+// This is used for homepage preview. It avoids illegal states by sampling only legal moves.
+export function generateRandomBoardState(size: number, maxMoves: number = 24): Board {
+    let board = createInitialBoard(size);
+    let turn: Turn = 'B';
+
+    // Random but bounded number of moves
+    const movesToPlay = Math.max(4, Math.min(maxMoves, size * size));
+
+    for (let i = 0; i < movesToPlay; i++) {
+        const { availableMoves } = getMobility(board, turn, size);
+
+        if (availableMoves.length === 0) {
+            // Try the other side; if both cannot move, stop.
+            const altTurn = toggleTurn(turn);
+            const { availableMoves: altMoves } = getMobility(board, altTurn, size);
+            if (altMoves.length === 0) {
+                break;
+            } else {
+                turn = altTurn;
+            }
+        }
+
+        const { availableMoves: mv } = getMobility(board, turn, size);
+        if (mv.length === 0) break;
+        const pick = mv[Math.floor(Math.random() * mv.length)];
+        const { newBoard } = getUpdatedBoard(board, turn, pick, size);
+        board = newBoard;
+        turn = toggleTurn(turn);
+    }
+
+    return board;
+}

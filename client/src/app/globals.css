@@ -213,6 +213,44 @@
   background-color: #f9f9f9; 
 }
 
+/* ---------------- Board preview styles ---------------- */
+.rvc-board {
+  background-color: var(--rvc-primary-green);
+  position: relative;
+  border: 2px solid var(--rvc-primary-black);
+}
+
+.rvc-cell {
+  border: 1px solid var(--rvc-primary-black);
+}
+
+.rvc-piece-b {
+  width: 70%;
+  height: 70%;
+  border-radius: 9999px;
+  background-color: var(--rvc-primary-black);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3) inset;
+}
+
+.rvc-piece-w {
+  width: 70%;
+  height: 70%;
+  border-radius: 9999px;
+  background-color: var(--rvc-primary-white);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15) inset;
+}
+
+.rvc-letter {
+  font-family: 'Golos Text', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.3vw, 22px);
+  color: var(--rvc-text-black);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rvc-cell > div { transition: none !important; }
+}
+
 /* 
 
 @import "tailwindcss";
