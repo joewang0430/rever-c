@@ -25,6 +25,8 @@ const Faqs = ({mobile, url}: FaqsProps) => {
         ) : (
             <Link
                 href={faqUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
                 FAQs
@@ -46,6 +48,8 @@ const Faqs = ({mobile, url}: FaqsProps) => {
                 ) : (
                     <Link
                         href={faqUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="hover:text-rvc-primary-green rvct-theme-500 transition cursor-pointer"
                     >
                         FAQs

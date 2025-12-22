@@ -85,6 +85,8 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                     ) : (
                         <Link
                             href={contactUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
                             Contact Us

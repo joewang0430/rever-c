@@ -421,7 +421,7 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
                     {!hasProcessedFile && (
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2 rvct-theme">
-                                Select C File to Upload:
+                                Select C File to Upload (*Stored code will exist for only 36 hours).
                             </label>
                             <input
                                 type="file"

@@ -60,7 +60,7 @@ const Logo = ({mobile, url}: LogoProps) => {
                     onConfirm={handleConfirm}
                     open={showDialog}
                     onOpenChange={setShowDialog}
-                    confirm="Back Home"
+                    confirm="Home Page"
                     cancel="cancel"
                 >
                     You will quit this setup page.

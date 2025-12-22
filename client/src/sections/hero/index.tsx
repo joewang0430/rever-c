@@ -43,7 +43,7 @@ export default function Hero () {
 
             {/* Function tagline and signature */}
             <div className="px-6 text-center max-w-3xl">
-                <p className="rvct-theme text-rvc-text-black/80 mb-3">Play reversi with your own .c function:</p>
+                <p className="text-rvc-text-black/80 mb-3">Play reversi with your own .c function:</p>
                 <p className="rvct-theme-700 text-xl md:text-2xl text-rvc-text-black">
                     int makeMove(const char board[][26], int n, char turn, int *row, int *col);
                 </p>
@@ -67,7 +67,7 @@ export default function Hero () {
                     className="rvct-theme underline text-rvc-primary-black hover:text-rvc-primary-green transition-colors"
                     aria-label="What is ReverC?"
                 >
-                    What is ReverC?
+                    What is ReverC? / How to play ReverC?
                 </button>
             </div>
 
