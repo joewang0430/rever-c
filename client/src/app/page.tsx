@@ -5,7 +5,7 @@
 "use client";
 
 import Hero from "@/sections/hero";
-import MyCode from "@/sections/myCode";
+import Info from "@/sections/Info";
 import Statistics from "@/sections/statistics";
 import Footer from "@/sections/footer";
 
@@ -14,7 +14,7 @@ export default function HomePage() {
   return(
     <>
       <Hero />
-      <MyCode />
+      <Info />
       <Statistics />
       <Footer />
     </>

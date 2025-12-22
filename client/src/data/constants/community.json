@@ -1,8 +1,8 @@
 {
   "groups": [
     {
-        "id": "2024",
-        "name": "2024 APS105 Leaders",
+        "id": "aps105",
+        "name": "APS105 Leaders",
         "archives": [
         {
             "id": "mateo_tomeho",
@@ -34,23 +34,6 @@
             "description": "#21 rank APS105 Leaderboard 2024, founder of ReverC",
             "shortDescription": "#21 on Leaderboard",
             "rating": "(800)",
-            "image": "/svgs/archives/test_player.svg",
-            "heavy": false
-        }
-        ]
-    },
-    {
-        "id": "2025",
-        "name": "2025 APS105 Leaders",
-        "archives": [
-        {
-            "id": "test",
-            "groupId": "2025",
-            "name": "test",
-            "shortName": "test",
-            "description": "test",
-            "shortDescription": "test",
-            "rating": "(N/A)",
             "image": "/svgs/archives/test_player.svg",
             "heavy": false
         }
@@ -177,6 +160,17 @@
             "shortName": "AJEX N8",
             "description": "One of Chase's examinor",
             "shortDescription": "Remodified Alex",
+            "rating": "(???)",
+            "image": "/svgs/archives/hukaiqi1_7.svg",
+            "heavy": true
+        },
+        {
+            "id": "eva_noise_random",
+            "groupId": "alex_tower_1",
+            "name": "eva_noise_random",
+            "shortName": "eva_noise_random",
+            "description": "One of Chase's examinor",
+            "shortDescription": "EVA",
             "rating": "(???)",
             "image": "/svgs/archives/hukaiqi1_7.svg",
             "heavy": true

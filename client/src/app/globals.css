@@ -199,12 +199,12 @@
 .animate-border-color-change {
   animation: border-color-change 1.5s infinite;
 }
-.hero-gradient-bg {
+/* .hero-gradient-bg {
   background:
     radial-gradient(ellipse 30% 40% at left bottom, #33adb6 0%, transparent 90%),
     radial-gradient(ellipse 20% 20% at right bottom, #2D874C 0%, transparent 90%);
   background-color: #f9f9f9; 
-}
+} */
 
 .mc-gradient-bg {
   background:
