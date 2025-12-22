@@ -57,7 +57,7 @@ export default function Hero () {
                     onClick={handleStartGameClick}
                     aria-label="Start a new game"
                 >
-                    Start Game
+                    Start a Game
                 </button>
             </div>
 

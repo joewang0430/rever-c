@@ -29,7 +29,7 @@ const RvcDialog = ({ title, onConfirm, open, onOpenChange, confirm, cancel, chil
                     </DialogClose>
                     }
                     <button
-                        className="px-4 py-2 bg-rvc-primary-green hover:bg-rvc-secondary-green text-rvc-primary-white rvct-theme-500 rounded"
+                        className="px-4 py-2 bg-rvc-primary-green hover:bg-rvc-primary-green/90 text-rvc-primary-white rvct-theme-500 rounded"
                         onClick={onConfirm}
                     >
                         {confirm}

@@ -68,7 +68,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                         href={githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2 hover:bg-rvc-secondary-green hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2 transition"
+                        className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2 transition"
                         >
                         <FaGithub className="w-5 h-5" />
                         <div className="rvct-theme">GitHub</div>
@@ -78,14 +78,14 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                             href={contactUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-4 py-2 hover:bg-rvc-secondary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
+                            className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
                             Contact Us
                         </Link>
                     ) : (
                         <Link
                             href={contactUrl}
-                            className="px-4 py-2 hover:bg-rvc-secondary-green hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
+                            className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
                             Contact Us
                         </Link>

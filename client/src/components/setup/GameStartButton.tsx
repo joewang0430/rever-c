@@ -165,7 +165,7 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
             disabled={!isValid}
             onClick={handleStartGame}
         >
-            Start Game
+            Begin!
         </button>
     );
 };
