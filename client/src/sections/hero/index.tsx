@@ -40,10 +40,6 @@ export default function Hero () {
                 </button>
             </div>
 
-            {/* 页面下方缓存状态（原有组件占位） */}
-            <div className="mt-10 w-full max-w-5xl px-4">
-                <CasheBlockHome />
-            </div>
         </section>
     );
 }

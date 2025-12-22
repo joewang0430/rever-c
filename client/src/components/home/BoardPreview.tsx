@@ -57,6 +57,14 @@ export default function BoardPreview({ size = 8 }: Props) {
     return () => clearInterval(id);
   }, [directionToLetters, maxOrder]);
 
+  // Regenerate board at the start of each UBW -> Board transition
+  // Keep the same board when transitioning Board -> UBW for continuity
+  useEffect(() => {
+    if (!reduceMotionRef.current && directionToLetters === false) {
+      setBoard(generateRandomBoardState(size));
+    }
+  }, [directionToLetters, size]);
+
   const cells = useMemo(() => {
     const arr: { r: number; c: number; order: number; val: string }[] = [];
     for (let r = 0; r < size; r++) {
