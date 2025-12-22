@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Board } from "@/data/types/game";
-import { generateRandomBoardState } from "@/utils/gameLogistics";
+import { generateRandomBoardState, createInitialBoard } from "@/utils/gameLogistics";
 
 type Props = {
   size?: number; // default 8
@@ -15,7 +15,8 @@ const TRANSITION_MS = 3500 / 3;
 const PAUSE_MS = Math.floor(3000); // 
 
 export default function BoardPreview({ size = 8 }: Props) {
-  const [board, setBoard] = useState<Board>(() => generateRandomBoardState(size));
+  // IMPORTANT: Use deterministic initial board to avoid SSR/CSR hydration mismatch
+  const [board, setBoard] = useState<Board>(() => createInitialBoard(size));
   const [directionToLetters, setDirectionToLetters] = useState(true);
   const maxOrder = (size - 1) * 2;
   const [stage, setStage] = useState(0); // diagonal threshold
@@ -23,6 +24,7 @@ export default function BoardPreview({ size = 8 }: Props) {
 
   // On mount, re-randomize; respect reduced motion
   useEffect(() => {
+    // Generate random board only on client after mount to keep SSR markup stable
     setBoard(generateRandomBoardState(size));
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     reduceMotionRef.current = mq.matches;
