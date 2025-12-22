@@ -79,23 +79,23 @@ export default function Info() {
                     {/* Left: text content */}
                     <div className="text-white" ref={leftRef}>
                         <h2 className="font-bold text-3xl md:text-4xl leading-tight mb-4">What is ReverC?</h2>
-                        <p className="text-white/90 mb-8">
+                        <p className="text-white mb-8">
                             ReverC is a lightweight browser platform where you use your own C function to play Reversi against humans, candidate code, historical algorithms, or AI.
                         </p>
 
                         <h3 className="font-bold text-2xl md:text-3xl leading-tight mb-4">Code Requirements?</h3>
-                        <p className="text-white/90 mb-3">As a first-time attempt, you may ask:</p>
-                        <ul className="list-disc pl-6 text-white/90 space-y-1 mb-4">
+                        <p className="text-white mb-3">As a first-time attempt, you may ask:</p>
+                        <ul className="list-disc pl-6 text-white space-y-1 mb-4">
                             <li>Code format</li>
                             <li>Time limit</li>
                             <li>Other things I can do</li>
                             <li>The significance of this website</li>
                             <li>…</li>
                         </ul>
-                        <p className="text-white/90 mb-5">Relax, it’s simple! Have a quick look at:</p>
+                        <p className="text-white mb-5">Relax, it’s simple! Have a quick look at:</p>
                         <Link
                             href="/questions"
-                            className="inline-flex items-center gap-2 bg-white text-rvc-primary-green px-5 py-3 rounded-lg shadow-sm hover:bg-white/95 transition"
+                            className="font-semibold inline-flex items-center gap-2 bg-white text-rvc-primary-black px-5 py-3 rounded-lg hover:bg-white/95 transition hover:underline"
                         >
                             Instructions (FAQs)
                             <span aria-hidden>→</span>
