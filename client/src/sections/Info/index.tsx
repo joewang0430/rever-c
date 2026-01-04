@@ -5,33 +5,72 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const CODE_FILENAME = "rvc_example.c";
 
-const EXAMPLE_CODE = `#include <stdio.h>
+const EXAMPLE_CODE = `
+/**
+ * This sample code can be directly submitted to reverc.org to compete.
+ *
+ * The makeMove() signature was defined in lab8part2.h by the APS105 teaching team
+ * at the University of Toronto (UofT) in 2022. This sample code and reverc.org are
+ * provided by Jue Wang. The code is protected under the MIT License.
+ *
+ * APS105 students at UofT are responsible for academic integrity and should take
+ * responsibility when referring to this code.
+ */
 
-// Return 1 if found a legal move and write to *row/*col, else return 0 (pass)
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+/**
+ * You can always include rvc.h, they can be recognized during the competition.
+ */
+#include "rvc.h"      
+
+// By using rvc.h, your code will be linked with another file called "rvc_tools.c", 
+// where four basic Reversi logic functions are defined for you to use, they are:
+
+/*
+static bool rvc_in_bounds(int n, int row, int col);     // Whether the position is in bound
+static bool rvc_occupied(const char board[][26], int row, int col); // Whether the position is occupied
+static bool rvc_position_legal_direction(const char board[][26], int n, int row, 
+    int col, char color, int deltaRow, int deltaCol);   // Whether the position is legal in one direction
+bool rvc_position_legal(const char board[][26], int n, int row, int col, char color);   // Whether the position is legal
+*/
+
+// Together, you can use those provided tool functions to write a random placed Reversi AI.
 int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
-        char opp = (turn == 'B') ? 'W' : 'B';
-        int dr[8] = {-1,-1,-1,0,0,1,1,1};
-        int dc[8] = {-1,0,1,-1,1,-1,0,1};
-        for (int r = 0; r < n; r++) {
-                for (int c = 0; c < n; c++) {
-                        if (board[r][c] != 'U') continue;
-                        // check 8 directions
-                        for (int k = 0; k < 8; k++) {
-                                int rr = r + dr[k], cc = c + dc[k];
-                                int foundOpp = 0;
-                                while (rr >= 0 && rr < n && cc >= 0 && cc < n && board[rr][cc] == opp) {
-                                        foundOpp = 1;
-                                        rr += dr[k];
-                                        cc += dc[k];
-                                }
-                                if (foundOpp && rr >= 0 && rr < n && cc >= 0 && cc < n && board[rr][cc] == turn) {
-                                        *row = r; *col = c; return 1; // legal move
-                                }
-                        }
-                }
+    int availableRows[26 * 26];
+    int availableCols[26 * 26];
+    int count = 0;
+
+    // Traverse the board, find all possible moves
+    for (int r = 0; r < n; r++) {
+        for (int c = 0; c < n; c++) {
+            if (rvc_position_legal(board, n, r, c, turn)) {
+                availableRows[count] = r;
+                availableCols[count] = c;
+                count++;
+            }
         }
-        return 0; // no legal move
+    }
+
+    // In case no available moves (ReverC won't let it happen)
+    if (count == 0) {
+        return -1;
+    }
+
+    // Randomly choose one position to place
+    int idx = rand() % count;
+    *row = availableRows[idx];
+    *col = availableCols[idx];
+    return 0;
 }
+
+/**
+ * In reverc.org, only a valid makeMove() function is required, so you do not need a main() function.
+ */
+
 `;
 
 export default function Info() {
