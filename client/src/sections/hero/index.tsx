@@ -31,6 +31,14 @@ export default function Hero () {
         // If you want identical cleanup with NewGame, we can also call clearCandidate(setupData) here.
     };
 
+    // Smoothly scroll to the Info section and align tops
+    const scrollToInfo = () => {
+        const el = document.getElementById("info");
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: "smooth" });
+    };
+
     return (
         <section id="hero" className="min-h-screen w-full flex flex-col items-center justify-start bg-rvc-primary-white">
             {/* Top spacer to avoid overlapping with NavBar (slightly increased) */}
@@ -44,7 +52,7 @@ export default function Hero () {
             {/* Function tagline and signature */}
             <div className="px-6 text-center max-w-3xl">
                 <p className="text-rvc-text-black/80 mb-3">Play reversi with your own .c function:</p>
-                <p className="rvct-theme-700 text-xl md:text-2xl text-rvc-text-black">
+                <p className="text-xl md:text-2xl text-rvc-text-black">
                     int makeMove(const char board[][26], int n, char turn, int *row, int *col);
                 </p>
             </div>
@@ -64,8 +72,10 @@ export default function Hero () {
             {/* What is ReverC? button (no navigation logic for now) */}
             <div className="mt-8">
                 <button
-                    className="rvct-theme underline text-rvc-primary-black hover:text-rvc-primary-green transition-colors"
+                    className="underline text-rvc-primary-black hover:text-rvc-primary-green transition-colors"
                     aria-label="What is ReverC?"
+                    onClick={scrollToInfo}
+                    aria-controls="info"
                 >
                     What is ReverC? / How to play ReverC?
                 </button>
