@@ -9,9 +9,10 @@ import { useState, useEffect, useRef } from "react";
 import { SetupData } from "@/data/types/setup";
 import { useGame } from "@/hooks/useGame";
 import PieceCountDisplay from "@/components/game/pieceCountDisplay";
+import PieceRatioBar from "@/components/game/PieceRatioBar";
 import GameStatusDisplay from "@/components/game/GameStatusDisplay";
 import PlayerInfoDisplay from "@/components/game/PlayerInfoDisplay";
-import RoundDisplay from "@/components/game/RoundDisplay";
+// import RoundDisplay from "@/components/game/RoundDisplay";
 import GameBoard from "@/components/game/GameBoard";
 import { 
     defaultPlayerStats, 
@@ -97,7 +98,7 @@ export default function Game({ matchId}: GameProps) {
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | FetchAIMoveResult | null = null;
-                const delayPromise = new Promise(resolve => setTimeout(resolve, 50));
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 300));
 
                 // Type: custom
                 if (setupData[side].type === 'custom') {
@@ -236,6 +237,11 @@ export default function Game({ matchId}: GameProps) {
                             }} 
                             gameOver={game.gameOver}
                         /> 
+                        {/* Ratio bar below score, above board (desktop/tablet only) */}
+                        <PieceRatioBar 
+                            blackCount={game.playersStats.B.pieceCount}
+                            whiteCount={game.playersStats.W.pieceCount}
+                        />
                         
 
                         <GameBoard 
@@ -250,7 +256,7 @@ export default function Game({ matchId}: GameProps) {
                             onCellClick={game.handleMove}
                         />
 
-                        <RoundDisplay placeCount={game.placeCount} />
+                        {/* <RoundDisplay placeCount={game.placeCount} /> */}
 
                         {game.gameOver && (
                             <button onClick={handleShowReport}>Game Report</button>
@@ -289,7 +295,7 @@ export default function Game({ matchId}: GameProps) {
                             blackCount={game.playersStats.B.pieceCount}
                             whiteCount={game.playersStats.W.pieceCount}
                         />
-                        <RoundDisplay placeCount={game.placeCount} />
+                        {/* <RoundDisplay placeCount={game.placeCount} /> */}
 
                         <GameBoard 
                             board={game.board}

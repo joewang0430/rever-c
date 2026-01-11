@@ -54,40 +54,49 @@ const GameBoard = ({
     }, [isEcho, board.flat().join("")]);
 
     return (
-        <div 
-        className={`grid border border-black`}
-        style={{
-            gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
-            width: `${size * 32}px`,
-            height: `${size * 32}px`,
-        }}
+        <div
+            className="rvc-board shadow-sm relative"
+            style={{
+                width: `${size * 32}px`,
+                height: `${size * 32}px`,
+            }}
         >
             {showTip && tipMsg && (
                 <div className="fixed top-8 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded shadow z-50 transition-all">
                     {tipMsg}
                 </div>
             )}
+            <div
+                className="grid"
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${size}, 1fr)`,
+                    gridTemplateRows: `repeat(${size}, 1fr)`,
+                    width: "100%",
+                    height: "100%",
+                }}
+            >
+                {board.map((rowArr, row) =>
+                    rowArr.map((cell, col) => {
+                        const isLegal = legalMoves.some(m => m.row === row && m.col === col);
 
-            {board.map((rowArr, row) => 
-                rowArr.map((cell, col) => {
-                    const isLegal = legalMoves.some(m => m.row === row && m.col === col);
+                        const isFlipping = flipped.some(f => f.row === row && f.col === col);
+                        const isLast = lastMove && lastMove.row === row && lastMove.col === col;
+                        const canClick = turn && setupData[getSetupTurnName(turn)].type === 'human' && isLegal;
 
-                    const isFlipping = flipped.some(f => f.row === row && f.col === col);
-                    const isLast = lastMove && lastMove.row === row && lastMove.col === col;
-                    const canClick = turn && setupData[getSetupTurnName(turn)].type === 'human' && isLegal;
-
-                    return (
-                        <Cell key={`${row}-${col}`}
-                            value={cell}
-                            isLast={!!isLast}  
-                            isFlipping={isFlipping}
-                            isLegal={isLegal}
-                            canClick={!!canClick}
-                            onClick={() => canClick && onCellClick({row, col})}
-                        />
-                    );
-                })
-            )}
+                        return (
+                            <Cell key={`${row}-${col}`}
+                                value={cell}
+                                isLast={!!isLast}
+                                isFlipping={isFlipping}
+                                isLegal={isLegal}
+                                canClick={!!canClick}
+                                onClick={() => canClick && onCellClick({ row, col })}
+                            />
+                        );
+                    })
+                )}
+            </div>
         </div>
     );
 };
