@@ -8,7 +8,7 @@ import { Sheet, SheetTrigger, SheetContent, SheetTitle } from "@/components/ui/s
 import { Menu } from "lucide-react";
 import Logo from "../ui/Logo";
 import NewGame from "../ui/NewGame";
-import MyCode from "../ui/MyCode";
+// import MyCode from "../ui/MyCode";
 import Faqs from "../ui/Faqs";
 import JoinUs from "../ui/JoinUs";
 
@@ -36,7 +36,7 @@ const NavBarSmall = ({url}: NavBarSmallProps) => {
                         </div>
                         <nav className="flex-1 flex flex-col gap-2 p-6">
                             <NewGame mobile={true} url={url} />
-                           <MyCode mobile={true} url={url} onClose={() => setOpen(false)} />
+                           {/* <MyCode mobile={true} url={url} onClose={() => setOpen(false)} /> */}
                             <Faqs mobile={true} url={url} />
                             <JoinUs mobile={true} url={url} />
                         </nav>

@@ -125,13 +125,13 @@ export default function Info() {
                         <h3 className="font-bold text-2xl md:text-3xl leading-tight mb-4">Code Requirements?</h3>
                         <p className="text-white mb-3">As a first-time attempt, you may ask:</p>
                         <ul className="list-disc pl-6 text-white space-y-1 mb-4">
-                            <li>Code format and time limit</li>
-                            <li>How to play Reversi</li>
-                            <li>Other things I can do</li>
-                            <li>The significance of this website</li>
-                            <li>…</li>
+                            <li>What I can do in ReverC</li>
+                            <li>Code format in competition</li>
+                            <li>Is there a time limit</li>
+                            <li>Safety and integrity</li>
+                            {/* <li>…</li> */}
                         </ul>
-                        <p className="text-white mb-5">Relax, it’s simple! Have a quick look at</p>
+                        <p className="text-white mb-5">Please have a quick look at</p>
                         <Link
                             href="/questions"
                             className="rvct-theme-700 font-semibold inline-flex items-center gap-2 bg-white text-rvc-primary-black px-5 py-3 rounded-lg hover:bg-white/95 transition hover:underline"
