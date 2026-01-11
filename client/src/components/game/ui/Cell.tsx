@@ -9,6 +9,7 @@ interface CellProps {
     isLast: boolean;
     isFlipping: boolean;
     isLegal: boolean;
+    showLegalHints?: boolean;
     canClick: boolean;
     onClick?: () => void;
 };
@@ -18,6 +19,7 @@ const Cell = ({
     isLast,
     isFlipping,
     isLegal,
+    showLegalHints = false,
     canClick,
     onClick
 }: CellProps) => {
@@ -38,7 +40,7 @@ const Cell = ({
             </div>
 
             {/* Legal move hint (subtle) */}
-            {isLegal && value === "U" && (
+            {showLegalHints && isLegal && value === "U" && (
                 <div className="absolute w-2.5 h-2.5 rounded-full bg-emerald-400/60 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             )}
 

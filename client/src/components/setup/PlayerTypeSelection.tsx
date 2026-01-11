@@ -12,7 +12,7 @@ const AI_NAME = "AI Language Models"
 const CUSTOM_DESCRIPTION = "Play with your own .c file with the makeMove function.";
 const ARCHIVE_DESCRIPTION = "Play with Bots from the ReverC community.";
 const HUMAN_DESCRIPTION = "Real human player like you.";
-const AI_DESCRIPTION = "Play with large language models like Deepseek.";
+const AI_DESCRIPTION = "Play with large language models and see how they think.";
 
 interface PlayerTypeSelectionProps {
     blackPlayerConfig: PlayerConfig;

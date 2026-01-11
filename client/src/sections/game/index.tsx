@@ -24,6 +24,7 @@ import {
 } from "@/data/types/game";
 import { getSetupTurnName } from "@/utils/nameConverters";
 import { fetchCustomMove, fetchArchiveMove, fetchAIMove } from "@/api/playApi";
+import { storage } from "@/utils/storage";
 import { raiseGameErrorWindow, isFetchAIMoveResult } from "@/utils/gameLogistics";
 import { useRouter } from 'next/navigation';
 import ReportSection from "../report";
@@ -46,6 +47,21 @@ export default function Game({ matchId}: GameProps) {
     const reportRef = useRef<HTMLDivElement>(null);
 
     const { setSetupData } = useSetupDataContext();  // added
+
+    // UI toggles
+    const [showLegalMoves, setShowLegalMoves] = useState(false);
+    const [accelerateSpeed, setAccelerateSpeed] = useState(false);
+
+    // Initialize toggles from local storage with defaults:
+    // Show Legal Moves -> true (default), Accelerate Speed -> false (default)
+    useEffect(() => {
+        try {
+            const savedLegal = storage.getJSON<boolean>("showLegalMoves");
+            const savedAccel = storage.getJSON<boolean>("accelerateSpeed");
+            setShowLegalMoves(savedLegal === null ? true : !!savedLegal);
+            setAccelerateSpeed(savedAccel === null ? false : !!savedAccel);
+        } catch {}
+    }, []);
 
     const handleShowReport = () => {
         setShowReport(true);
@@ -98,7 +114,8 @@ export default function Game({ matchId}: GameProps) {
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | FetchAIMoveResult | null = null;
-                const delayPromise = new Promise(resolve => setTimeout(resolve, 300));
+                const delayMs = accelerateSpeed ? 150 : 600;
+                const delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
 
                 // Type: custom
                 if (setupData[side].type === 'custom') {
@@ -254,9 +271,40 @@ export default function Game({ matchId}: GameProps) {
                             setupData={setupData}
                             isEcho={game.isEcho}
                             onCellClick={game.handleMove}
+                            showLegalHints={showLegalMoves}
                         />
 
-                        {/* <RoundDisplay placeCount={game.placeCount} /> */}
+                        {/* Toggle controls under the board (desktop/tablet shown within this layout) */}
+                        <div className="hidden md:flex md:flex-col w-full items-center justify-center gap-3 mt-3">
+                            <div className="flex items-center gap-2 select-none">
+                                <input
+                                    type="checkbox"
+                                    checked={showLegalMoves}
+                                    onChange={(e) => {
+                                        const v = e.target.checked;
+                                        setShowLegalMoves(v);
+                                        storage.setJSON("showLegalMoves", v);
+                                    }}
+                                    className="cursor-pointer appearance-none w-6 h-6 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    aria-label="Show Legal Moves"
+                                />
+                                <span className="text-lg">Show Legal Moves</span>
+                            </div>
+                            <div className="flex items-center gap-2 select-none">
+                                <input
+                                    type="checkbox"
+                                    checked={accelerateSpeed}
+                                    onChange={(e) => {
+                                        const v = e.target.checked;
+                                        setAccelerateSpeed(v);
+                                        storage.setJSON("accelerateSpeed", v);
+                                    }}
+                                    className="cursor-pointer appearance-none w-6 h-6 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    aria-label="Accelerate Speed"
+                                />
+                                <span className="text-lg">Accelerate Speed</span>
+                            </div>
+                        </div>
 
                         {game.gameOver && (
                             <button onClick={handleShowReport}>Game Report</button>
@@ -307,7 +355,40 @@ export default function Game({ matchId}: GameProps) {
                             setupData={setupData}
                             isEcho={game.isEcho}
                             onCellClick={game.handleMove}
+                            showLegalHints={showLegalMoves}
                         />
+
+                        {/* Toggle controls under the board (mobile layout) */}
+                        <div className="flex md:hidden flex-col w-full items-center justify-center gap-2 mt-3">
+                            <div className="flex items-center gap-2 select-none">
+                                <input
+                                    type="checkbox"
+                                    checked={showLegalMoves}
+                                    onChange={(e) => {
+                                        const v = e.target.checked;
+                                        setShowLegalMoves(v);
+                                        storage.setJSON("showLegalMoves", v);
+                                    }}
+                                    className="cursor-pointer appearance-none w-5 h-5 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    aria-label="Show Legal Moves"
+                                />
+                                <span className="text-base">Show Legal Moves</span>
+                            </div>
+                            <div className="flex items-center gap-2 select-none">
+                                <input
+                                    type="checkbox"
+                                    checked={accelerateSpeed}
+                                    onChange={(e) => {
+                                        const v = e.target.checked;
+                                        setAccelerateSpeed(v);
+                                        storage.setJSON("accelerateSpeed", v);
+                                    }}
+                                    className="cursor-pointer appearance-none w-5 h-5 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    aria-label="Accelerate Speed"
+                                />
+                                <span className="text-base">Accelerate Speed</span>
+                            </div>
+                        </div>
 
                         {game.gameOver && (
                             <button onClick={handleShowReport}>Game Report</button>

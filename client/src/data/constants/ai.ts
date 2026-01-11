@@ -31,7 +31,7 @@ export const aiList: Record<string, AIInfo> = {
     id: "gemini-2pt5",
     name: "Gemini 2.5",
     shortDescription: "Google's model",
-    description: "Powerful language model developed by Google",
+    description: "Powerful comprehensive language model by Google",
     rating: "(200)",
     image: `svgs/ai/gemini-2pt5.svg`,
     available: true,
