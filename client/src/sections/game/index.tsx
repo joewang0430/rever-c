@@ -232,8 +232,10 @@ export default function Game({ matchId}: GameProps) {
                 <div className="h-15"></div>
                 {/* --- Large Screen Layout: 3 fixed columns (Left / Middle / Right) --- */}
                 <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8">
+
                     {/* Left Column (Black Player) */}
                     <div className="lg:flex lg:flex-col lg:gap-2">
+                        <div className="lg:h-2"></div>
                         <PlayerInfoDisplay 
                             playerConfig={setupData.black}
                             playerStats={game.playersStats.B || defaultPlayerStats}
@@ -322,6 +324,7 @@ export default function Game({ matchId}: GameProps) {
 
                     {/* Right Column (White Player) */}
                     <div className="lg:flex lg:flex-col lg:gap-2">
+                        <div className="lg:h-2"></div>
                         <PlayerInfoDisplay 
                             playerConfig={setupData.white}
                             playerStats={game.playersStats.W || defaultPlayerStats}

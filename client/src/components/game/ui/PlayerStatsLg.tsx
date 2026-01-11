@@ -1,5 +1,6 @@
 import { PlayerStats } from "@/data/types/game";
 import { formatElapsed } from "@/utils/nameConverters";
+import StatItem from "./StatItem";
 
 interface PlayerStatsLgProps {
     playerStats: PlayerStats;
@@ -9,20 +10,30 @@ interface PlayerStatsLgProps {
 
 const PlayerStatsLg = ({ playerStats, isCode, isAI = false }: PlayerStatsLgProps) => {
     return (
-        <div>
-            <div className="mt-4">Available Moves</div>
-            <div>{playerStats.mobility === 0 ? '-' : playerStats.mobility}</div>
+        <div className="bg-gray-200 w-full rounded-lg min-h-96 flex flex-col items-center justify-center px-4">
+            <StatItem 
+                label="Available Moves" 
+                value={playerStats.mobility === 0 ? '-' : playerStats.mobility} 
+            />
 
             {isCode && (
                 <>
-                    <div className="mt-4">Thinking Time:</div>
-                    <div>{playerStats.time === 0 ? '-' : formatElapsed(playerStats.time)}</div>
-                    <div className="mt-4">Total Thinking</div>
-                    <div>{playerStats.totalTime === 0 ? '-' : formatElapsed(playerStats.totalTime)}</div>
-                    <div className="mt-4">Maximum Thinking</div>
-                    <div>{playerStats.maxTime === 0 ? '-' : formatElapsed(playerStats.maxTime)}</div>
-                    <div className="mt-4">Code Return Value</div>
-                    <div>{playerStats.returnValue ?? '-'}</div>
+                    <StatItem 
+                        label="Thinking Time" 
+                        value={playerStats.time === 0 ? '-' : formatElapsed(playerStats.time)} 
+                    />
+                    <StatItem 
+                        label="Total Thinking" 
+                        value={playerStats.totalTime === 0 ? '-' : formatElapsed(playerStats.totalTime)} 
+                    />
+                    <StatItem 
+                        label="Maximum Thinking" 
+                        value={playerStats.maxTime === 0 ? '-' : formatElapsed(playerStats.maxTime)} 
+                    />
+                    <StatItem 
+                        label="Code Return Value" 
+                        value={playerStats.returnValue ?? '-'} 
+                    />
                 </>
             )}
 
