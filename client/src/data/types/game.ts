@@ -28,6 +28,7 @@ export interface PlayerStats {
     maxTime: number; // only manipulated if player type is 'archive' or 'custom'
     returnValue: number | null; // only manipulated if player type is 'archive' or 'custom'
     explanation?: string;    // only manipulated if player type is 'ai'
+    explanations?: { move: Move; text: string }[]; // accumulated AI explanations with moves
 };
 
 export const defaultPlayerStats: PlayerStats = {
@@ -38,6 +39,7 @@ export const defaultPlayerStats: PlayerStats = {
     totalTime: 0,
     maxTime: 0,
     returnValue: null,
+    explanations: [],
 };
 
 export interface MoveHistoryItem {

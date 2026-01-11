@@ -203,9 +203,14 @@ export default function Game({ matchId}: GameProps) {
                     } else if (setupData[side].type === 'ai' && isFetchAIMoveResult(computerMove)) {
                         game.setPlayersStats(prev => {
                             const newStats = { ...prev };
+                            const prevExps = newStats[turn].explanations || [];
                             newStats[turn] = {
                                 ...newStats[turn],
                                 explanation: computerMove.explanation,
+                                explanations: [
+                                    ...prevExps,
+                                    { move: computerMove.move, text: computerMove.explanation }
+                                ],
                             };
                             return newStats;
                         });
