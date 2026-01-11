@@ -1,3 +1,5 @@
+// Display each Item in large screen mode.
+
 import React from "react";
 
 interface StatItemProps {
