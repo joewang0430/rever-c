@@ -285,7 +285,8 @@ export default function Game({ matchId}: GameProps) {
                                         setShowLegalMoves(v);
                                         storage.setJSON("showLegalMoves", v);
                                     }}
-                                    className="cursor-pointer appearance-none w-6 h-6 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
+                                    style={{ accentColor: "var(--rvc-primary-green)" }}
                                     aria-label="Show Legal Moves"
                                 />
                                 <span className="text-lg">Show Legal Moves</span>
@@ -299,7 +300,8 @@ export default function Game({ matchId}: GameProps) {
                                         setAccelerateSpeed(v);
                                         storage.setJSON("accelerateSpeed", v);
                                     }}
-                                    className="cursor-pointer appearance-none w-6 h-6 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
+                                    style={{ accentColor: "var(--rvc-primary-green)" }}
                                     aria-label="Accelerate Speed"
                                 />
                                 <span className="text-lg">Accelerate Speed</span>
@@ -369,7 +371,8 @@ export default function Game({ matchId}: GameProps) {
                                         setShowLegalMoves(v);
                                         storage.setJSON("showLegalMoves", v);
                                     }}
-                                    className="cursor-pointer appearance-none w-5 h-5 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
+                                    style={{ accentColor: "var(--rvc-primary-green)" }}
                                     aria-label="Show Legal Moves"
                                 />
                                 <span className="text-base">Show Legal Moves</span>
@@ -383,7 +386,8 @@ export default function Game({ matchId}: GameProps) {
                                         setAccelerateSpeed(v);
                                         storage.setJSON("accelerateSpeed", v);
                                     }}
-                                    className="cursor-pointer appearance-none w-5 h-5 border-2 border-rvc-primary-green rounded-md bg-white checked:bg-rvc-primary-green transition-colors"
+                                    className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
+                                    style={{ accentColor: "var(--rvc-primary-green)" }}
                                     aria-label="Accelerate Speed"
                                 />
                                 <span className="text-base">Accelerate Speed</span>
