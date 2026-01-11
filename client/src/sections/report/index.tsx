@@ -13,7 +13,7 @@ interface ReportSectionProps {
 
 export default function ReportSection({ setupData, history }: ReportSectionProps) {
     return (
-        <div className="bg-green-200">
+        <div className="w-full bg-green-200 min-h-screen">
             report
             <LogGenerator 
                 setupData={setupData}

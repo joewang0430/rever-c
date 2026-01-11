@@ -66,8 +66,8 @@ export default function Game({ matchId}: GameProps) {
     const handleShowReport = () => {
         setShowReport(true);
         setTimeout(() => {
-            reportRef.current?.scrollIntoView({behavior: "smooth"});
-        }, 100);    
+            reportRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
     };
 
     // Prefer reading setup from URL hash token (pure frontend). If missing/invalid, redirect back to setup with an error message.
@@ -226,9 +226,10 @@ export default function Game({ matchId}: GameProps) {
     if (!setupData) return null; // while redirecting or before parsing, render nothing
 
     return (
-        <section aria-label="Game Page" className="bg-gray-50 h-screen">
-            <div className="h-15"></div>
-            <div className="max-w-6xl mx-auto">
+        <section aria-label="Game Page" className="bg-gray-50">
+            
+            <div className="max-w-6xl mx-auto min-h-screen">
+                <div className="h-15"></div>
                 {/* --- Large Screen Layout: 3 fixed columns (Left / Middle / Right) --- */}
                 <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8">
                     {/* Left Column (Black Player) */}
@@ -308,16 +309,14 @@ export default function Game({ matchId}: GameProps) {
                             </div>
                         </div>
 
-                        {game.gameOver && (
-                            <button onClick={handleShowReport}>Game Report</button>
-                        )}
-                        {showReport && (
-                            <div ref={reportRef}>
-                                <ReportSection 
-                                    setupData={setupData}
-                                    history={game.moveHistory}
-                                />
-                            </div>
+                        {game.gameOver && !showReport && (
+                            <button
+                                onClick={handleShowReport}
+                                aria-label="See Game Report"
+                                className="rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
+                            >
+                                See Game Report
+                            </button>
                         )}
                     </div>
 
@@ -394,16 +393,14 @@ export default function Game({ matchId}: GameProps) {
                             </div>
                         </div>
 
-                        {game.gameOver && (
-                            <button onClick={handleShowReport}>Game Report</button>
-                        )}
-                        {showReport && (
-                            <div ref={reportRef}>
-                                <ReportSection 
-                                    setupData={setupData}
-                                    history={game.moveHistory}
-                                />
-                            </div>
+                        {game.gameOver && !showReport && (
+                            <button
+                                onClick={handleShowReport}
+                                aria-label="See Game Report"
+                                className="rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
+                            >
+                                See Game Report
+                            </button>
                         )}
                     </div>
 
@@ -414,6 +411,14 @@ export default function Game({ matchId}: GameProps) {
                     />
                 </div>
             </div>
+            {showReport && (
+                <div ref={reportRef}>
+                    <ReportSection 
+                        setupData={setupData}
+                        history={game.moveHistory}
+                    />
+                </div>
+            )}
         </section>
     );
 };
