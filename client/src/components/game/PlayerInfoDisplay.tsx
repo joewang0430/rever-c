@@ -38,7 +38,12 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
             <div className="text-2xl text-gray-400 text-center" >{playerDescription}</div>
             <div className="h-4"></div>
             <div className="w-full px-8">
-                <PlayerStatsLg playerStats={playerStats} isCode={isCode} isAI={isAI} />
+                <PlayerStatsLg 
+                    playerStats={playerStats} 
+                    isCode={isCode} 
+                    isAI={isAI} 
+                    aiName={playerConfig.config?.aiName}
+                />
             </div>
         </div>
     );

@@ -57,9 +57,9 @@ export default function Game({ matchId}: GameProps) {
     useEffect(() => {
         try {
             const savedLegal = storage.getJSON<boolean>("showLegalMoves");
-            const savedAccel = storage.getJSON<boolean>("accelerateSpeed");
             setShowLegalMoves(savedLegal === null ? true : !!savedLegal);
-            setAccelerateSpeed(savedAccel === null ? false : !!savedAccel);
+            // accelerateSpeed is match-local only; default false per match
+            setAccelerateSpeed(false);
         } catch {}
     }, []);
 
@@ -114,7 +114,9 @@ export default function Game({ matchId}: GameProps) {
             isRequestingComputer.current = true;
             try {
                 let computerMove: FetchCodeMoveResult | FetchAIMoveResult | null = null;
-                const delayMs = accelerateSpeed ? 150 : 600;
+                const isCode = (t: string | null | undefined) => t === 'custom' || t === 'archive';
+                const bothCodePlayers = !!setupData && isCode(setupData.black.type) && isCode(setupData.white.type);
+                const delayMs = bothCodePlayers ? (accelerateSpeed ? 150 : 600) : 700;
                 const delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
 
                 // Type: custom
@@ -299,21 +301,22 @@ export default function Game({ matchId}: GameProps) {
                                 />
                                 <span className="text-lg">Show Legal Moves</span>
                             </div>
-                            <div className="flex items-center gap-2 select-none">
-                                <input
-                                    type="checkbox"
-                                    checked={accelerateSpeed}
-                                    onChange={(e) => {
-                                        const v = e.target.checked;
-                                        setAccelerateSpeed(v);
-                                        storage.setJSON("accelerateSpeed", v);
-                                    }}
-                                    className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
-                                    style={{ accentColor: "var(--rvc-primary-green)" }}
-                                    aria-label="Accelerate Speed"
-                                />
-                                <span className="text-lg">Accelerate Speed</span>
-                            </div>
+                            {(setupData && (setupData.black.type === 'custom' || setupData.black.type === 'archive') && (setupData.white.type === 'custom' || setupData.white.type === 'archive')) && (
+                                <div className="flex items-center gap-2 select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={accelerateSpeed}
+                                        onChange={(e) => {
+                                            const v = e.target.checked;
+                                            setAccelerateSpeed(v);
+                                        }}
+                                        className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
+                                        style={{ accentColor: "var(--rvc-primary-green)" }}
+                                        aria-label="Accelerate Speed"
+                                    />
+                                    <span className="text-lg">Accelerate Speed</span>
+                                </div>
+                            )}
                         </div>
 
                         {game.gameOver && !showReport && (
@@ -384,21 +387,22 @@ export default function Game({ matchId}: GameProps) {
                                 />
                                 <span className="text-base">Show Legal Moves</span>
                             </div>
-                            <div className="flex items-center gap-2 select-none">
-                                <input
-                                    type="checkbox"
-                                    checked={accelerateSpeed}
-                                    onChange={(e) => {
-                                        const v = e.target.checked;
-                                        setAccelerateSpeed(v);
-                                        storage.setJSON("accelerateSpeed", v);
-                                    }}
-                                    className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
-                                    style={{ accentColor: "var(--rvc-primary-green)" }}
-                                    aria-label="Accelerate Speed"
-                                />
-                                <span className="text-base">Accelerate Speed</span>
-                            </div>
+                            {(setupData && (setupData.black.type === 'custom' || setupData.black.type === 'archive') && (setupData.white.type === 'custom' || setupData.white.type === 'archive')) && (
+                                <div className="flex items-center gap-2 select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={accelerateSpeed}
+                                        onChange={(e) => {
+                                            const v = e.target.checked;
+                                            setAccelerateSpeed(v);
+                                        }}
+                                        className="cursor-pointer w-5 h-5 rounded-md border-2 border-rvc-primary-green"
+                                        style={{ accentColor: "var(--rvc-primary-green)" }}
+                                        aria-label="Accelerate Speed"
+                                    />
+                                    <span className="text-base">Accelerate Speed</span>
+                                </div>
+                            )}
                         </div>
 
                         {game.gameOver && !showReport && (

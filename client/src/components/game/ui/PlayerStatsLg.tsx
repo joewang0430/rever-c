@@ -8,9 +8,10 @@ interface PlayerStatsLgProps {
     playerStats: PlayerStats;
     isCode: boolean;
     isAI?: boolean;
+    aiName?: string;
 }
 
-const PlayerStatsLg = ({ playerStats, isCode, isAI = false }: PlayerStatsLgProps) => {
+const PlayerStatsLg = ({ playerStats, isCode, isAI = false, aiName }: PlayerStatsLgProps) => {
     const listRef = useRef<HTMLDivElement>(null);
     const prevLenRef = useRef<number>(playerStats.explanations?.length ?? 0);
     const [highlightIdx, setHighlightIdx] = useState<number | null>(null);
@@ -55,7 +56,7 @@ const PlayerStatsLg = ({ playerStats, isCode, isAI = false }: PlayerStatsLgProps
 
             {isAI && (
                 <>
-                    <div className="mt-4 w-full text-center">Explanations</div>
+                    <div className="mt-4 w-full text-center">{(aiName || "LLM") + ":"}</div>
                     <div ref={listRef} className="w-full h-64 overflow-y-auto bg-white rounded-md border border-gray-200 p-2">
                         {(playerStats.explanations || []).map((item, idx) => {
                             const colLetter = String.fromCharCode(97 + (item.move?.col ?? 0));
@@ -63,9 +64,9 @@ const PlayerStatsLg = ({ playerStats, isCode, isAI = false }: PlayerStatsLgProps
                             const notation = `[${colLetter}${rowNumber}]`;
                             const isHighlight = idx === highlightIdx;
                             return (
-                                <div key={idx} className={`py-1 text-left rounded-md ${isHighlight ? "animate-new-item" : ""}`}>
-                                    <span className="rvct-theme-500 text-gray-700 mr-2">{notation}</span>
-                                    <span className="text-gray-800">{item.text}</span>
+                                <div key={idx} className={`py-2 text-left rounded-md ${isHighlight ? "animate-new-item" : ""}`}>
+                                    <div className="text-gray-700 font-bold text-rvc-primary-blue">{notation}</div>
+                                    <div className="text-gray-800 rvct-theme-500">{item.text}</div>
                                 </div>
                             );
                         })}
