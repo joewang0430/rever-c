@@ -25,7 +25,7 @@ import {
 import { getSetupTurnName } from "@/utils/nameConverters";
 import { fetchCustomMove, fetchArchiveMove, fetchAIMove } from "@/api/playApi";
 import { storage } from "@/utils/storage";
-import { raiseGameErrorWindow, isFetchAIMoveResult } from "@/utils/gameLogistics";
+import { raiseGameErrorWindow, isFetchAIMoveResult, clearCandidate } from "@/utils/gameLogistics";
 import { useRouter } from 'next/navigation';
 import ReportSection from "../report";
 import { useSetupDataContext } from "@/contexts/SetupDataContext";  // added
@@ -68,6 +68,23 @@ export default function Game({ matchId}: GameProps) {
         setTimeout(() => {
             reportRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 100);
+    };
+
+    const handleNewGame = async () => {
+        router.push("/setup");
+        if (setupData) {
+            try {
+                await clearCandidate(setupData);
+            } catch (e) {
+                // silently ignore cleanup errors here
+            }
+        }
+    };
+
+    const handleReplay = () => {
+        if (typeof window !== "undefined") {
+            window.location.reload();
+        }
     };
 
     // Prefer reading setup from URL hash token (pure frontend). If missing/invalid, redirect back to setup with an error message.
@@ -285,6 +302,7 @@ export default function Game({ matchId}: GameProps) {
                         />
 
                         {/* Toggle controls under the board (desktop/tablet shown within this layout) */}
+                        {!game.gameOver && (
                         <div className="hidden md:flex md:flex-col w-full items-center justify-center gap-3 mt-3">
                             <div className="flex items-center gap-2 select-none">
                                 <input
@@ -318,15 +336,38 @@ export default function Game({ matchId}: GameProps) {
                                 </div>
                             )}
                         </div>
+                        )}
 
                         {game.gameOver && !showReport && (
-                            <button
-                                onClick={handleShowReport}
-                                aria-label="See Game Report"
-                                className="rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
-                            >
-                                See Game Report
-                            </button>
+                            <div className="w-full flex items-center justify-center mt-4">
+                                <div className="w-[18rem] max-w-full">
+                                    <button
+                                        onClick={handleShowReport}
+                                        aria-label="See Game Report"
+                                        className="w-full rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
+                                    >
+                                        See Game Report
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {game.gameOver && (
+                            <div className="w-full flex items-center justify-center mt-2">
+                                <div className="w-[18rem] max-w-full flex items-center justify-center gap-3">
+                                    <button
+                                        onClick={handleNewGame}
+                                        className="w-1/2 rounded-lg bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                                    >
+                                        New Game
+                                    </button>
+                                    <button
+                                        onClick={handleReplay}
+                                        className="w-1/2 rounded-lg bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                                    >
+                                        Replay
+                                    </button>
+                                </div>
+                            </div>
                         )}
                     </div>
 
@@ -371,6 +412,7 @@ export default function Game({ matchId}: GameProps) {
                         />
 
                         {/* Toggle controls under the board (mobile layout) */}
+                        {!game.gameOver && (
                         <div className="flex md:hidden flex-col w-full items-center justify-center gap-2 mt-3">
                             <div className="flex items-center gap-2 select-none">
                                 <input
@@ -404,15 +446,38 @@ export default function Game({ matchId}: GameProps) {
                                 </div>
                             )}
                         </div>
+                        )}
 
                         {game.gameOver && !showReport && (
-                            <button
-                                onClick={handleShowReport}
-                                aria-label="See Game Report"
-                                className="rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
-                            >
-                                See Game Report
-                            </button>
+                            <div className="w-full flex items-center justify-center mt-8">
+                                <div className="w-[20rem] max-w-full">
+                                    <button
+                                        onClick={handleShowReport}
+                                        aria-label="See Game Report"
+                                        className="w-full rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
+                                    >
+                                        See Game Report
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {game.gameOver && (
+                            <div className="w-full flex items-center justify-center mt-2">
+                                <div className="w-[20rem] max-w-full flex items-center justify-center gap-3">
+                                    <button
+                                        onClick={handleNewGame}
+                                        className="w-1/2 rounded-lg bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                                    >
+                                        New Game
+                                    </button>
+                                    <button
+                                        onClick={handleReplay}
+                                        className="w-1/2 rounded-lg bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                                    >
+                                        Replay
+                                    </button>
+                                </div>
+                            </div>
                         )}
                     </div>
 
