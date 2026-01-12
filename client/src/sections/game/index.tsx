@@ -133,7 +133,7 @@ export default function Game({ matchId}: GameProps) {
                 let computerMove: FetchCodeMoveResult | FetchAIMoveResult | null = null;
                 const isCode = (t: string | null | undefined) => t === 'custom' || t === 'archive';
                 const bothCodePlayers = !!setupData && isCode(setupData.black.type) && isCode(setupData.white.type);
-                const delayMs = bothCodePlayers ? (accelerateSpeed ? 150 : 600) : 700;
+                const delayMs = bothCodePlayers ? (accelerateSpeed ? 150 : 600) : 1000;
                 const delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
 
                 // Type: custom
@@ -303,7 +303,7 @@ export default function Game({ matchId}: GameProps) {
 
                         {/* Toggle controls under the board (desktop/tablet shown within this layout) */}
                         {!game.gameOver && (
-                        <div className="hidden md:flex md:flex-col w-full items-center justify-center gap-3 mt-3">
+                        <div className={`hidden md:flex md:flex-col w-full items-center justify-center gap-3 mt-3 ${game.gameOver ? 'hidden' : ''}`}>
                             <div className="flex items-center gap-2 select-none">
                                 <input
                                     type="checkbox"
@@ -344,9 +344,21 @@ export default function Game({ matchId}: GameProps) {
                                     <button
                                         onClick={handleShowReport}
                                         aria-label="See Game Report"
-                                        className="w-full rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
+                                        className="w-full rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-rvc-primary-green hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
                                     >
-                                        See Game Report
+                                        <svg
+                                            className="h-5 w-5"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="M5 20V10" strokeLinecap="round" />
+                                            <path d="M12 20V4" strokeLinecap="round" />
+                                            <path d="M19 20V14" strokeLinecap="round" />
+                                        </svg>
+                                        <span>See Game Report</span>
                                     </button>
                                 </div>
                             </div>
@@ -413,7 +425,7 @@ export default function Game({ matchId}: GameProps) {
 
                         {/* Toggle controls under the board (mobile layout) */}
                         {!game.gameOver && (
-                        <div className="flex md:hidden flex-col w-full items-center justify-center gap-2 mt-3">
+                        <div className={`flex md:hidden flex-col w-full items-center justify-center gap-2 mt-3 ${game.gameOver ? 'hidden' : ''}`}>
                             <div className="flex items-center gap-2 select-none">
                                 <input
                                     type="checkbox"
@@ -454,15 +466,27 @@ export default function Game({ matchId}: GameProps) {
                                     <button
                                         onClick={handleShowReport}
                                         aria-label="See Game Report"
-                                        className="w-full rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-gray-100 transition-colors"
+                                        className="w-full rounded-lg border-2 border-rvc-primary-green text-rvc-primary-green bg-transparent px-4 py-2 hover:bg-rvc-primary-green hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
                                     >
-                                        See Game Report
+                                        <svg
+                                            className="h-5 w-5"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="M5 20V10" strokeLinecap="round" />
+                                            <path d="M12 20V4" strokeLinecap="round" />
+                                            <path d="M19 20V14" strokeLinecap="round" />
+                                        </svg>
+                                        <span>See Game Report</span>
                                     </button>
                                 </div>
                             </div>
                         )}
                         {game.gameOver && (
-                            <div className="w-full flex items-center justify-center mt-2">
+                            <div className="w-full flex items-center justify-center">
                                 <div className="w-[20rem] max-w-full flex items-center justify-center gap-3">
                                     <button
                                         onClick={handleNewGame}

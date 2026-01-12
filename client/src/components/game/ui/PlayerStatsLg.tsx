@@ -57,7 +57,7 @@ const PlayerStatsLg = ({ playerStats, isCode, isAI = false, aiName }: PlayerStat
             {isAI && (
                 <>
                     <div className="mt-4 w-full text-center">{(aiName || "LLM") + ":"}</div>
-                    <div ref={listRef} className="w-full h-64 overflow-y-auto bg-white rounded-md border border-gray-200 p-2">
+                    <div ref={listRef} className="w-full h-64 overflow-y-auto bg-gray-100 rounded-md border border-gray-200 p-2">
                         {(playerStats.explanations || []).map((item, idx) => {
                             const colLetter = String.fromCharCode(97 + (item.move?.col ?? 0));
                             const rowNumber = (item.move?.row ?? 0) + 1;
@@ -70,9 +70,9 @@ const PlayerStatsLg = ({ playerStats, isCode, isAI = false, aiName }: PlayerStat
                                 </div>
                             );
                         })}
-                        {(playerStats.explanations ?? []).length === 0 && (
+                        {/* {(playerStats.explanations ?? []).length === 0 && (
                             <div className="text-gray-400 text-center py-2">No AI explanations yet</div>
-                        )}
+                        )} */}
                     </div>
                 </>
             )}
