@@ -46,8 +46,18 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
 
                     {/* Middle column: Time diagram (top), Move list (middle), New/Replay (bottom) */}
                     <div className="flex flex-col gap-6">
-                        <TimeDiagram setupData={setupData} history={history} />
-                        <MoveList setupData={setupData} history={history} />
+                        <TimeDiagram 
+                            setupData={setupData} 
+                            history={history} 
+                            selectedStep={selectedStep}
+                            setSelectedStep={setSelectedStep}
+                        />
+                        <MoveList 
+                            setupData={setupData} 
+                            history={history} 
+                            selectedStep={selectedStep}
+                            setSelectedStep={setSelectedStep}
+                        />
                         <div className="w-full flex items-center justify-center">
                             <div className="w-[20rem] max-w-full flex items-center justify-center gap-3">
                                 <button
