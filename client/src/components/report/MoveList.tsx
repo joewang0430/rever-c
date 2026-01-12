@@ -22,32 +22,47 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
     }
   }, [selectedStep]);
 
+  // Helper for row classes - selected rows don't have hover effect
+  const getRowClasses = (step: number, isSelected: boolean) => {
+    if (isSelected) {
+      return "bg-gray-200"; // No hover effect for selected
+    }
+    const baseBg = step % 2 === 1 ? "bg-gray-50" : "bg-white";
+    return `${baseBg} hover:bg-gray-200`;
+  };
+
   return (
-    <div ref={containerRef} className="w-full h-64 bg-orange-100 border-2 border-orange-300 rounded p-3 overflow-auto">
-      <div className="text-orange-900 font-medium mb-2">Move List</div>
-      <ul className="space-y-1">
-        {/* Optional: initial board state */}
-        <li>
-          <button
-            className={`w-full text-left px-2 py-1 rounded ${selectedStep === 0 ? "bg-orange-200" : "hover:bg-orange-200"}`}
-            onClick={() => setSelectedStep(0)}
-            data-step={0}
-          >
-            Step 0: Initial Position
-          </button>
-        </li>
-        {history.map((item) => (
-          <li key={item.step}>
+    <div className="w-full h-64 bg-gray-100 border-2 border-gray-300 rounded-md flex flex-col">
+      {/* Fixed header */}
+      <div className="text-gray-900 px-6 py-3 rvct-theme text-center shrink-0">
+        All Moves
+      </div>
+      {/* Scrollable list */}
+      <div ref={containerRef} className="flex-1 overflow-auto px-4 py-2">
+        <ul>
+          {/* Initial board state */}
+          <li>
             <button
-              className={`w-full text-left px-2 py-1 rounded ${selectedStep === item.step ? "bg-orange-200" : "hover:bg-orange-200"}`}
-              onClick={() => setSelectedStep(item.step)}
-              data-step={item.step}
+              className={`w-full text-left px-2 py-1 ${getRowClasses(0, selectedStep === 0)}`}
+              onClick={() => setSelectedStep(0)}
+              data-step={0}
             >
-              Step {item.step}: {getSetupTurnName(item.color)} at ({getColName(item.position.col)}{getRowName(item.position.row)})
+              0. Initial Position
             </button>
           </li>
-        ))}
-      </ul>
+          {history.map((item) => (
+            <li key={item.step}>
+              <button
+                className={`w-full text-left px-2 py-1 ${getRowClasses(item.step, selectedStep === item.step)}`}
+                onClick={() => setSelectedStep(item.step)}
+                data-step={item.step}
+              >
+                {item.step}. {getSetupTurnName(item.color)} -- [{getColName(item.position.col)}{getRowName(item.position.row)}]
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

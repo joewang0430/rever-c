@@ -102,10 +102,10 @@ export default function TimeDiagram({ setupData, history, selectedStep, setSelec
     : null;
 
   return (
-    <div className="w-full bg-purple-100 border-2 border-purple-300 rounded p-3">
+    <div className="w-full bg-gray-100 border-2 border-gray-300 rounded-md p-3">
       <div
         ref={containerRef}
-        className="relative h-32 lg:h-40 bg-purple-200 rounded cursor-pointer overflow-hidden"
+        className="relative h-32 lg:h-40 bg-gray-200 rounded cursor-pointer overflow-hidden"
         onClick={handleClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
