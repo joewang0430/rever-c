@@ -51,7 +51,7 @@ const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
                 `${whiteName} (White) used ${formatElapsed(totalWhiteTime)}, [max turn: ${formatElapsed(maxWhiteTime)}]\n` : ''
             ) + 
             ((setupData.black.type === 'custom' || setupData.white.type === 'custom') ?
-                `* Note: All time data measured by reverc.org is for reference only and may not be fully accurate.` : ''
+                `* Note: All time data measured by ReverC is for reference only, and may not be fully accurate.` : ''
             ) +
             `\n\nProvided by reverc.org`
         // General

@@ -1,6 +1,7 @@
 import { SetupData } from "@/data/types/setup";
 import { MoveHistoryItem } from "@/data/types/game";
 import { getSetupTurnName, getRowName, getColName } from "@/utils/nameConverters";
+import { useEffect, useRef } from "react";
 
 interface MoveListProps {
   setupData: SetupData;
@@ -10,8 +11,19 @@ interface MoveListProps {
 }
 
 export default function MoveList({ setupData, history, selectedStep, setSelectedStep }: MoveListProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const target = el.querySelector<HTMLButtonElement>(`button[data-step="${selectedStep}"]`);
+    if (target) {
+      target.scrollIntoView({ block: "nearest" });
+    }
+  }, [selectedStep]);
+
   return (
-    <div className="w-full h-64 bg-orange-100 border-2 border-orange-300 rounded p-3 overflow-auto">
+    <div ref={containerRef} className="w-full h-64 bg-orange-100 border-2 border-orange-300 rounded p-3 overflow-auto">
       <div className="text-orange-900 font-medium mb-2">Move List</div>
       <ul className="space-y-1">
         {/* Optional: initial board state */}
@@ -19,6 +31,7 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
           <button
             className={`w-full text-left px-2 py-1 rounded ${selectedStep === 0 ? "bg-orange-200" : "hover:bg-orange-200"}`}
             onClick={() => setSelectedStep(0)}
+            data-step={0}
           >
             Step 0: Initial Position
           </button>
@@ -28,6 +41,7 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
             <button
               className={`w-full text-left px-2 py-1 rounded ${selectedStep === item.step ? "bg-orange-200" : "hover:bg-orange-200"}`}
               onClick={() => setSelectedStep(item.step)}
+              data-step={item.step}
             >
               Step {item.step}: {getSetupTurnName(item.color)} at ({getColName(item.position.col)}{getRowName(item.position.row)})
             </button>
