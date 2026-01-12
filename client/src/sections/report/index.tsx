@@ -34,10 +34,10 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
     };
 
     return (
-        <section aria-label="Report Page" className="w-full bg-gray-50 min-h-screen">
-            <div className="max-w-6xl mx-auto py-8">
+        <section aria-label="Report Page" className="w-full bg-gray-50 h-screen overflow-hidden">
+            <div className="max-w-6xl mx-auto h-full px-4 flex items-center">
                 {/* Large screen layout scaffold: 3 columns */}
-                <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6">
+                <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6 w-full">
                     {/* Left column: Board (top) + Computer Analysis (bottom) */}
                     <div className="flex flex-col gap-6">
                         <ReportBoard setupData={setupData} history={history} step={selectedStep} />
@@ -45,7 +45,7 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                     </div>
 
                     {/* Middle column: Time diagram (top), Move list (middle), New/Replay (bottom) */}
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4">
                         <TimeDiagram 
                             setupData={setupData} 
                             history={history} 
@@ -58,21 +58,19 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                             selectedStep={selectedStep}
                             setSelectedStep={setSelectedStep}
                         />
-                        <div className="w-full flex items-center justify-center">
-                            <div className="w-[20rem] max-w-full flex items-center justify-center gap-3">
-                                <button
-                                    onClick={handleNewGame}
-                                    className="w-1/2 rounded-lg bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
-                                >
-                                    New Game
-                                </button>
-                                <button
-                                    onClick={handleReplay}
-                                    className="w-1/2 rounded-lg bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
-                                >
-                                    Replay
-                                </button>
-                            </div>
+                        <div className="w-full flex items-center gap-3">
+                            <button
+                                onClick={handleNewGame}
+                                className="flex-1 rounded-md bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                            >
+                                New Game
+                            </button>
+                            <button
+                                onClick={handleReplay}
+                                className="flex-1 rounded-md bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                            >
+                                Replay
+                            </button>
                         </div>
                     </div>
 

@@ -1,6 +1,6 @@
 import { SetupData } from "@/data/types/setup";
 import { MoveHistoryItem } from "@/data/types/game";
-import { getSetupTurnName, getRowName, getColName } from "@/utils/nameConverters";
+import { getRowName, getColName } from "@/utils/nameConverters";
 import { useEffect, useRef } from "react";
 
 interface MoveListProps {
@@ -32,13 +32,13 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
   };
 
   return (
-    <div className="w-full h-64 bg-gray-100 border-2 border-gray-300 rounded-md flex flex-col">
+    <div className="w-full h-80 bg-gray-100 border-2 border-gray-300 rounded-md flex flex-col">
       {/* Fixed header */}
-      <div className="text-gray-900 px-6 py-3 rvct-theme text-center shrink-0">
+      <div className="text-gray-900 px-6 py-2 rvct-theme text-center shrink-0">
         All Moves
       </div>
       {/* Scrollable list */}
-      <div ref={containerRef} className="flex-1 overflow-auto px-4 py-2">
+      <div ref={containerRef} className="flex-1 overflow-auto px-6 py-2 font-medium">
         <ul>
           {/* Initial board state */}
           <li>
@@ -47,7 +47,8 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
               onClick={() => setSelectedStep(0)}
               data-step={0}
             >
-              0. Initial Position
+              <span className="inline-block w-8 text-right mr-4">0.</span>
+              <span>Initial Position</span>
             </button>
           </li>
           {history.map((item) => (
@@ -57,12 +58,15 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
                 onClick={() => setSelectedStep(item.step)}
                 data-step={item.step}
               >
-                {item.step}. {getSetupTurnName(item.color)} -- [{getColName(item.position.col)}{getRowName(item.position.row)}]
+                <span className="inline-block w-8 text-right mr-4">{item.step}.</span>
+                <span>{item.color} -- [{getColName(item.position.col)}{getRowName(item.position.row)}]</span>
               </button>
             </li>
           ))}
         </ul>
       </div>
+      {/* Fixed bottom spacer - always visible regardless of scroll position */}
+      <div className="h-4 shrink-0"></div>
     </div>
   );
 }
