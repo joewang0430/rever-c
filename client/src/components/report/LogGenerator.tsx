@@ -86,9 +86,12 @@ const LogGenerator = ({ setupData, history }: ReportGeneratorProps) => {
     }
 
     return(
-        <div>
-            <button onClick={handleGenerateLog}>Generate Log</button>
-        </div>
+        <button 
+            onClick={handleGenerateLog}
+            className="w-full px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors"
+        >
+            Generate Log
+        </button>
     )
 };
 

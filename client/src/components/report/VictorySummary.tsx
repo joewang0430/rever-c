@@ -1,8 +1,12 @@
 export default function VictorySummary() {
   return (
-    <div className="w-full bg-teal-100 border-2 border-teal-300 rounded p-4">
-      <div className="text-2xl font-semibold text-teal-900 mb-2">A resounding and sweeping victory.</div>
-      <p className="text-teal-800 text-sm">LLM-generated summary will appear here. Placeholder text for now.</p>
+    <div className="w-full">
+      <h2 className="text-4xl font-semibold text-gray-900 mb-3">
+        A resounding and sweeping victory.
+      </h2>
+      <p className="text-gray-600 text-sm leading-relaxed">
+        [Still under development] Black took control of the center, limited white&apos;s mobility, and through accurate calculation in the end to get this winning.
+      </p>
     </div>
   );
 }
