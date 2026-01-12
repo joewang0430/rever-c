@@ -23,6 +23,7 @@ interface GameBoardProps {
     isEcho: boolean;
     onCellClick: (move: Move)  => void;
     showLegalHints?: boolean;
+    variant?: "default" | "report";
 };
 
 const GameBoard = ({
@@ -35,7 +36,8 @@ const GameBoard = ({
     setupData,
     isEcho,
     onCellClick,
-    showLegalHints = false
+    showLegalHints = false,
+    variant = "default"
 }: GameBoardProps) => {
 
     // Magage tip show up: for if opponenet has no available move
@@ -95,6 +97,7 @@ const GameBoard = ({
                                 showLegalHints={showLegalHints}
                                 canClick={!!canClick}
                                 onClick={() => canClick && onCellClick({ row, col })}
+                                variant={variant}
                             />
                         );
                     })

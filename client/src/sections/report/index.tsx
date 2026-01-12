@@ -12,6 +12,7 @@ import VictorySummary from "@/components/report/VictorySummary";
 import StatsSummary from "@/components/report/StatsSummary";
 import ReportActions from "@/components/report/ReportActions";
 import { useRouter } from "next/navigation";
+import { useState, useMemo } from "react";
 
 interface ReportSectionProps {
     setupData: SetupData;
@@ -20,6 +21,7 @@ interface ReportSectionProps {
 
 export default function ReportSection({ setupData, history }: ReportSectionProps) {
     const router = useRouter();
+    const [selectedStep, setSelectedStep] = useState<number>(() => history?.length ?? 0);
 
     const handleNewGame = () => {
         router.push("/setup");
@@ -38,7 +40,7 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                 <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6">
                     {/* Left column: Board (top) + Computer Analysis (bottom) */}
                     <div className="flex flex-col gap-6">
-                        <ReportBoard setupData={setupData} history={history} />
+                        <ReportBoard setupData={setupData} history={history} step={selectedStep} />
                         <ComputerAnalysis />
                     </div>
 

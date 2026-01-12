@@ -12,6 +12,7 @@ interface CellProps {
     showLegalHints?: boolean;
     canClick: boolean;
     onClick?: () => void;
+    variant?: "default" | "report";
 };
 
 const Cell = ({
@@ -21,17 +22,25 @@ const Cell = ({
     isLegal,
     showLegalHints = false,
     canClick,
-    onClick
+    onClick,
+    variant = "default"
 }: CellProps) => {
     return (
         <div
             className={`
                 rvc-cell relative flex items-center justify-center w-full h-full
                 ${canClick ? "cursor-pointer" : "cursor-default"}
-                ${isFlipping ? "animate-pulse" : ""}
+                ${isFlipping && variant === "default" ? "animate-pulse" : ""}
             `}
             onClick={canClick ? onClick : undefined}
         >
+            {/* Report variant overlays for flipped and last move */}
+            {variant === "report" && isFlipping && (
+                <div className="absolute inset-0 bg-green-200/80 rounded pointer-events-none" />
+            )}
+            {variant === "report" && isLast && (
+                <div className="absolute inset-0 bg-yellow-300/90 rounded pointer-events-none" />
+            )}
             {/* Piece view */}
             <div className="absolute inset-0 flex items-center justify-center">
                 {value !== "U" ? (
@@ -44,8 +53,8 @@ const Cell = ({
                 <div className="absolute w-2.5 h-2.5 rounded-full bg-emerald-400/60 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             )}
 
-            {/* Last move marker (unchanged) */}
-            {isLast && (
+            {/* Last move marker (game-only) */}
+            {variant === "default" && isLast && (
                 <div className="absolute w-2 h-2 rounded-full bg-red-500 opacity-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             )}
         </div>
