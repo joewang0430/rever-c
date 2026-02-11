@@ -45,19 +45,21 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                     </div>
 
                     {/* Middle column: Time diagram (top), Move list (middle), New/Replay (bottom) */}
-                    <div className="flex flex-col gap-4">
-                        <TimeDiagram 
-                            setupData={setupData} 
-                            history={history} 
-                            selectedStep={selectedStep}
-                            setSelectedStep={setSelectedStep}
-                        />
-                        <MoveList 
-                            setupData={setupData} 
-                            history={history} 
-                            selectedStep={selectedStep}
-                            setSelectedStep={setSelectedStep}
-                        />
+                    <div className="flex flex-col gap-4 justify-between">
+                        <div className="flex flex-col gap-4">
+                            <TimeDiagram 
+                                setupData={setupData} 
+                                history={history} 
+                                selectedStep={selectedStep}
+                                setSelectedStep={setSelectedStep}
+                            />
+                            <MoveList 
+                                setupData={setupData} 
+                                history={history} 
+                                selectedStep={selectedStep}
+                                setSelectedStep={setSelectedStep}
+                            />
+                        </div>
                         <div className="w-full flex items-center gap-3">
                             <button
                                 onClick={handleNewGame}
@@ -75,9 +77,11 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                     </div>
 
                     {/* Right column: LLM summary (top), stats (middle), actions (bottom) */}
-                    <div className="flex flex-col gap-4">
-                        <VictorySummary />
-                        <StatsSummary setupData={setupData} history={history} />
+                    <div className="flex flex-col gap-4 justify-between">
+                        <div className="flex flex-col gap-4">
+                            <VictorySummary />
+                            <StatsSummary setupData={setupData} history={history} />
+                        </div>
                         <ReportActions setupData={setupData} history={history} />
                     </div>
                 </div>
