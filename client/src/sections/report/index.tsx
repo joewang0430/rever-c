@@ -79,7 +79,7 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                     {/* Right column: LLM summary (top), stats (middle), actions (bottom) */}
                     <div className="flex flex-col gap-4 justify-between">
                         <div className="flex flex-col gap-4">
-                            <VictorySummary />
+                            <VictorySummary setupData={setupData} history={history} />
                             <StatsSummary setupData={setupData} history={history} />
                         </div>
                         <ReportActions setupData={setupData} history={history} />

@@ -82,9 +82,9 @@ function calcAvgMobility(history: MoveHistoryItem[], color: Turn): number {
 /** Format time in microseconds to readable string */
 function formatTime(us: number): string {
   if (us === 0) return "0 ms";
-  if (us < 1000) return `${us} μs`;
+  if (us < 1000) return `${Math.round(us)} μs`;
   const ms = us / 1000;
-  if (ms < 1000) return `${ms.toFixed(0)} ms`;
+  if (ms < 1000) return `${ms.toFixed(1)} ms`;
   const s = ms / 1000;
   return `${s.toFixed(2)} s`;
 }
