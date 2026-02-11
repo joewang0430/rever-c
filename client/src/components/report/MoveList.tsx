@@ -38,7 +38,7 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
         All Moves
       </div>
       {/* Scrollable list */}
-      <div ref={containerRef} className="flex-1 overflow-auto px-6 py-2 font-medium">
+      <div ref={containerRef} className="flex-1 overflow-auto px-6 py-2 font-medium text-gray-600">
         <ul>
           {/* Initial board state */}
           <li>
@@ -48,7 +48,7 @@ export default function MoveList({ setupData, history, selectedStep, setSelected
               data-step={0}
             >
               <span className="inline-block w-8 text-right mr-4">0.</span>
-              <span>Initial Position</span>
+              <span>Initial</span>
             </button>
           </li>
           {history.map((item) => (

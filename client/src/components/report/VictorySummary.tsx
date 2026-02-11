@@ -1,7 +1,7 @@
 export default function VictorySummary() {
   return (
     <div className="w-full">
-      <h2 className="text-4xl font-semibold text-gray-900 mb-3">
+      <h2 className="text-3xl font-semibold text-gray-900 mb-2">
         A resounding and sweeping victory.
       </h2>
       <p className="text-gray-600 text-sm leading-relaxed">

@@ -6,7 +6,7 @@
         "archives": [
         {
             "id": "mateo_tomeho",
-            "groupId": "2024",
+            "groupId": "aps105",
             "name": "Mateo Tomeho",
             "shortName": "T.Mateo",
             "description": "#11 rank APS105 Leaderboard 2024",
@@ -17,7 +17,7 @@
         },
         {
             "id": "hukaiqi1",
-            "groupId": "2024",
+            "groupId": "aps105",
             "name": "Alex K.Q. Hu",
             "shortName": "H.Alex",
             "description": "#8 rank APS105 Leaderboard 2024",
@@ -28,7 +28,7 @@
         },
         {
             "id": "yongkang_cheng",
-            "groupId": "2024",
+            "groupId": "aps105",
             "name": "Ken Cheng",
             "shortName": "C.Ken",
             "description": "≈25 rank APS105 Leaderboard 2024",
@@ -39,7 +39,7 @@
         },
         {
             "id": "xianglun_wu",
-            "groupId": "2024",
+            "groupId": "aps105",
             "name": "Sunny Wu (redo)",
             "shortName": "W.Sunny",
             "description": "#7 rank APS105 Leaderboard 2024",
@@ -50,7 +50,7 @@
         },
         {
             "id": "alizada",
-            "groupId": "2024",
+            "groupId": "aps105",
             "name": "Mohammed Ali Alizada",
             "shortName": "M.Ali",
             "description": "≈30 rank APS105 Leaderboard 2024",
@@ -61,7 +61,7 @@
         },
         {
             "id": "wang4577",
-            "groupId": "2024",
+            "groupId": "aps105",
             "name": "Joe Wang",
             "shortName": "W.Joe",
             "description": "#21 rank APS105 Leaderboard 2024, ReverC developer",
