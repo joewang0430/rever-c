@@ -27,6 +27,39 @@
             "heavy": false
         },
         {
+            "id": "yongkang_cheng",
+            "groupId": "2024",
+            "name": "Ken Cheng",
+            "shortName": "C.Ken",
+            "description": "≈25 rank APS105 Leaderboard 2024",
+            "shortDescription": "≈25 on Leaderboard",
+            "rating": "(600)",
+            "image": "/svgs/archives/test_player.svg",
+            "heavy": false
+        },
+        {
+            "id": "xianglun_wu",
+            "groupId": "2024",
+            "name": "Sunny Wu (redo)",
+            "shortName": "W.Sunny",
+            "description": "#7 rank APS105 Leaderboard 2024",
+            "shortDescription": "#7 on Leaderboard",
+            "rating": "(1500)",
+            "image": "/svgs/archives/test_player.svg",
+            "heavy": false
+        },
+        {
+            "id": "alizada",
+            "groupId": "2024",
+            "name": "Mohammed Ali Alizada",
+            "shortName": "M.Ali",
+            "description": "≈30 rank APS105 Leaderboard 2024",
+            "shortDescription": "≈30 on Leaderboard",
+            "rating": "(450)",
+            "image": "/svgs/archives/test_player.svg",
+            "heavy": false
+        },
+        {
             "id": "wang4577",
             "groupId": "2024",
             "name": "Joe Wang",
