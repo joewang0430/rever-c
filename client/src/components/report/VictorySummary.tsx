@@ -63,11 +63,20 @@ const crushingMessages: VictoryMessage[] = [
   { title: "A merciless rout.", getSubtitle: (name, side) => `${name} (${side}) obliterates the competition.` },
 ];
 
-function getMessageCategory(scoreDiff: number): VictoryMessage[] {
+function getMessageCategory(scoreDiff: number, boardSize: number): VictoryMessage[] {
+  // Base thresholds for 8x8 (64 cells)
+  // Scale factor based on board size
+  const scale = (boardSize * boardSize) / 64;
+  
+  // Thresholds adjusted by scale (except the minimum close threshold stays at 2)
+  const closeThreshold = Math.max(2, Math.round(6 * scale));
+  const solidThreshold = Math.round(16 * scale);
+  const greatThreshold = Math.round(34 * scale);
+
   if (scoreDiff === 0) return drawMessages;
-  if (scoreDiff <= 6) return closeMessages;
-  if (scoreDiff <= 16) return solidMessages;
-  if (scoreDiff <= 34) return greatMessages;
+  if (scoreDiff <= closeThreshold) return closeMessages;
+  if (scoreDiff <= solidThreshold) return solidMessages;
+  if (scoreDiff <= greatThreshold) return greatMessages;
   return crushingMessages;
 }
 
@@ -91,7 +100,7 @@ export default function VictorySummary({ setupData, history }: VictorySummaryPro
   // Pick a random message from the appropriate category
   // useMemo ensures we don't re-randomize on every re-render
   const message = useMemo(() => {
-    const messages = getMessageCategory(scoreDiff);
+    const messages = getMessageCategory(scoreDiff, setupData.boardSize);
     const randomIndex = Math.floor(Math.random() * messages.length);
     return messages[randomIndex];
   // eslint-disable-next-line react-hooks/exhaustive-deps

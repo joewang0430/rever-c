@@ -9,15 +9,6 @@ export interface AIInfo {
 };
 
 export const aiList: Record<string, AIInfo> = {
-  // "gemma3n:e4b": {
-  //   id: "gemma3n:e4b",
-  //   name: "AI Gemma",
-  //   shortDescription: "tbd",
-  //   description: "Your AI classmate, powered by Gemma-3n-4B",
-  //   rating: "(200)",
-  //   image: ``,
-  //   available: false,
-  // },
   "deepseek-v3": {
     id: "deepseek-v3",
     name: "DeepSeek V3",
