@@ -17,18 +17,24 @@ const EXAMPLE_CODE = `
  * responsibility when referring to this code.
  */
 
-
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 /**
- * You can always include rvc.h, they can be recognized during the competition.
+ * For APS105 students, you can safely keep these two including statement since ReverC stores them.
+ */
+#include "lab8part2.h"
+#include "liblab8part2.h"
+
+/**
+ * You can also choose to include rvc.h, which is a library provided by ReverC (not teaching team).
+ * It helps you quickly test your prototype. It can be recognized during the competition.
  */
 #include "rvc.h"      
 
 // By using rvc.h, your code will be linked with another file called "rvc_tools.c", 
-// where four basic Reversi logic functions are defined for you to use, they are:
+// where four ready-made functions are defined for you to use, they are:
 
 /*
 static bool rvc_in_bounds(int n, int row, int col);     // Whether the position is in bound
@@ -68,7 +74,7 @@ int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
 }
 
 /**
- * In reverc.org, only a valid makeMove() function is required, so you do not need a main() function.
+ * In reverc.org, only a valid makeMove() function is required, so it's not mandatory to have main() function.
  */
 
 `;
@@ -123,15 +129,14 @@ export default function Info() {
                         </p>
 
                         <h3 className="font-bold text-2xl md:text-3xl leading-tight mb-4">Code Requirements?</h3>
-                        <p className="text-white mb-3">As a first-time attempt, you may ask:</p>
+                        <p className="text-white mb-3">To upload your own code to compete, you should know:</p>
                         <ul className="list-disc pl-6 text-white space-y-1 mb-4">
-                            <li>What I can do in ReverC</li>
-                            <li>Code format in competition</li>
-                            <li>Is there a time limit</li>
-                            <li>Safety and integrity</li>
+                            <li>ReverC has built-in "lab8part2.h" and "liblab8part2.h", so codes with these two headers decleared won't cause error.</li>
+                            <li>Ensure there's a MakeMove() function with correct format.</li>
+                            <li>There is a time limit of 3 seconds for .c algorithm, exceeding it will end the game.</li>
                             {/* <li>…</li> */}
                         </ul>
-                        <p className="text-white mb-5">Please have a quick look at</p>
+                        <p className="text-white mb-5">Enjoy the game! See here for more details</p>
                         <Link
                             href="/questions"
                             className="rvct-theme-700 font-semibold inline-flex items-center gap-2 bg-white text-rvc-primary-black px-5 py-3 rounded-lg hover:bg-white/95 transition hover:underline"

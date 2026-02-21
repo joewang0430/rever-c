@@ -40,14 +40,14 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
-                Join Us
+                About Us
             </Link>
         ) : (
             <Link
                 href={contactUrl}
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
-                Join Us
+                About Us
             </Link>
         );
     }
@@ -60,7 +60,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 tabIndex={0}
                 className="hover:text-rvc-primary-green rvct-theme-500 hover:rvct-theme-700 transition cursor-pointer"
             >
-                Join Us
+                About Us
             </button>
             {open && (
                 <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded flex flex-col z-50">
