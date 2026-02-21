@@ -13,8 +13,8 @@ const EXAMPLE_CODE = `
  * at the University of Toronto (UofT) in 2022. This sample code and reverc.org are
  * provided by Jue Wang. The code is protected under the MIT License.
  *
- * APS105 students at UofT are responsible for academic integrity and should take
- * responsibility when referring to this code.
+ * APS105 students at UofT are responsible for academic integrity defined by UofT 
+ * and should take responsibility when referring to this code.
  */
 
 #include <stdio.h>
@@ -29,7 +29,7 @@ const EXAMPLE_CODE = `
 
 /**
  * You can also choose to include rvc.h, which is a library provided by ReverC (not teaching team).
- * It helps you quickly test your prototype. It can be recognized during the competition.
+ * It helps you quickly test your prototype, though they may not be the most runtime-efficient.
  */
 #include "rvc.h"      
 
@@ -74,7 +74,7 @@ int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
 }
 
 /**
- * In reverc.org, only a valid makeMove() function is required, so it's not mandatory to have main() function.
+ * Only a valid makeMove() function is required in ReverC. It's not mandatory to have main() function.
  */
 
 `;

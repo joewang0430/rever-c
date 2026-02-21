@@ -177,7 +177,7 @@ export default function Setup() {
                     </div>
                     
                     {/* Test Info - Used in Development */}
-                    {process.env.NODE_ENV === 'development' && (
+                    {/* {process.env.NODE_ENV === 'development' && (
                         <div className="mt-8 p-4 bg-gray-100 rounded-lg">
                             <details>
                                 <summary className="cursor-pointer text-sm font-medium text-gray-600">
@@ -197,7 +197,7 @@ export default function Setup() {
                                 </div>
                             </div>
                         </div>
-                    )}
+                    )} */}
                     
                 </div>
             </CacheProvider>
