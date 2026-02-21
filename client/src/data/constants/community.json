@@ -156,23 +156,6 @@
         ]
     },
     {
-        "id": "reverc_family",
-        "name": "ReverC Family",
-        "archives": [
-        {
-            "id": "oone",
-            "groupId": "reverc_family",
-            "name": "Oone",
-            "shortName": "Oone",
-            "description": "Joe's pet, good at reversi",
-            "shortDescription": "Joe's pet",
-            "rating": "(???)",
-            "image": "/svgs/archives/test_player.svg",
-            "heavy": false
-        }
-        ]
-    },
-    {
         "id": "other_bots",
         "name": "Other Bots",
         "archives": [
