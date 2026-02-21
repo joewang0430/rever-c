@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { PlayerConfig } from '@/data/types/setup';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { cleanupCandidate } from '@/api/uploadApi';
+import { canUpload, incrementUploadCount, getRemainingUploads } from '@/utils/rateLimit';
 
 interface CandidateUploadProps {
     playerConfig: PlayerConfig;
@@ -86,6 +87,12 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const handleButtonClick = async () => {
         if (!selectedFile || isButtonCooldown) return; 
 
+        // Check upload rate limit
+        if (!canUpload()) {
+            alert(`You have reached the daily upload limit (${getRemainingUploads()} remaining). Please try again tomorrow.`);
+            return;
+        }
+
         // cool down to prevent multiple clicks
         setIsButtonCooldown(true);
         setTimeout(() => {
@@ -132,6 +139,9 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
 
             // Reset PlayerConfig ONLY IF the upload was successful
             if (isSuccess) {
+                // Increment upload count on successful upload
+                incrementUploadCount();
+                
                 const updatedConfig: PlayerConfig = {
                     ...playerConfig,
                     config: {

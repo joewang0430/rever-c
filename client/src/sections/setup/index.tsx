@@ -5,7 +5,6 @@
 "use client";
 
 import { useSetupData } from "@/hooks/useSetupData";
-import { SetupData } from "@/data/types/setup";
 import { useRef, useEffect, useMemo } from "react";
 import BoardSizeSelection from "@/components/setup/BoardSizeSelection";
 import GameStartButton from "@/components/setup/GameStartButton";
@@ -14,6 +13,7 @@ import PlayerTypeSelection from "@/components/setup/PlayerTypeSelection";
 import SetupNameDisplay from "@/components/setup/SetupNameDisplay";
 import SetupTitle from "@/components/setup/SetupTitle";
 import { CacheProvider } from '@/contexts/CacheContext';
+import RateLimitDisplay from "@/components/setup/RateLimitDisplay";
 
 export default function Setup() {
     const {
@@ -198,6 +198,9 @@ export default function Setup() {
                             </div>
                         </div>
                     )} */}
+
+                    {/* Rate Limit Display */}
+                    <RateLimitDisplay />
                     
                 </div>
             </CacheProvider>

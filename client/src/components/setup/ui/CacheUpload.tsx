@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { useCacheContext } from '@/contexts/CacheContext';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { PlayerConfig } from '@/data/types/setup';
+import { canUpload, incrementUploadCount, getRemainingUploads } from '@/utils/rateLimit';
 
 interface CacheUploadProps {
     playerConfig: PlayerConfig;
@@ -161,6 +162,12 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     const handleUpload = async () => {
         if (!selectedFile || isButtonCooldown) return;
 
+        // Check upload rate limit
+        if (!canUpload()) {
+            alert(`You have reached the daily upload limit (${getRemainingUploads()} remaining). Please try again tomorrow.`);
+            return;
+        }
+
     setIsButtonCooldown(true);
         setTimeout(() => setIsButtonCooldown(false), 1000); // 1s cooldown
     // Hide file input until cleared, matching Candidate behavior
@@ -173,6 +180,9 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
             const isSuccess = await pollStatus(uploadedCodeId);
 
             if (isSuccess) {
+                // Increment upload count on successful upload
+                incrementUploadCount();
+
                 const updatedConfig: PlayerConfig = {
                     ...playerConfig,
                     config: {

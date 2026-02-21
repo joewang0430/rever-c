@@ -10,6 +10,15 @@ import { SetupData, PlayerConfig } from '../../data/types/setup';
 import { getCandidateStatus, getCacheStatus, cleanupCandidate, cleanupCache, checkArchiveExists } from "@/api/uploadApi";
 import { buildSetupToken, isTokenLengthReasonable } from "@/utils/setupTransport";
 import { v4 as uuid } from "uuid";
+import { 
+    canBeginGame, 
+    incrementBeginCount, 
+    getRemainingBegins,
+    canUseAI,
+    incrementAICount,
+    getRemainingAICalls,
+    countAICallsNeeded
+} from "@/utils/rateLimit";
 
 interface GameStartButtonProps {
     isValid: boolean;
@@ -67,6 +76,31 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
     
     const handleStartGame = async () => {
         if (!isValid) return;
+
+        // === Rate Limit Checks ===
+        
+        // Check begin game limit
+        if (!canBeginGame()) {
+            alert(`You have reached the daily game limit (${getRemainingBegins()} remaining). Please try again tomorrow.`);
+            return;
+        }
+
+        // Check AI limit if AI players are involved
+        const aiCallsNeeded = countAICallsNeeded(setupData.black.type, setupData.white.type);
+        if (aiCallsNeeded > 0) {
+            const remainingAI = getRemainingAICalls();
+            
+            if (!canUseAI(aiCallsNeeded)) {
+                alert(`You have reached the daily AI limit (${remainingAI} remaining, but ${aiCallsNeeded} needed). Please try again tomorrow.`);
+                return;
+            }
+
+            // Show AI confirmation dialog
+            const confirmMessage = `You have ${remainingAI} AI call${remainingAI !== 1 ? 's' : ''} remaining today.\n\nThis game will use ${aiCallsNeeded} AI call${aiCallsNeeded !== 1 ? 's' : ''}.\n\nAre you sure you want to start?`;
+            if (!window.confirm(confirmMessage)) {
+                return;
+            }
+        }
 
         // Check if both players have valid custom / archive files
         let missingCustom = false;
@@ -152,6 +186,12 @@ const GameStartButton = ({ isValid, setupData }: GameStartButtonProps) => {
         if (!isTokenLengthReasonable(token)) {
             alert("Setup data is too large to embed in URL. Please simplify your configuration and try again.");
             return;
+        }
+
+        // Increment rate limit counters on successful game start
+        incrementBeginCount();
+        if (aiCallsNeeded > 0) {
+            incrementAICount(aiCallsNeeded);
         }
 
         router.push(`/game/${matchId}#s=${token}`);
