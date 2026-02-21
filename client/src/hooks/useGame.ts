@@ -27,6 +27,7 @@ import {
 } from '@/utils/gameLogistics';
 import { getPlayerName } from '@/utils/nameConverters';
 import { useRouter } from 'next/navigation';
+import { incrementStats } from '@/api/statsApi';
 
 export const useGame = (setupData: SetupData | null) => {
     const [board, setBoard] = useState<Board>(() => setupData ? createInitialBoard(setupData.boardSize) : []); 
@@ -226,6 +227,9 @@ export const useGame = (setupData: SetupData | null) => {
 
         // Clear Data
             clearCandidate(setupData);
+
+        // Increment total games count
+            incrementStats().catch(err => console.error("Failed to increment stats:", err));
         }
 
         // Turn & Available Moves & echo
