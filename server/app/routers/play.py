@@ -32,7 +32,8 @@ async def fetch_custom_move(
             row=move_result["row"],
             col=move_result["col"],
             elapsed=move_result["elapsed"],
-            returnValue=move_result["returnValue"]
+            returnValue=move_result["returnValue"],
+            timeout=move_result.get("timeout", False)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -56,7 +57,8 @@ async def fetch_archive_move(
             row=move_result["row"],
             col=move_result["col"],
             elapsed=move_result["elapsed"],
-            returnValue=move_result["returnValue"]
+            returnValue=move_result["returnValue"],
+            timeout=move_result.get("timeout", False)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

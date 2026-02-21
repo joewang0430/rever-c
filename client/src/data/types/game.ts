@@ -62,6 +62,7 @@ export interface FetchCodeMoveResult {
     move: Move;
     elapsed: number;        // how long "makeMove()" takes ROUGHLY
     returnValue: number;    // return value of "int makeMove()"
+    timeout: boolean;       // true if makeMove() exceeded time limit
 }
 
 export interface FetchAIMoveParams {

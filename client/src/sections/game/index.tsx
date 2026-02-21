@@ -22,7 +22,7 @@ import {
     FetchCodeMoveResult,
     FetchAIMoveResult
 } from "@/data/types/game";
-import { getSetupTurnName } from "@/utils/nameConverters";
+import { getSetupTurnName, getPlayerName } from "@/utils/nameConverters";
 import { fetchCustomMove, fetchArchiveMove, fetchAIMove } from "@/api/playApi";
 import { storage } from "@/utils/storage";
 import { raiseGameErrorWindow, isFetchAIMoveResult, clearCandidate } from "@/utils/gameLogistics";
@@ -192,6 +192,16 @@ export default function Game({ matchId}: GameProps) {
 
                 if (computerMove) { 
                     const elapsed = "elapsed" in computerMove ? computerMove.elapsed : 0;
+                    
+                    // Check for timeout (only for code players)
+                    if ("timeout" in computerMove && computerMove.timeout) {
+                        const playerName = getPlayerName(setupData[side]);
+                        const colorName = side === 'black' ? 'Black' : 'White';
+                        const msg = `The ${colorName} player, ${playerName}, exceeded the time limit (3 seconds), thus the game quit unexpectedly.`;
+                        raiseGameErrorWindow(setupData, msg, () => {router.push("/setup")});
+                        isRequestingComputer.current = false;
+                        return;
+                    }
                     
                     // Validate move before applying
                     if (!computerMove.move || typeof computerMove.move.row !== 'number' || typeof computerMove.move.col !== 'number') {

@@ -26,6 +26,7 @@ export async function fetchCustomMove(params: FetchCodeMoveParams, customType: C
         move: { row: data.row, col: data.col },
         elapsed: data.elapsed,
         returnValue: data.returnValue,
+        timeout: data.timeout || false,
     };
 }
 
@@ -42,6 +43,7 @@ export async function fetchArchiveMove(params: FetchCodeMoveParams, archiveGroup
         move: { row: data.row, col: data.col },
         elapsed: data.elapsed,
         returnValue: data.returnValue,
+        timeout: data.timeout || false,
     };
 }
 

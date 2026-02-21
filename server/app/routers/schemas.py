@@ -32,6 +32,7 @@ class CodeMoveResult(BaseModel):
     col: int
     elapsed: int
     returnValue: Any
+    timeout: bool = False
 
 # ===== game.py models =====
 class SetupDataRequest(BaseModel):

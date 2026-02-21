@@ -5,10 +5,21 @@ Call the .c function to make move decision, during the game.
 import ctypes
 import os
 import time
+import signal
+
+# Time limit for makeMove() in seconds
+MAKE_MOVE_TIME_LIMIT = 3
+
+class TimeoutException(Exception):
+    """Exception raised when makeMove() exceeds time limit"""
+    pass
+
+def _timeout_handler(signum, frame):
+    raise TimeoutException("makeMove() exceeded time limit")
 
 class CMoveCaller:
     @staticmethod
-    def call_make_move_105(board, size, turn, data_path):
+    def call_make_move_105(board, size, turn, data_path, time_limit=MAKE_MOVE_TIME_LIMIT):
         """
         Call makeMove() function in .c file, 
         which extracted from lab 8, APS105, 2022 version, University of Toronto.
@@ -59,17 +70,36 @@ class CMoveCaller:
         row = ctypes.c_int()
         col = ctypes.c_int()
 
-        # Timing and calling
-        start = time.time()
-        return_value = make_move(board_array, size, turn.encode('utf-8'), ctypes.byref(row), ctypes.byref(col))
-        elapsed = int((time.time() - start) * 1000 * 1000) # us
+        # Set up timeout handler
+        old_handler = signal.signal(signal.SIGALRM, _timeout_handler)
+        signal.alarm(time_limit)  # Set timeout
 
-        #  Return
-        return {
-            "row": row.value,
-            "col": col.value,
-            "elapsed": elapsed,
-            "returnValue": return_value
-        }
+        try:
+            # Timing and calling
+            start = time.time()
+            return_value = make_move(board_array, size, turn.encode('utf-8'), ctypes.byref(row), ctypes.byref(col))
+            elapsed = int((time.time() - start) * 1000 * 1000) # us
+            signal.alarm(0)  # Cancel the alarm
+
+            # Return normal result
+            return {
+                "row": row.value,
+                "col": col.value,
+                "elapsed": elapsed,
+                "returnValue": return_value,
+                "timeout": False
+            }
+        except TimeoutException:
+            # Return timeout result
+            return {
+                "row": -1,
+                "col": -1,
+                "elapsed": time_limit * 1000 * 1000,  # Convert to microseconds
+                "returnValue": -1,
+                "timeout": True
+            }
+        finally:
+            signal.alarm(0)  # Ensure alarm is cancelled
+            signal.signal(signal.SIGALRM, old_handler)  # Restore old handler
 
     
