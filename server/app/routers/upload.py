@@ -103,8 +103,8 @@ def validate_c_code(file_path: str) -> bool:
         'system(',                # execute system commands
         'exec(',                  # execute external programs
         'fork(',                  # process operations
-        'while(1)',               # infinite loop
-        'for(;;)',                # infinite loop as well
+        # 'while(1)',               # infinite loop
+        # 'for(;;)',                # infinite loop as well
         '__asm__',                # no way to do ece243 here
         'asm(',                   # same
         '#include <signal.h>',    # signal handling
@@ -281,6 +281,8 @@ async def process_candidate_async(code_id: str):
 
 
 # Routers
+MAX_FILE_SIZE = 500 * 1024  # 500KB
+
 @upload_router.post("/api/upload/candidate")
 async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
     """
@@ -289,6 +291,12 @@ async def process_candidate(file: UploadFile = File(...)) -> ProcessResponse:
     try:
         if not file.filename or not file.filename.endswith('.c'):
             raise HTTPException(status_code=400, detail="Only .c files are allowed")
+        
+        # Check file size limit
+        content = await file.read()
+        if len(content) > MAX_FILE_SIZE:
+            raise HTTPException(status_code=400, detail=f"File size exceeds 500KB limit. Your file is {len(content) / 1024:.1f}KB.")
+        await file.seek(0)  # Reset file position for later read
         
         # Generate a unique ID, new name, and store path for the code
         code_id = str(uuid.uuid4())
@@ -494,6 +502,12 @@ async def process_cache(file: UploadFile = File(...)) -> ProcessResponse:
     try:
         if not file.filename or not file.filename.endswith('.c'):
             raise HTTPException(status_code=400, detail="Only .c files are allowed")
+        
+        # Check file size limit
+        content = await file.read()
+        if len(content) > MAX_FILE_SIZE:
+            raise HTTPException(status_code=400, detail=f"File size exceeds 500KB limit. Your file is {len(content) / 1024:.1f}KB.")
+        await file.seek(0)  # Reset file position for later read
         
         # Generate a unique ID, new name, and store path for the code
         code_id = str(uuid.uuid4())

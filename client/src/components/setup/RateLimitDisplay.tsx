@@ -29,15 +29,16 @@ export default function RateLimitDisplay() {
     if (!limits) return null;
 
     return (
-        <div className="mt-8 text-center text-xs text-gray-400">
-            <span className="inline-flex items-center gap-4">
-                <span>Uploads: {limits.uploads.remaining}/{limits.uploads.total}</span>
+        <div className="mt-2 text-center text-[10px] text-gray-400">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                <span>Up: {limits.uploads.remaining}/{limits.uploads.total}</span>
                 <span className="text-gray-300">|</span>
                 <span>Games: {limits.begins.remaining}/{limits.begins.total}</span>
                 <span className="text-gray-300">|</span>
                 <span>AI: {limits.ai.remaining}/{limits.ai.total}</span>
+                <span className="text-gray-300">·</span>
+                <span>reset at midnigh</span>
             </span>
-            <p className="mt-1 text-gray-300">Daily limits reset at midnight</p>
         </div>
     );
 }

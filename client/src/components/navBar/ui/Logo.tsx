@@ -63,7 +63,7 @@ const Logo = ({mobile, url}: LogoProps) => {
                     confirm="Home Page"
                     cancel="cancel"
                 >
-                    You will quit this setup page.
+                    You will quit this current page.
                 </RvcDialog>
             )}
         </>

@@ -113,6 +113,7 @@ export default function Setup() {
                                 isValid={isValid}
                                 setupData={setupData}
                             />
+                            <RateLimitDisplay />
                         </div>
 
                         {/* Right Column (LG) */}
@@ -162,6 +163,7 @@ export default function Setup() {
                                 isValid={isValid}
                                 setupData={setupData}
                             />
+                            <RateLimitDisplay />
                             <SetupNameDisplay 
                                 playerConfig={memorizedWhiteConfig}
                                 side="white"
@@ -199,9 +201,6 @@ export default function Setup() {
                         </div>
                     )} */}
 
-                    {/* Rate Limit Display */}
-                    <RateLimitDisplay />
-                    
                 </div>
             </CacheProvider>
         </main>

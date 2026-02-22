@@ -24,9 +24,16 @@ const CandidateUpload = ({ playerConfig, onConfigChange, side }: CandidateUpload
     const { uploadStatus, processFile, pollStatus, cleanup } = useFileUpload('candidate');
 
     // Handle file selection
+    const MAX_FILE_SIZE = 500 * 1024; // 500KB
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.name.endsWith('.c')) {
+            // Check file size limit
+            if (file.size > MAX_FILE_SIZE) {
+                alert(`File size exceeds 500KB limit. Your file is ${(file.size / 1024).toFixed(1)}KB.`);
+                e.target.value = '';
+                return;
+            }
             setSelectedFile(file);
             // If user selects a new file after processing, reset the processed state
             if (hasProcessedFile) {

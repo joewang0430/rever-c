@@ -100,9 +100,16 @@ const CacheUpload = ({ playerConfig, onConfigChange, side }: CacheUploadProps) =
     }, [cacheState?.status, uploadStatus.currentStep, showErrorCard]);
 
     // Handle file selection
+    const MAX_FILE_SIZE = 500 * 1024; // 500KB
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.name.endsWith('.c')) {
+            // Check file size limit
+            if (file.size > MAX_FILE_SIZE) {
+                alert(`File size exceeds 500KB limit. Your file is ${(file.size / 1024).toFixed(1)}KB.`);
+                e.target.value = '';
+                return;
+            }
             // If previous attempt failed, reset upload status to idle so user can upload again
             if (uploadStatus.currentStep === 'failed') {
                 await cleanup();
