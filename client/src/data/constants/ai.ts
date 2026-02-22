@@ -6,6 +6,7 @@ export interface AIInfo {
     rating: string;
     image: string;
     available: boolean;
+    disabledReason?: string;
 };
 
 export const aiList: Record<string, AIInfo> = {
@@ -25,7 +26,8 @@ export const aiList: Record<string, AIInfo> = {
     description: "Powerful comprehensive language model by Google",
     rating: "(200)",
     image: `svgs/ai/gemini-2pt5.svg`,
-    available: true,
+    available: false,
+    disabledReason: "Sorry, Gemini 2.5 is currently unavailable due to exceeding request frequency",
   },
   "qwen-3": {
     id: "qwen-3",

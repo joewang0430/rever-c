@@ -31,6 +31,7 @@ const AISetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable }: AIS
                                 <div
                                     key={ai.id}
                                     onClick={() => !isDisabled && selectAI(ai)}
+                                    title={isDisabled && ai.disabledReason ? ai.disabledReason : undefined}
                                     className={`p-3 rounded-lg transition-all border-3 ${!isDisabled ? 'group' : ''} ${
                                         isDisabled
                                             ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
