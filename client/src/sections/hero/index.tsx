@@ -52,7 +52,7 @@ export default function Hero () {
             {/* Function tagline and signature */}
             <div className="px-6 text-center max-w-3xl">
                 <p className="text-rvc-text-black/80 mb-3">Play reversi with your own .c function:</p>
-                <p className="text-xl md:text-2xl text-rvc-text-black">
+                <p className="text-xl md:text-2xl text-rvc-text-black md:whitespace-nowrap">
                     int makeMove(const char board[][26], int n, char turn, int *row, int *col);
                 </p>
             </div>

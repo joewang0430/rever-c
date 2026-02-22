@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { FaGithub } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import Link from "next/link";
 import { 
     NavigationMenuItem
@@ -16,7 +17,7 @@ interface JoinUsProps {
 const diffTabUrls = ["/setup", "/game"]; 
 
 const JoinUs = ({mobile, url}: JoinUsProps) => {
-    const contactUrl = "/contact";
+    const contactUrl = "mailto:icedeverjoe@outlook.com";
     const githubUrl = "https://github.com/joewang0430/rever-c";
     const diffTab = diffTabUrls.some(path => url.startsWith(path));
 
@@ -63,7 +64,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 About
             </button>
             {open && (
-                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded flex flex-col z-50">
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-white rounded flex flex-col z-50">
                     <Link
                         href={githubUrl}
                         target="_blank"
@@ -74,23 +75,21 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                         <div className="rvct-theme">GitHub</div>
                     </Link>
                     {diffTab ? (
-                        <Link
+                        <a
                             href={contactUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
+                            className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2"
                         >
-                            Contact
-                        </Link>
+                            <MdEmail className="w-5 h-5" />
+                            <div className="rvct-theme">Contact</div>
+                        </a>
                     ) : (
-                        <Link
+                        <a
                             href={contactUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
+                            className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center w-full flex items-center justify-center gap-2"
                         >
-                            Contact
-                        </Link>
+                            <MdEmail className="w-5 h-5" />
+                            <div className="rvct-theme">Contact</div>
+                        </a>
                     )}
                     
                 </div>
