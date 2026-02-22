@@ -14,7 +14,7 @@ export default function Footer() {
     }, []);
 
     return (
-        <footer className="bg-[#1a1a1a] text-white py-12 px-8">
+        <footer className="bg-[#1a1a1a] text-white py-10 px-8">
             {/* Top Section: Three Columns */}
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-8 mb-10">
                 {/* Left: ReverC Logo - Hidden on mobile */}

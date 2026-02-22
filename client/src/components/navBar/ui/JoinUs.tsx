@@ -40,14 +40,14 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 rel="noopener noreferrer"
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
-                About Us
+                About
             </Link>
         ) : (
             <Link
                 href={contactUrl}
                 className="block w-full text-left py-2 px-4 rounded hover:bg-gray-100 hover:text-rvc-primary-green rvct-theme-500 transition"
             >
-                About Us
+                About
             </Link>
         );
     }
@@ -60,7 +60,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                 tabIndex={0}
                 className="hover:text-rvc-primary-green rvct-theme-500 hover:rvct-theme-700 transition cursor-pointer"
             >
-                About Us
+                About
             </button>
             {open && (
                 <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-white shadow-lg rounded flex flex-col z-50">
@@ -80,7 +80,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                             rel="noopener noreferrer"
                             className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
-                            Contact Us
+                            Contact
                         </Link>
                     ) : (
                         <Link
@@ -89,7 +89,7 @@ const JoinUs = ({mobile, url}: JoinUsProps) => {
                             rel="noopener noreferrer"
                             className="px-4 py-2 hover:bg-rvc-primary-green/90 hover:text-rvc-primary-white transition text-center hover:text-rvc-primary-green rvct-theme transition"
                         >
-                            Contact Us
+                            Contact
                         </Link>
                     )}
                     
