@@ -61,7 +61,7 @@ export default function Footer() {
                 <p className="text-gray-400 text-sm text-center mb-3">
                     Contact developer{" "}
                     <a
-                        href="mailto:icddeverjoe@outlook.com"
+                        href="mailto:icedeverjoe@outlook.com"
                         className="text-white underline hover:text-gray-300 transition-colors"
                     >
                         Joe Wang
@@ -108,7 +108,7 @@ export default function Footer() {
 
                     {/* Email Icon */}
                     <a
-                        href="mailto:icddeverjoe@outlook.com"
+                        href="mailto:icedeverjoe@outlook.com"
                         className="text-gray-400 hover:text-white transition-colors"
                         aria-label="Email"
                     >

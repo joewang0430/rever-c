@@ -10,6 +10,12 @@ import Image from 'next/image';
 import { ArchiveEntry } from '@/data/types/archive';
 import { useEffect } from 'react';
 
+// ============ Archive Board Size Restrictions ============
+// Archives that are too computationally heavy for 6x6 board
+const DISABLED_ON_6X6: string[] = ['hukaiqi1_7', 'ajex_bb_rvc'];
+// Archives that are too heavy for 12x12 board - uses 'heavy' field in JSON
+// =========================================================
+
 interface ArchiveSetupBlockProps {
     playerConfig: PlayerConfig;
     onConfigChange: (config: PlayerConfig) => void;
@@ -27,9 +33,16 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
         toggleGroup
     } = useArchiveData(side, playerConfig, onConfigChange);
 
-    // New addition: When boardSize changes, check whether the current selection is valid
+    // Check if an archive is disabled for current board size
+    const isArchiveDisabled = (archive: ArchiveEntry): boolean => {
+        if (boardSize === 6 && DISABLED_ON_6X6.includes(archive.id)) return true;
+        if (boardSize === 12 && archive.heavy) return true;
+        return false;
+    };
+
+    // When boardSize changes, check whether the current selection is valid
     useEffect(() => {
-        if (boardSize === 12 && selectedArchive?.heavy) {
+        if (selectedArchive && isArchiveDisabled(selectedArchive)) {
             clearSelection();
         }
     }, [boardSize, selectedArchive, clearSelection]);
@@ -93,7 +106,7 @@ const ArchiveSetupBlock = ({ playerConfig, onConfigChange, side, boardSize }: Ar
                         {openGroups.includes(group.id) && (
                             <div className="p-2 space-y-1 bg-gray-100 rounded-b-sm">
                                 {group.archives.map(archive => {
-                                    const isDisabled = boardSize === 12 && archive.heavy;
+                                    const isDisabled = isArchiveDisabled(archive);
                                     const isSelected = selectedArchive?.id === archive.id;
                                     return (
                                         <div
