@@ -41,11 +41,11 @@ export default function Footer() {
                 {/* Right: WZD Logo Placeholder - Hidden on mobile */}
                 <div className="hidden md:flex justify-end">
                     <Image
-                        src="/svgs/footer/wzd_logo_placeholder.svg"
+                        src="/svgs/footer/wzd_606_white.svg"
                         alt="WZD Logo"
-                        width={200}
-                        height={80}
-                        className="h-auto"
+                        width={135}
+                        height={54}
+                        className="h-auto opacity-95"
                     />
                 </div>
             </div>
