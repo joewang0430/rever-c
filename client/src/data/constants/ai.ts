@@ -27,7 +27,7 @@ export const aiList: Record<string, AIInfo> = {
     rating: "(200)",
     image: `svgs/ai/gemini-2pt5.svg`,
     available: false,
-    disabledReason: "Sorry, Gemini 2.5 is currently unavailable due to exceeding request frequency",
+    disabledReason: "Unavailable due to exceeding request frequency",
   },
   "qwen-3": {
     id: "qwen-3",

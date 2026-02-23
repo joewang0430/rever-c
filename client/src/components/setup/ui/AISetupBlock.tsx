@@ -28,50 +28,61 @@ const AISetupBlock = ({ playerConfig, onConfigChange, side, isAIAvailable }: AIS
                             const isDisabled = !ai.available || !isAIAvailable;
                             const isSelected = selectedAI?.id === ai.id;
                             return (
-                                <div
-                                    key={ai.id}
-                                    onClick={() => !isDisabled && selectAI(ai)}
-                                    title={isDisabled && ai.disabledReason ? ai.disabledReason : undefined}
-                                    className={`p-3 rounded-lg transition-all border-3 ${!isDisabled ? 'group' : ''} ${
-                                        isDisabled
-                                            ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
-                                            : `cursor-pointer ${
-                                                isSelected
-                                                    ? 'bg-white border-rvc-primary-green'
-                                                    : 'bg-white hover:bg-white border-gray-100'
-                                            }`
-                                    }`}
-                                >
-                                    <div className="flex items-center space-x-3">
-                                        {ai.image && (
-                                            <Image
-                                                src={ai.image}
-                                                alt={ai.name}
-                                                width={28}
-                                                height={28}
-                                            />
-                                        )}
-                                        <div
-                                            className="flex-1 overflow-hidden"
-                                            style={{ maskImage: 'linear-gradient(to right, black 80%, transparent 100%)' }}
-                                        >
-                                            <div className="flex items-baseline">
-                                                <div className={`font-medium shrink-0 ${isSelected ? 'text-rvc-primary-green rvct-theme-500' : 'text-gray-700 rvct-theme-500'}`}>{ai.name}</div>
-                                                <div className="relative ml-2 h-5 flex items-center">
-                                                    {/* Default view: show rating */}
-                                                    {ai.rating && (
-                                                        <div className="text-sm text-gray-400 rvct-theme-500 whitespace-nowrap transition-all duration-200 ease-in-out transform group-hover:opacity-0 group-hover:translate-y-3">
-                                                            {`${ai.rating}`}
+                                <div key={ai.id} className="relative group/item">
+                                    <div
+                                        onClick={() => !isDisabled && selectAI(ai)}
+                                        className={`p-3 rounded-lg transition-all border-3 ${!isDisabled ? 'group' : ''} ${
+                                            isDisabled
+                                                ? 'bg-gray-50 opacity-50 cursor-not-allowed border-transparent'
+                                                : `cursor-pointer ${
+                                                    isSelected
+                                                        ? 'bg-white border-rvc-primary-green'
+                                                        : 'bg-white hover:bg-white border-gray-100'
+                                                }`
+                                        }`}
+                                    >
+                                        <div className="flex items-center space-x-3">
+                                            {ai.image && (
+                                                <Image
+                                                    src={ai.image}
+                                                    alt={ai.name}
+                                                    width={28}
+                                                    height={28}
+                                                />
+                                            )}
+                                            <div
+                                                className="flex-1 overflow-hidden"
+                                                style={{ maskImage: 'linear-gradient(to right, black 80%, transparent 100%)' }}
+                                            >
+                                                <div className="flex items-baseline">
+                                                    <div className={`font-medium shrink-0 ${isSelected ? 'text-rvc-primary-green rvct-theme-500' : 'text-gray-700 rvct-theme-500'}`}>{ai.name}</div>
+                                                    <div className="relative ml-2 h-5 flex items-center">
+                                                        {/* Default view: show rating */}
+                                                        {ai.rating && (
+                                                            <div className="text-sm text-gray-400 rvct-theme-500 whitespace-nowrap transition-all duration-200 ease-in-out transform group-hover:opacity-0 group-hover:translate-y-3">
+                                                                {`${ai.rating}`}
+                                                            </div>
+                                                        )}
+                                                        {/* Hover view: show short description */}
+                                                        <div className="text-sm text-gray-500 rvct-theme-500 whitespace-nowrap absolute left-0 transition-all duration-200 ease-in-out opacity-0 transform -translate-y-3 group-hover:opacity-100 group-hover:translate-y-0">
+                                                            {ai.shortDescription}
                                                         </div>
-                                                    )}
-                                                    {/* Hover view: show short description */}
-                                                    <div className="text-sm text-gray-500 rvct-theme-500 whitespace-nowrap absolute left-0 transition-all duration-200 ease-in-out opacity-0 transform -translate-y-3 group-hover:opacity-100 group-hover:translate-y-0">
-                                                        {ai.shortDescription}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    {/* Tooltip for disabled AI */}
+                                    {isDisabled && ai.disabledReason && (
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 
+                                            bg-gray-800 text-white text-xs rounded-md whitespace-nowrap
+                                            opacity-0 group-hover/item:opacity-100 transition-opacity duration-200
+                                            pointer-events-none z-10">
+                                            {ai.disabledReason}
+                                            <div className="absolute top-full left-1/2 -translate-x-1/2 
+                                                border-4 border-transparent border-t-gray-800"></div>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

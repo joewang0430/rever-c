@@ -34,18 +34,7 @@
             "description": "≈25 rank APS105 Leaderboard 2024",
             "shortDescription": "≈25 on Leaderboard",
             "rating": "(600)",
-            "image": "/svgs/archives/test_player.svg",
-            "heavy": false
-        },
-        {
-            "id": "xianglun_wu",
-            "groupId": "aps105",
-            "name": "Sunny Wu (redo)",
-            "shortName": "W.Sunny",
-            "description": "#7 rank APS105 Leaderboard 2024",
-            "shortDescription": "#7 on Leaderboard",
-            "rating": "(1400)",
-            "image": "/svgs/archives/test_player.svg",
+            "image": "/svgs/archives/yongkang_cheng.svg",
             "heavy": false
         },
         {
@@ -56,7 +45,18 @@
             "description": "≈30 rank APS105 Leaderboard 2024",
             "shortDescription": "≈30 on Leaderboard",
             "rating": "(450)",
-            "image": "/svgs/archives/test_player.svg",
+            "image": "/svgs/archives/alizada.svg",
+            "heavy": false
+        },
+        {
+            "id": "xianglun_wu",
+            "groupId": "aps105",
+            "name": "Sunny Wu (redo)",
+            "shortName": "W.Sunny",
+            "description": "#7 rank APS105 Leaderboard 2024",
+            "shortDescription": "#7 on Leaderboard",
+            "rating": "(1400)",
+            "image": "/svgs/archives/xianglun_wu.svg",
             "heavy": false
         },
         {
@@ -64,10 +64,10 @@
             "groupId": "aps105",
             "name": "Joe Wang",
             "shortName": "W.Joe",
-            "description": "#21 rank APS105 Leaderboard 2024, ReverC developer",
+            "description": "#21 rank APS105 Leaderboard 2024",
             "shortDescription": "#21 on Leaderboard",
             "rating": "(800)",
-            "image": "/svgs/archives/test_player.svg",
+            "image": "/svgs/archives/wang4577.svg",
             "heavy": false
         }
         ]

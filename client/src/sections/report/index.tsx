@@ -62,16 +62,16 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                         </div>
                         <div className="w-full flex items-center gap-3">
                             <button
-                                onClick={handleNewGame}
-                                className="flex-1 rounded-md bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
-                            >
-                                New Game
-                            </button>
-                            <button
                                 onClick={handleReplay}
                                 className="flex-1 rounded-md bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
                             >
                                 Replay
+                            </button>
+                            <button
+                                onClick={handleNewGame}
+                                className="flex-1 rounded-md bg-rvc-primary-green text-white px-4 py-2 hover:bg-rvc-primary-green/90 transition-colors"
+                            >
+                                New Game
                             </button>
                         </div>
                     </div>

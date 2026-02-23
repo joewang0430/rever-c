@@ -5,8 +5,7 @@
 import { SetupData } from "@/data/types/setup";
 import { MoveHistoryItem, Board, Turn } from "@/data/types/game";
 import { generateBoardFromHistory } from "@/utils/gameLogistics";
-import { getPlayerName, getSvgPathSetup } from "@/utils/nameConverters";
-import Image from "next/image";
+import { getPlayerName, getPlayerRating } from "@/utils/nameConverters";
 
 interface StatsSummaryProps {
   setupData: SetupData;
@@ -91,22 +90,22 @@ function formatTime(us: number): string {
 
 // ---------- Sub-components ----------
 
-/** Player header with avatar and name */
-function PlayerHeader({ name, svgPath, side }: { name: string; svgPath: string | null; side: "black" | "white" }) {
-  const fallbackPath = "/svgs/setup/not-selected.svg";
-  const sideLabel = side === "black" ? "(Black)" : "(White)";
-
+/** Player header with piece icon and name */
+function PlayerHeader({ name, rating, side }: { name: string; rating: string; side: "black" | "white" }) {
   return (
     <div className="flex flex-col items-center">
-      <Image
-        src={svgPath || fallbackPath}
-        alt={`${name} avatar`}
-        width={40}
-        height={40}
-        className="rounded-full"
-      />
+      {/* Piece icon with green background */}
+      <div className="w-10 h-10 rounded-full bg-rvc-primary-green flex items-center justify-center">
+        <div 
+          className={`w-7 h-7 rounded-full ${
+            side === "black" 
+              ? "bg-gray-800" 
+              : "bg-white border-2 border-gray-300"
+          }`}
+        />
+      </div>
       <div className="mt-1 text-sm font-semibold text-gray-800 text-center leading-tight">{name}</div>
-      <div className="text-xs text-gray-500">{sideLabel}</div>
+      <div className="text-xs text-gray-500">{rating}</div>
     </div>
   );
 }
@@ -164,16 +163,16 @@ export default function StatsSummary({ setupData, history }: StatsSummaryProps) 
   // Player info
   const blackName = getPlayerName(setupData.black);
   const whiteName = getPlayerName(setupData.white);
-  const blackSvg = getSvgPathSetup(setupData.black);
-  const whiteSvg = getSvgPathSetup(setupData.white);
+  const blackRating = getPlayerRating(setupData.black);
+  const whiteRating = getPlayerRating(setupData.white);
 
   return (
     <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3">
       {/* Player Headers */}
       <div className="grid grid-cols-3 items-start mb-2">
-        <PlayerHeader name={blackName} svgPath={blackSvg} side="black" />
+        <PlayerHeader name={blackName} rating={blackRating} side="black" />
         <div /> {/* Empty center column for alignment */}
-        <PlayerHeader name={whiteName} svgPath={whiteSvg} side="white" />
+        <PlayerHeader name={whiteName} rating={whiteRating} side="white" />
       </div>
 
       {/* Stats Rows */}
@@ -184,7 +183,7 @@ export default function StatsSummary({ setupData, history }: StatsSummaryProps) 
           whiteValue={String(finalScore.W)}
         />
         <StatRow
-          label="Accuracy (Coming Soon)"
+          label="Accuracy (under development)"
           blackValue="N/A"
           whiteValue="N/A"
         />

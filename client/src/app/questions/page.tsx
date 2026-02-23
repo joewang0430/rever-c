@@ -42,6 +42,10 @@ const faqData: FAQItem[] = [
         answer: "To ensure fair usage: you can upload code up to 50 times per day, start up to 200 games per day, and use AI opponents up to 10 times per day. These limits reset at midnight."
     },
     {
+        question: "What is the file size limit?",
+        answer: "Each uploaded C file must be under 500KB and no more than 5000 lines of code. These limits are enforced on both the frontend and backend to ensure server stability."
+    },
+    {
         question: "Why did my code fail to compile?",
         answer: "Common reasons include: missing semicolons, undefined functions, incorrect function signature, or using libraries not available on the server. Make sure your code compiles locally with gcc before uploading."
     },
