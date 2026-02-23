@@ -86,9 +86,56 @@ export default function ReportSection({ setupData, history }: ReportSectionProps
                     </div>
                 </div>
 
-                {/* TODO: Mobile layout to be designed later */}
-                <div className="lg:hidden">
-                    <div className="text-center text-gray-600 py-12">Mobile report layout coming soon.</div>
+                {/* Mobile layout: single column, scrollable */}
+                <div className="lg:hidden w-full h-full overflow-y-auto py-6 space-y-4">
+                    {/* Victory Summary */}
+                    <VictorySummary setupData={setupData} history={history} />
+                    
+                    {/* Board */}
+                    <div className="flex justify-center">
+                        <ReportBoard setupData={setupData} history={history} step={selectedStep} />
+                    </div>
+                    
+                    {/* Stats Summary */}
+                    <StatsSummary setupData={setupData} history={history} />
+                    
+                    {/* Replay / New Game buttons */}
+                    <div className="w-full flex items-center gap-3">
+                        <button
+                            onClick={handleReplay}
+                            className="flex-1 rounded-md bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300 transition-colors"
+                        >
+                            Replay
+                        </button>
+                        <button
+                            onClick={handleNewGame}
+                            className="flex-1 rounded-md bg-rvc-primary-green text-white px-4 py-2 hover:bg-rvc-primary-green/90 transition-colors"
+                        >
+                            New Game
+                        </button>
+                    </div>
+                    
+                    {/* Time Diagram */}
+                    <TimeDiagram 
+                        setupData={setupData} 
+                        history={history} 
+                        selectedStep={selectedStep}
+                        setSelectedStep={setSelectedStep}
+                    />
+                    
+                    {/* Move List */}
+                    <MoveList 
+                        setupData={setupData} 
+                        history={history} 
+                        selectedStep={selectedStep}
+                        setSelectedStep={setSelectedStep}
+                    />
+                    
+                    {/* Computer Analysis */}
+                    <ComputerAnalysis />
+                    
+                    {/* Report Actions */}
+                    <ReportActions setupData={setupData} history={history} />
                 </div>
             </div>
         </section>
