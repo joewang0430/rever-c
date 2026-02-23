@@ -35,7 +35,8 @@ const PlayerInfoDisplay = ({ playerConfig, playerStats = defaultPlayerStats }: P
                 />
             </div>
             <div className="text-4xl font-bold text-center">{playerName}</div>
-            <div className="text-2xl text-gray-400 text-center" >{playerDescription}</div>
+            {/* Fixed height for description to ensure left/right alignment */}
+            <div className="text-2xl text-gray-400 text-center min-h-[4rem] flex items-start justify-center">{playerDescription}</div>
             <div className="h-4"></div>
             <div className="w-full px-8">
                 <PlayerStatsLg 
