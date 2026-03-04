@@ -37,7 +37,7 @@ export default function RateLimitDisplay() {
                 <span className="text-gray-300">|</span>
                 <span>AI: {limits.ai.remaining}/{limits.ai.total}</span>
                 <span className="text-gray-300">·</span>
-                <span>reset at midnigh</span>
+                <span>reset at midnight</span>
             </span>
         </div>
     );

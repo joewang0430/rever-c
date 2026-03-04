@@ -1,15 +1,13 @@
 FROM node:20-alpine
-
-# Consider delete this if not needed
-RUN apk add --no-cache curl 
-
 WORKDIR /app
-
 COPY package.json package-lock.json* ./
-RUN npm install
-
+RUN npm ci
 COPY . .
 
-EXPOSE 3000
+# 设置构建时环境变量（Next.js NEXT_PUBLIC_ 变量必须在 build 时设置）
+ENV NEXT_PUBLIC_API_BASE_URL=https://reverc-backend-630132598726.us-central1.run.app
 
-CMD ["npm", "run", "dev"]
+RUN npm run build
+ENV NODE_ENV=production
+EXPOSE 3000
+CMD ["npm","run","start"]
