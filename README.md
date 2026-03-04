@@ -48,13 +48,13 @@ Originally inspired by U of T APS105's Reversi lab assignment.
 <!-- TODO: Add screenshots -->
 
 ![Homepage](screenshots/setup.png)
-*Homepage with game mode selection*
+*Set up the game*
 
 ![Game Board](screenshots/game.png)
 *Live game visualization*
 
 ![Code Upload](screenshots/report.png)
-*C code upload interface*
+*Report Interface*
 
 ---
 
