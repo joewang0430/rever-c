@@ -1,0 +1,48 @@
+# .gcloudignore - 控制 gcloud 部署时上传哪些文件
+# 这个文件会覆盖 .gitignore 的行为
+
+# === Python Virtual Environment ===
+.venv/
+
+# === Python Cache Files / Bytecode ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# === Environment Variable Config Files ===
+.env
+
+# === 编译后的文件（会在 Docker 构建时重新生成）===
+*.so
+*.dylib
+*.dll
+
+# === 不需要上传的编译产物 ===
+data/shared_libs/archives/*
+data/shared_libs/candidates/*
+data/shared_libs/caches/*
+
+# === 状态文件 ===
+data/status/candidates/*
+data/status/caches/*
+
+# === IDE / Editor-Related Files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === System-Level Ignores ===
+.DS_Store
+Thumbs.db
+
+# === 日志文件 ===
+*.log
+*.tmp
+
+# ============================================
+# 重要：以下文件会被上传（不在忽略列表中）
+# - data/c_src/archives/* （C 源代码，用于编译）
+# - data/c_src/candidates/*
+# - data/c_src/caches/*
+# ============================================
